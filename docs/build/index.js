@@ -264,7 +264,7 @@ var index = (function () {
     	return child_ctx;
     }
 
-    // (11:2) {#each Object.keys(clui.commands) as command}
+    // (11:2) {#each Object.keys(commands) as command}
     function create_each_block(ctx) {
     	let div;
     	let span0;
@@ -272,7 +272,7 @@ var index = (function () {
     	let t0;
     	let t1;
     	let span1;
-    	let t2_value = clui.commands[/*command*/ ctx[0]].description + "";
+    	let t2_value = commands[/*command*/ ctx[0]].description + "";
     	let t2;
     	let t3;
 
@@ -285,9 +285,9 @@ var index = (function () {
     			span1 = element("span");
     			t2 = text(t2_value);
     			t3 = space();
-    			attr(span0, "class", "clui-dropdown-name svelte-1oo64rr");
+    			attr(span0, "class", "clui-dropdown-name svelte-7javn3");
     			attr(span1, "class", "clui-dropdown-description");
-    			attr(div, "class", "clui-dropdown-item svelte-1oo64rr");
+    			attr(div, "class", "clui-dropdown-item svelte-7javn3");
     		},
     		m(target, anchor) {
     			insert(target, div, anchor);
@@ -310,7 +310,7 @@ var index = (function () {
     	let div1;
     	let t2;
     	let div2;
-    	let each_value = Object.keys(clui.commands);
+    	let each_value = Object.keys(commands);
     	let each_blocks = [];
 
     	for (let i = 0; i < each_value.length; i += 1) {
@@ -324,7 +324,7 @@ var index = (function () {
 
     			div1.innerHTML = `<img src="" alt="" class="clui-cli-icon"/> 
 		<div class="clui-cli-autocomplete"></div> 
-		<input type="text" placeholder="enter a command" class="svelte-1oo64rr"/>`;
+		<input type="text" placeholder="enter a command" class="svelte-7javn3"/>`;
 
     			t2 = space();
     			div2 = element("div");
@@ -333,9 +333,9 @@ var index = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr(div1, "class", "clui-cli-input svelte-1oo64rr");
-    			attr(div2, "class", "clui-cli-dropdown svelte-1oo64rr");
-    			attr(div3, "class", "clui-cli svelte-1oo64rr");
+    			attr(div1, "class", "clui-cli-input svelte-7javn3");
+    			attr(div2, "class", "clui-cli-dropdown svelte-7javn3");
+    			attr(div3, "class", "clui-cli svelte-7javn3");
     		},
     		m(target, anchor) {
     			insert(target, div3, anchor);
@@ -348,8 +348,8 @@ var index = (function () {
     			}
     		},
     		p(ctx, [dirty]) {
-    			if (dirty & /*clui, Object*/ 0) {
-    				each_value = Object.keys(clui.commands);
+    			if (dirty & /*commands, Object*/ 0) {
+    				each_value = Object.keys(commands);
     				let i;
 
     				for (i = 0; i < each_value.length; i += 1) {
