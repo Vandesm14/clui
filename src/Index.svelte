@@ -1,15 +1,28 @@
 <script>
+	import clui from './clui.ts';
+	
+	let state = {
+		selection: 0,
+		cli: {
+			list: [],
+			value: ''
+		}
+	};
+
+	const parse = () => {
+		clui.parse(state.cli.value);
+	};
 </script>
 
 <div class="clui-cli">
 	<div class="clui-cli-input">
 		<img src="" alt="" class="clui-cli-icon">
 		<div class="clui-cli-autocomplete"></div>
-		<input type="text" placeholder="enter a command">
+		<input type="text" placeholder="enter a command" bind:value={state.cli.value} on:input={parse}>
 	</div>
 	<div class="clui-cli-dropdown">
 		{#each Object.keys(commands) as command}
-			<div class="clui-dropdown-item">
+			<div class="clui-dropdown-item" on:click={()=>{clui.execute(command)}}>
 				<span class="clui-dropdown-name">{command}</span>
 				<span class="clui-dropdown-description">{commands[command].description}</span>
 			</div>
