@@ -1,0 +1,29 @@
+* {
+	box-sizing: border-box;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	width: 100vw;
+	height: 100vh;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	background-color: white;
+	color: black;
+	font-family: Calibri, sans-serif;
+}
+
+div, h1, p {
+	margin: 0;
+	padding: 0;
+}
+
+a, a:visited {
+	color: #0000dd;
+}
+
+/* ----------App---------- */
