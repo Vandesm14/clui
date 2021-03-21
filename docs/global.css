@@ -1,3 +1,9 @@
+:root {
+	--dark: #1E1F1C;
+	--medium: #272822;
+	--light: #34352F;
+}
+
 * {
 	box-sizing: border-box;
 }
@@ -12,9 +18,10 @@ html, body {
 body {
 	display: flex;
 	flex-direction: column;
-	background-color: white;
-	color: black;
+	background-color: var(--dark);
+	color: white;
 	font-family: Calibri, sans-serif;
+	font: 1.2rem;
 }
 
 div, h1, p {
