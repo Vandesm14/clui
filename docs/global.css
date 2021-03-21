@@ -2,6 +2,8 @@
 	--dark: #1E1F1C;
 	--medium: #272822;
 	--light: #34352F;
+	--text-medium: #949480;
+	--text-light: #f8f8f2;
 }
 
 * {
@@ -19,9 +21,9 @@ body {
 	display: flex;
 	flex-direction: column;
 	background-color: var(--dark);
-	color: white;
+	color: var(--text-medium);
 	font-family: Calibri, sans-serif;
-	font: 1.2rem;
+	font-size: 1.4rem;
 }
 
 div, h1, p {

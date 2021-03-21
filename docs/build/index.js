@@ -285,9 +285,9 @@ var index = (function () {
     			span1 = element("span");
     			t2 = text(t2_value);
     			t3 = space();
-    			attr(span0, "class", "clui-dropdown-name svelte-1fsanic");
+    			attr(span0, "class", "clui-dropdown-name svelte-1oo64rr");
     			attr(span1, "class", "clui-dropdown-description");
-    			attr(div, "class", "clui-dropdown-item svelte-1fsanic");
+    			attr(div, "class", "clui-dropdown-item svelte-1oo64rr");
     		},
     		m(target, anchor) {
     			insert(target, div, anchor);
@@ -324,7 +324,7 @@ var index = (function () {
 
     			div1.innerHTML = `<img src="" alt="" class="clui-cli-icon"/> 
 		<div class="clui-cli-autocomplete"></div> 
-		<input type="text" placeholder="enter a command" class="svelte-1fsanic"/>`;
+		<input type="text" placeholder="enter a command" class="svelte-1oo64rr"/>`;
 
     			t2 = space();
     			div2 = element("div");
@@ -333,9 +333,9 @@ var index = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr(div1, "class", "clui-cli-input svelte-1fsanic");
-    			attr(div2, "class", "clui-cli-dropdown svelte-1fsanic");
-    			attr(div3, "class", "clui-cli svelte-1fsanic");
+    			attr(div1, "class", "clui-cli-input svelte-1oo64rr");
+    			attr(div2, "class", "clui-cli-dropdown svelte-1oo64rr");
+    			attr(div3, "class", "clui-cli svelte-1oo64rr");
     		},
     		m(target, anchor) {
     			insert(target, div3, anchor);

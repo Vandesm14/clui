@@ -27,39 +27,47 @@
 
 	.clui-cli-input {
 		display: flex;
-		align-items: middle;
+		align-items: center;
 		background-color: var(--medium);
+		border-radius: 3px 3px 0 0;
+		width: 40vw;
 	}
 
 	.clui-cli-input > input {
-		background-color: var(--medium);
-		color: white;
+		background-color: transparent;
+		color: var(--text-light);
 		border: none;
 		outline: none;
-		font-size: 1.2rem;
-		padding: 0.5rem 1rem;
+		font-size: inherit;
+		padding: 0.6rem 1.2rem;
 		font-family: Calibri, sans-serif;
-		width: 30vw;
+		flex: 1;
+	}
+	.clui-cli-input > input::placeholder {
+		color: var(--text-medium);
 	}
 
 	.clui-cli-dropdown {
 		background-color: var(--medium);
-		color: white;
-		font-size: 1.2rem;
+		border-radius: 0 0 3px 3px;
+		width: 40vw;
 	}
 
 	.clui-dropdown-item {
 		padding: 0.6rem 1.2rem;
+		border-radius: 3px;
 	}
 	.clui-dropdown-item:hover, .clui-dropdown-item.clui-selected {
 		background-color: var(--light);
 		cursor: pointer;
+		color: var(--text-light);
 	}
 
 	.clui-dropdown-name {
 		background-color: var(--light);
 		padding: 0.3rem 0.5rem;
-		margin-left: -0.6rem;
+		margin-left: -0.5rem;
 		margin-right: 0.3rem;
+		border-radius: 3px;
 	}
 </style>
