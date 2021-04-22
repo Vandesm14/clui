@@ -45,5 +45,61 @@ const commands = {
 				}
 			}
 		}
+	},
+	'git': {
+		description: 'a simple git cli',
+		commands: {
+			'push': {
+				description: 'push local changes to remote',
+				args: [{
+						name: 'remote',
+						description: 'the name of the remote to push to',
+						type: 'string',
+						required: true
+					},
+					{
+						name: 'branch',
+						description: 'the name of the branch to push to',
+						type: 'string',
+						required: true
+					},
+					{
+						name: ['force', 'f'],
+						description: 'overwrite remote state with local state',
+						type: 'boolean',
+					}
+				]
+			},
+			'remote': {
+				description: 'modify the remote list',
+				commands: {
+					'add': {
+						description: 'add a remote to the local repository',
+						args: [{
+								name: 'name',
+								description: 'the name for the new remote',
+								type: 'string',
+								required: true
+							},
+							{
+								name: 'url',
+								description: 'the url of the new remote',
+								type: 'string',
+								required: true
+							}
+						]
+					},
+					'remove': {
+						description: 'add a remote to the local repository',
+						args: [{
+							name: 'name',
+							description: 'the name of the remote to remove',
+							type: 'string',
+							required: true
+						}]
+					}
+				}
+			}
+		}
 	}
 };
