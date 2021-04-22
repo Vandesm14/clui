@@ -1,5 +1,5 @@
 <script>
-	import clui from './clui.ts';
+	import clui from './clui.js';
 	import {current} from './stores.js';
 
 	$current = {commands};

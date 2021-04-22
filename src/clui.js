@@ -1,4 +1,3 @@
-import { set_current_component } from 'svelte/internal';
 import {current as _current} from './stores.js';
 
 let current = {commands};
