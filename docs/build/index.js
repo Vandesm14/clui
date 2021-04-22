@@ -22,6 +22,20 @@ var index = (function () {
     function is_empty(obj) {
         return Object.keys(obj).length === 0;
     }
+    function subscribe(store, ...callbacks) {
+        if (store == null) {
+            return noop;
+        }
+        const unsub = store.subscribe(...callbacks);
+        return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
+    }
+    function component_subscribe(component, store, callback) {
+        component.$$.on_destroy.push(subscribe(store, callback));
+    }
+    function set_store_value(store, ret, value = ret) {
+        store.set(value);
+        return ret;
+    }
 
     function append(target, node) {
         target.appendChild(node);
@@ -47,6 +61,9 @@ var index = (function () {
     function space() {
         return text(' ');
     }
+    function empty() {
+        return text('');
+    }
     function listen(node, event, handler, options) {
         node.addEventListener(event, handler, options);
         return () => node.removeEventListener(event, handler, options);
@@ -59,6 +76,11 @@ var index = (function () {
     }
     function children(element) {
         return Array.from(element.childNodes);
+    }
+    function set_data(text, data) {
+        data = '' + data;
+        if (text.wholeText !== data)
+            text.data = data;
     }
     function set_input_value(input, value) {
         input.value = value == null ? '' : value;
@@ -263,44 +285,333 @@ var index = (function () {
         }
     }
 
+    const subscriber_queue = [];
+    /**
+     * Create a `Writable` store that allows both updating and reading by subscription.
+     * @param {*=}value initial value
+     * @param {StartStopNotifier=}start start and stop notifications for subscriptions
+     */
+    function writable(value, start = noop) {
+        let stop;
+        const subscribers = [];
+        function set(new_value) {
+            if (safe_not_equal(value, new_value)) {
+                value = new_value;
+                if (stop) { // store is ready
+                    const run_queue = !subscriber_queue.length;
+                    for (let i = 0; i < subscribers.length; i += 1) {
+                        const s = subscribers[i];
+                        s[1]();
+                        subscriber_queue.push(s, value);
+                    }
+                    if (run_queue) {
+                        for (let i = 0; i < subscriber_queue.length; i += 2) {
+                            subscriber_queue[i][0](subscriber_queue[i + 1]);
+                        }
+                        subscriber_queue.length = 0;
+                    }
+                }
+            }
+        }
+        function update(fn) {
+            set(fn(value));
+        }
+        function subscribe(run, invalidate = noop) {
+            const subscriber = [run, invalidate];
+            subscribers.push(subscriber);
+            if (subscribers.length === 1) {
+                stop = start(set) || noop;
+            }
+            run(value);
+            return () => {
+                const index = subscribers.indexOf(subscriber);
+                if (index !== -1) {
+                    subscribers.splice(index, 1);
+                }
+                if (subscribers.length === 0) {
+                    stop();
+                    stop = null;
+                }
+            };
+        }
+        return { set, update, subscribe };
+    }
+
+    const current$1 = writable({});
+
+    let current = {commands};
+    current$1.subscribe(value => {
+    	console.log('update:', value);
+    	current = value;
+    });
+
     const clui = {
-    	execute: (name) => {
-    		if (Object.keys(commands).includes(name)) {
+    	execute: function(name) {
+    		if (Object.keys(current.commands).includes(name)) { // if command exists
     			console.log('run:', name);
     			// parse args
     			// check args
     			// run command
     		}
     	},
-    	parse: (value) => {
+    	parse: function(value) {
     		console.log('parse:', value);
+    		value = value.split(' ');
+    		if (Object.keys(current.commands).includes(value[0])) { // if command exists
+    			console.log('command exists');
+    			this.setCurrent(value[0]);
+    		} else {
+    			console.log('command does not exist');
+    		}
+    	},
+    	setCurrent: function(name) {
+    		if (Object.keys(current.commands).includes(name)) { // if command exists
+    			console.log('set:', name);
+    			current$1.update(value => current.commands[name]);
+    		}
+    	},
+    	tokenize: function(input) {
+    		let arr = input.split('');
+    		let tokens = [];
+    		let accumulator = '';
+    		let stringType = false;
+    		for (let i = 0; i < arr.length; i++) {
+    			const char = arr[i];
+    			if (char === ' ') {
+    				if (stringType === false) { // Not inside string
+    					tokens.push(accumulator);
+    					accumulator = '';
+    				} else {
+    					accumulator += char;
+    				}
+    			} else if (char === '"') {
+    				if (stringType === '"') { // Closing token
+    					stringType = false;
+    					accumulator += char;
+    					tokens.push(accumulator);
+    					accumulator = '';
+    					i++;
+    				} else if (stringType === "'") { // Ignore
+    					accumulator += char;
+    				} else { // New string
+    					accumulator += char;
+    					stringType = '"';
+    				}
+    			} else if (char === "'") {
+    				if (stringType === "'") { // Closing token
+    					stringType = false;
+    					accumulator += char;
+    					tokens.push(accumulator);
+    					accumulator = '';
+    					i++;
+    				} else if (stringType === '"') { // Ignore
+    					accumulator += char;
+    				} else { // New string
+    					accumulator += char;
+    					stringType = "'";
+    				}
+    			} else {
+    				accumulator += char;
+    			}
+    		}
+    		if (accumulator !== '') tokens.push(accumulator);
+    		return tokens;
     	}
     };
 
     /* src/Index.svelte generated by Svelte v3.35.0 */
 
-    function get_each_context(ctx, list, i) {
+    function get_each_context_1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[4] = list[i];
+    	child_ctx[8] = list[i];
     	return child_ctx;
     }
 
-    // (24:2) {#each Object.keys(commands) as command}
-    function create_each_block(ctx) {
+    function get_each_context(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[5] = list[i];
+    	return child_ctx;
+    }
+
+    // (34:2) {:else}
+    function create_else_block(ctx) {
+    	let each_1_anchor;
+    	let each_value_1 = Object.keys(/*$current*/ ctx[1].args);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value_1.length; i += 1) {
+    		each_blocks[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
+    	}
+
+    	return {
+    		c() {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			each_1_anchor = empty();
+    		},
+    		m(target, anchor) {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(target, anchor);
+    			}
+
+    			insert(target, each_1_anchor, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*$current, Object, Array*/ 2) {
+    				each_value_1 = Object.keys(/*$current*/ ctx[1].args);
+    				let i;
+
+    				for (i = 0; i < each_value_1.length; i += 1) {
+    					const child_ctx = get_each_context_1(ctx, each_value_1, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block_1(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value_1.length;
+    			}
+    		},
+    		d(detaching) {
+    			destroy_each(each_blocks, detaching);
+    			if (detaching) detach(each_1_anchor);
+    		}
+    	};
+    }
+
+    // (27:2) {#if $current?.commands}
+    function create_if_block(ctx) {
+    	let each_1_anchor;
+    	let each_value = Object.keys(/*$current*/ ctx[1].commands);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+    	}
+
+    	return {
+    		c() {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			each_1_anchor = empty();
+    		},
+    		m(target, anchor) {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(target, anchor);
+    			}
+
+    			insert(target, each_1_anchor, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*clui, Object, $current*/ 2) {
+    				each_value = Object.keys(/*$current*/ ctx[1].commands);
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		d(detaching) {
+    			destroy_each(each_blocks, detaching);
+    			if (detaching) detach(each_1_anchor);
+    		}
+    	};
+    }
+
+    // (35:3) {#each Object.keys($current.args) as argument}
+    function create_each_block_1(ctx) {
     	let div;
     	let span0;
-    	let t0_value = /*command*/ ctx[4] + "";
+
+    	let t0_value = (Array.isArray(/*$current*/ ctx[1].args[/*argument*/ ctx[8]].name)
+    	? /*$current*/ ctx[1].args[/*argument*/ ctx[8]].name.join(", ")
+    	: /*$current*/ ctx[1].args[/*argument*/ ctx[8]].name) + "";
+
     	let t0;
     	let t1;
     	let span1;
-    	let t2_value = commands[/*command*/ ctx[4]].description + "";
+    	let t2_value = /*$current*/ ctx[1].args[/*argument*/ ctx[8]].description + "";
+    	let t2;
+    	let t3;
+
+    	return {
+    		c() {
+    			div = element("div");
+    			span0 = element("span");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			span1 = element("span");
+    			t2 = text(t2_value);
+    			t3 = space();
+    			attr(span0, "class", "clui-dropdown-name svelte-1o1dh6z");
+    			attr(span1, "class", "clui-dropdown-description");
+    			attr(div, "class", "clui-dropdown-item svelte-1o1dh6z");
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    			append(div, span0);
+    			append(span0, t0);
+    			append(div, t1);
+    			append(div, span1);
+    			append(span1, t2);
+    			append(div, t3);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*$current*/ 2 && t0_value !== (t0_value = (Array.isArray(/*$current*/ ctx[1].args[/*argument*/ ctx[8]].name)
+    			? /*$current*/ ctx[1].args[/*argument*/ ctx[8]].name.join(", ")
+    			: /*$current*/ ctx[1].args[/*argument*/ ctx[8]].name) + "")) set_data(t0, t0_value);
+
+    			if (dirty & /*$current*/ 2 && t2_value !== (t2_value = /*$current*/ ctx[1].args[/*argument*/ ctx[8]].description + "")) set_data(t2, t2_value);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div);
+    		}
+    	};
+    }
+
+    // (28:3) {#each Object.keys($current.commands) as command}
+    function create_each_block(ctx) {
+    	let div;
+    	let span0;
+    	let t0_value = /*command*/ ctx[5] + "";
+    	let t0;
+    	let t1;
+    	let span1;
+    	let t2_value = /*$current*/ ctx[1].commands[/*command*/ ctx[5]].description + "";
     	let t2;
     	let t3;
     	let mounted;
     	let dispose;
 
     	function click_handler() {
-    		return /*click_handler*/ ctx[3](/*command*/ ctx[4]);
+    		return /*click_handler*/ ctx[4](/*command*/ ctx[5]);
     	}
 
     	return {
@@ -312,9 +623,9 @@ var index = (function () {
     			span1 = element("span");
     			t2 = text(t2_value);
     			t3 = space();
-    			attr(span0, "class", "clui-dropdown-name svelte-7javn3");
+    			attr(span0, "class", "clui-dropdown-name svelte-1o1dh6z");
     			attr(span1, "class", "clui-dropdown-description");
-    			attr(div, "class", "clui-dropdown-item svelte-7javn3");
+    			attr(div, "class", "clui-dropdown-item svelte-1o1dh6z");
     		},
     		m(target, anchor) {
     			insert(target, div, anchor);
@@ -332,6 +643,8 @@ var index = (function () {
     		},
     		p(new_ctx, dirty) {
     			ctx = new_ctx;
+    			if (dirty & /*$current*/ 2 && t0_value !== (t0_value = /*command*/ ctx[5] + "")) set_data(t0, t0_value);
+    			if (dirty & /*$current*/ 2 && t2_value !== (t2_value = /*$current*/ ctx[1].commands[/*command*/ ctx[5]].description + "")) set_data(t2, t2_value);
     		},
     		d(detaching) {
     			if (detaching) detach(div);
@@ -354,12 +667,14 @@ var index = (function () {
     	let div2;
     	let mounted;
     	let dispose;
-    	let each_value = Object.keys(commands);
-    	let each_blocks = [];
 
-    	for (let i = 0; i < each_value.length; i += 1) {
-    		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+    	function select_block_type(ctx, dirty) {
+    		if (/*$current*/ ctx[1]?.commands) return create_if_block;
+    		return create_else_block;
     	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block = current_block_type(ctx);
 
     	return {
     		c() {
@@ -372,21 +687,17 @@ var index = (function () {
     			input = element("input");
     			t2 = space();
     			div2 = element("div");
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].c();
-    			}
-
+    			if_block.c();
     			if (img.src !== (img_src_value = "")) attr(img, "src", img_src_value);
     			attr(img, "alt", "");
     			attr(img, "class", "clui-cli-icon");
     			attr(div0, "class", "clui-cli-autocomplete");
     			attr(input, "type", "text");
     			attr(input, "placeholder", "enter a command");
-    			attr(input, "class", "svelte-7javn3");
-    			attr(div1, "class", "clui-cli-input svelte-7javn3");
-    			attr(div2, "class", "clui-cli-dropdown svelte-7javn3");
-    			attr(div3, "class", "clui-cli svelte-7javn3");
+    			attr(input, "class", "svelte-1o1dh6z");
+    			attr(div1, "class", "clui-cli-input svelte-1o1dh6z");
+    			attr(div2, "class", "clui-cli-dropdown svelte-1o1dh6z");
+    			attr(div3, "class", "clui-cli svelte-1o1dh6z");
     		},
     		m(target, anchor) {
     			insert(target, div3, anchor);
@@ -399,15 +710,12 @@ var index = (function () {
     			set_input_value(input, /*state*/ ctx[0].cli.value);
     			append(div3, t2);
     			append(div3, div2);
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].m(div2, null);
-    			}
+    			if_block.m(div2, null);
 
     			if (!mounted) {
     				dispose = [
-    					listen(input, "input", /*input_input_handler*/ ctx[2]),
-    					listen(input, "input", /*parse*/ ctx[1])
+    					listen(input, "input", /*input_input_handler*/ ctx[3]),
+    					listen(input, "input", /*parse*/ ctx[2])
     				];
 
     				mounted = true;
@@ -418,34 +726,23 @@ var index = (function () {
     				set_input_value(input, /*state*/ ctx[0].cli.value);
     			}
 
-    			if (dirty & /*clui, Object, commands*/ 0) {
-    				each_value = Object.keys(commands);
-    				let i;
+    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
+    				if_block.p(ctx, dirty);
+    			} else {
+    				if_block.d(1);
+    				if_block = current_block_type(ctx);
 
-    				for (i = 0; i < each_value.length; i += 1) {
-    					const child_ctx = get_each_context(ctx, each_value, i);
-
-    					if (each_blocks[i]) {
-    						each_blocks[i].p(child_ctx, dirty);
-    					} else {
-    						each_blocks[i] = create_each_block(child_ctx);
-    						each_blocks[i].c();
-    						each_blocks[i].m(div2, null);
-    					}
+    				if (if_block) {
+    					if_block.c();
+    					if_block.m(div2, null);
     				}
-
-    				for (; i < each_blocks.length; i += 1) {
-    					each_blocks[i].d(1);
-    				}
-
-    				each_blocks.length = each_value.length;
     			}
     		},
     		i: noop,
     		o: noop,
     		d(detaching) {
     			if (detaching) detach(div3);
-    			destroy_each(each_blocks, detaching);
+    			if_block.d();
     			mounted = false;
     			run_all(dispose);
     		}
@@ -453,6 +750,10 @@ var index = (function () {
     }
 
     function instance($$self, $$props, $$invalidate) {
+    	let $current;
+    	component_subscribe($$self, current$1, $$value => $$invalidate(1, $current = $$value));
+    	set_store_value(current$1, $current = { commands }, $current);
+
     	let state = {
     		selection: 0,
     		cli: { list: [], value: "" }
@@ -471,7 +772,7 @@ var index = (function () {
     		clui.execute(command);
     	};
 
-    	return [state, parse, input_input_handler, click_handler];
+    	return [state, $current, parse, input_input_handler, click_handler];
     }
 
     class Index extends SvelteComponent {

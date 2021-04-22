@@ -1,5 +1,8 @@
 <script>
 	import clui from './clui.ts';
+	import {current} from './stores.js';
+
+	$current = {commands};
 	
 	let state = {
 		selection: 0,
@@ -21,12 +24,21 @@
 		<input type="text" placeholder="enter a command" bind:value={state.cli.value} on:input={parse}>
 	</div>
 	<div class="clui-cli-dropdown">
-		{#each Object.keys(commands) as command}
-			<div class="clui-dropdown-item" on:click={()=>{clui.execute(command)}}>
-				<span class="clui-dropdown-name">{command}</span>
-				<span class="clui-dropdown-description">{commands[command].description}</span>
-			</div>
-		{/each}
+		{#if $current?.commands}
+			{#each Object.keys($current.commands) as command}
+				<div class="clui-dropdown-item" on:click={()=>{clui.execute(command)}}>
+					<span class="clui-dropdown-name">{command}</span>
+					<span class="clui-dropdown-description">{$current.commands[command].description}</span>
+				</div>
+			{/each}
+		{:else}
+			{#each Object.keys($current.args) as argument}
+				<div class="clui-dropdown-item">
+					<span class="clui-dropdown-name">{Array.isArray($current.args[argument].name) ? $current.args[argument].name.join(', ') : $current.args[argument].name}</span>
+					<span class="clui-dropdown-description">{$current.args[argument].description}</span>
+				</div>
+			{/each}
+		{/if}
 	</div>
 </div>
 
@@ -43,7 +55,7 @@
 	  align-items: center;
 	  width: 40vw;
 	  border-radius: 3px 3px 0 0;
-	  background-color: var(--medium);
+	  /* background-color: var(--medium); */
 	}
 
 	.clui-cli-input > input {
@@ -63,7 +75,7 @@
 	.clui-cli-dropdown {
 	  width: 40vw;
 	  border-radius: 0 0 3px 3px;
-	  background-color: var(--medium);
+	  /* background-color: var(--medium); */
 	}
 
 	.clui-dropdown-item {
