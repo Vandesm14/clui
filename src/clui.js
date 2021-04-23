@@ -40,22 +40,39 @@ const clui = {
 		if (Object.keys(current.commands).includes(name)) { // if command exists
 			if (tokens.length > depth) { // If half-completed in CLI
 				_value.update(val => [...tokens.slice(0, tokens.length - 1), name, ''].join(' '));
-				this.parse(value);
 			} else {
 				_value.update(val => [...tokens, name, ''].join(' '));
-				this.parse(value);
 			}
+			this.parse(value);
 		// } else if (argument) {
 		}
 	},
-	filter: function(name) {
-		let commands = Object.keys(current.commands).filter(el => el.indexOf(name) !== -1);
-		let args = Object.keys(current.args).filter(el => el.indexOf(name) !== -1)
-		
-		return commands;
-	},
-	includes: function(name) {
-		
+	filter: function(string) {
+		let tokens = this.tokenize(string);
+		let name = tokens[tokens.length - 1];
+
+		if (current?.args) {
+			if (tokens.length > depth) { // If half-completed in CLI
+				let args = current.args.filter(el => el.name.indexOf(name) !== -1);
+	
+				return args;
+			} else {
+				return current.args;
+			}
+		} else if (current?.commands) {
+			if (tokens.length > depth) { // If half-completed in CLI
+				let commands = Object.keys(current.commands).filter(el => el.indexOf(name) !== -1);
+	
+				let obj = {};
+				commands.map(el => obj[el] = current.commands[el]);
+	
+				return obj;
+			} else {
+				return current.commands;
+			}
+		} else {
+			return current.commands;
+		}
 	},
 	setCurrent: function(name) {
 		if (Object.keys(current.commands).includes(name)) { // if command exists

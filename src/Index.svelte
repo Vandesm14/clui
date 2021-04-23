@@ -17,17 +17,17 @@
 	</div>
 	<div class="clui-cli-dropdown">
 		{#if $current?.commands}
-			{#each Object.keys($current.commands) as command}
+			{#each Object.keys(clui.filter($value)) as command}
 				<div class="clui-dropdown-item" on:click={()=>{clui.select(command)}}>
 					<span class="clui-dropdown-name">{command}</span>
 					<span class="clui-dropdown-description">{$current.commands[command].description}</span>
 				</div>
 			{/each}
-		{:else}
-			{#each Object.keys($current.args) as argument}
+		{:else if $current?.args}
+			{#each clui.filter($value) as argument}
 				<div class="clui-dropdown-item">
-					<span class="clui-dropdown-name">{Array.isArray($current.args[argument].name) ? $current.args[argument].name.join(', ') : $current.args[argument].name}</span>
-					<span class="clui-dropdown-description">{$current.args[argument].description}</span>
+					<span class="clui-dropdown-name">{Array.isArray(argument.name) ? argument.name.join(', ') : argument.name}</span>
+					<span class="clui-dropdown-description">{argument.description}</span>
 				</div>
 			{/each}
 		{/if}
