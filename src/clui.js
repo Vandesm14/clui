@@ -25,7 +25,7 @@ const clui = {
 		let command = {commands};
 		depth = 0;
 		for (let token of string) {
-			if (Object.keys(command.commands).includes(token)) { // if command exists
+			if (command?.commands && Object.keys(command.commands).includes(token)) { // if command exists
 				if (raw[raw.indexOf(token) + token.length]) {
 					command = command.commands[token];
 					depth++;
@@ -52,13 +52,10 @@ const clui = {
 		let name = tokens[tokens.length - 1];
 
 		if (current?.args) {
-			if (tokens.length > depth) { // If half-completed in CLI
-				let args = current.args.filter(el => el.name.indexOf(name) !== -1);
-	
-				return args;
-			} else {
-				return current.args;
-			}
+			// calc required input from position (param)
+			// display unused flags/optional params
+
+			return current.args;
 		} else if (current?.commands) {
 			if (tokens.length > depth) { // If half-completed in CLI
 				let commands = Object.keys(current.commands).filter(el => el.indexOf(name) !== -1);
