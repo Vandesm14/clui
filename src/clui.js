@@ -1,9 +1,12 @@
-import {current as _current} from './stores.js';
+import {current as _current, value as _value} from './stores.js';
 
 let current = {commands};
-_current.subscribe(value => {
-	current = value;
-});
+_current.subscribe(val => current = val);
+
+let value = '';
+_value.subscribe(val => value = val);
+
+let depth = 0;
 
 const clui = {
 	execute: function(name) {
@@ -16,25 +19,48 @@ const clui = {
 			// command does not exist
 		}
 	},
-	parse: function(value) {
-		let raw = value;
-		value = this.tokenize(value);
+	parse: function(string) {
+		let raw = string;
+		string = this.tokenize(string);
 		let command = {commands};
-		for (let token of value) {
+		depth = 0;
+		for (let token of string) {
 			if (Object.keys(command.commands).includes(token)) { // if command exists
-				console.log(command, 'command exists');
-				if (raw[raw.indexOf(token) + token.length]) command = command.commands[token];
-			} else {
-				console.log(command, 'command does not exist');
+				if (raw[raw.indexOf(token) + token.length]) {
+					command = command.commands[token];
+					depth++;
+				}
+			// } else if (argument) {
 			}
 		}
-		// this.setCurrent(command);
-		_current.update(value => command);
+		_current.update(val => command);
+	},
+	select: function(name) {
+		let tokens = this.tokenize(value);
+		if (Object.keys(current.commands).includes(name)) { // if command exists
+			if (tokens.length > depth) { // If half-completed in CLI
+				_value.update(val => [...tokens.slice(0, tokens.length - 1), name, ''].join(' '));
+				this.parse(value);
+			} else {
+				_value.update(val => [...tokens, name, ''].join(' '));
+				this.parse(value);
+			}
+		// } else if (argument) {
+		}
+	},
+	filter: function(name) {
+		let commands = Object.keys(current.commands).filter(el => el.indexOf(name) !== -1);
+		let args = Object.keys(current.args).filter(el => el.indexOf(name) !== -1)
+		
+		return commands;
+	},
+	includes: function(name) {
+		
 	},
 	setCurrent: function(name) {
 		if (Object.keys(current.commands).includes(name)) { // if command exists
 			console.log('set:', name);
-			_current.update(value => current.commands[name]);
+			_current.update(val => current.commands[name]);
 		} else {
 			// command does not exist
 		}
