@@ -341,7 +341,6 @@ var index = (function () {
 
     let current = {commands};
     current$1.subscribe(value => {
-    	console.log('update:', value);
     	current = value;
     });
 
@@ -355,14 +354,19 @@ var index = (function () {
     		}
     	},
     	parse: function(value) {
-    		console.log('parse:', value);
-    		value = value.split(' ');
-    		if (Object.keys(current.commands).includes(value[0])) { // if command exists
-    			console.log('command exists');
-    			this.setCurrent(value[0]);
-    		} else {
-    			console.log('command does not exist');
+    		let raw = value;
+    		value = this.tokenize(value);
+    		let command = {commands};
+    		for (let token of value) {
+    			if (Object.keys(command.commands).includes(token)) { // if command exists
+    				console.log(command, 'command exists');
+    				if (raw[raw.indexOf(token) + token.length]) command = command.commands[token];
+    			} else {
+    				console.log(command, 'command does not exist');
+    			}
     		}
+    		// this.setCurrent(command);
+    		current$1.update(value => command);
     	},
     	setCurrent: function(name) {
     		if (Object.keys(current.commands).includes(name)) { // if command exists
@@ -381,7 +385,7 @@ var index = (function () {
     				if (stringType === false) { // Not inside string
     					tokens.push(accumulator);
     					accumulator = '';
-    				} else {
+    				} else { // Inside string
     					accumulator += char;
     				}
     			} else if (char === '"') {
@@ -570,9 +574,9 @@ var index = (function () {
     			span1 = element("span");
     			t2 = text(t2_value);
     			t3 = space();
-    			attr(span0, "class", "clui-dropdown-name svelte-1o1dh6z");
+    			attr(span0, "class", "clui-dropdown-name svelte-3v99mr");
     			attr(span1, "class", "clui-dropdown-description");
-    			attr(div, "class", "clui-dropdown-item svelte-1o1dh6z");
+    			attr(div, "class", "clui-dropdown-item svelte-3v99mr");
     		},
     		m(target, anchor) {
     			insert(target, div, anchor);
@@ -623,9 +627,9 @@ var index = (function () {
     			span1 = element("span");
     			t2 = text(t2_value);
     			t3 = space();
-    			attr(span0, "class", "clui-dropdown-name svelte-1o1dh6z");
+    			attr(span0, "class", "clui-dropdown-name svelte-3v99mr");
     			attr(span1, "class", "clui-dropdown-description");
-    			attr(div, "class", "clui-dropdown-item svelte-1o1dh6z");
+    			attr(div, "class", "clui-dropdown-item svelte-3v99mr");
     		},
     		m(target, anchor) {
     			insert(target, div, anchor);
@@ -655,7 +659,7 @@ var index = (function () {
     }
 
     function create_fragment(ctx) {
-    	let div3;
+    	let div4;
     	let div1;
     	let img;
     	let img_src_value;
@@ -665,6 +669,8 @@ var index = (function () {
     	let input;
     	let t2;
     	let div2;
+    	let t3;
+    	let div3;
     	let mounted;
     	let dispose;
 
@@ -678,7 +684,7 @@ var index = (function () {
 
     	return {
     		c() {
-    			div3 = element("div");
+    			div4 = element("div");
     			div1 = element("div");
     			img = element("img");
     			t0 = space();
@@ -688,29 +694,34 @@ var index = (function () {
     			t2 = space();
     			div2 = element("div");
     			if_block.c();
+    			t3 = space();
+    			div3 = element("div");
     			if (img.src !== (img_src_value = "")) attr(img, "src", img_src_value);
     			attr(img, "alt", "");
     			attr(img, "class", "clui-cli-icon");
     			attr(div0, "class", "clui-cli-autocomplete");
     			attr(input, "type", "text");
     			attr(input, "placeholder", "enter a command");
-    			attr(input, "class", "svelte-1o1dh6z");
-    			attr(div1, "class", "clui-cli-input svelte-1o1dh6z");
-    			attr(div2, "class", "clui-cli-dropdown svelte-1o1dh6z");
-    			attr(div3, "class", "clui-cli svelte-1o1dh6z");
+    			attr(input, "class", "svelte-3v99mr");
+    			attr(div1, "class", "clui-cli-input svelte-3v99mr");
+    			attr(div2, "class", "clui-cli-dropdown svelte-3v99mr");
+    			attr(div3, "class", "clui-pages");
+    			attr(div4, "class", "clui-cli svelte-3v99mr");
     		},
     		m(target, anchor) {
-    			insert(target, div3, anchor);
-    			append(div3, div1);
+    			insert(target, div4, anchor);
+    			append(div4, div1);
     			append(div1, img);
     			append(div1, t0);
     			append(div1, div0);
     			append(div1, t1);
     			append(div1, input);
     			set_input_value(input, /*state*/ ctx[0].cli.value);
-    			append(div3, t2);
-    			append(div3, div2);
+    			append(div4, t2);
+    			append(div4, div2);
     			if_block.m(div2, null);
+    			append(div4, t3);
+    			append(div4, div3);
 
     			if (!mounted) {
     				dispose = [
@@ -741,7 +752,7 @@ var index = (function () {
     		i: noop,
     		o: noop,
     		d(detaching) {
-    			if (detaching) detach(div3);
+    			if (detaching) detach(div4);
     			if_block.d();
     			mounted = false;
     			run_all(dispose);

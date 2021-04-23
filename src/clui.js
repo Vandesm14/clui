@@ -2,7 +2,6 @@ import {current as _current} from './stores.js';
 
 let current = {commands};
 _current.subscribe(value => {
-	console.log('update:', value);
 	current = value;
 });
 
@@ -18,14 +17,19 @@ const clui = {
 		}
 	},
 	parse: function(value) {
-		console.log('parse:', value);
-		value = value.split(' ');
-		if (Object.keys(current.commands).includes(value[0])) { // if command exists
-			console.log('command exists');
-			this.setCurrent(value[0]);
-		} else {
-			console.log('command does not exist');
+		let raw = value;
+		value = this.tokenize(value);
+		let command = {commands};
+		for (let token of value) {
+			if (Object.keys(command.commands).includes(token)) { // if command exists
+				console.log(command, 'command exists');
+				if (raw[raw.indexOf(token) + token.length]) command = command.commands[token];
+			} else {
+				console.log(command, 'command does not exist');
+			}
 		}
+		// this.setCurrent(command);
+		_current.update(value => command);
 	},
 	setCurrent: function(name) {
 		if (Object.keys(current.commands).includes(name)) { // if command exists
@@ -46,7 +50,7 @@ const clui = {
 				if (stringType === false) { // Not inside string
 					tokens.push(accumulator);
 					accumulator = '';
-				} else {
+				} else { // Inside string
 					accumulator += char;
 				}
 			} else if (char === '"') {

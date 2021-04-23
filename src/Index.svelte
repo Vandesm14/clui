@@ -40,6 +40,7 @@
 			{/each}
 		{/if}
 	</div>
+	<div class="clui-pages"></div>
 </div>
 
 <style>
@@ -55,7 +56,6 @@
 	  align-items: center;
 	  width: 40vw;
 	  border-radius: 3px 3px 0 0;
-	  /* background-color: var(--medium); */
 	}
 
 	.clui-cli-input > input {
@@ -75,7 +75,6 @@
 	.clui-cli-dropdown {
 	  width: 40vw;
 	  border-radius: 0 0 3px 3px;
-	  /* background-color: var(--medium); */
 	}
 
 	.clui-dropdown-item {
