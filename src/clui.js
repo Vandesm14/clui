@@ -30,12 +30,13 @@ class Page {
 };
 
 class Toast {
-	constructor(...msg) {
-		this.msg = msg.join(' ');
+	constructor(msg, color) {
+		this.msg = Array.isArray(msg) ? msg.join(' ') : msg;
+		this.color = color;
 		store.toasts.push(this);
 		setTimeout(function(){
 			store.toasts.splice(this, 1);
-		}, 3000)
+		}, 3000);
 	}
 };
 

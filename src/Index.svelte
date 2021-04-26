@@ -1,6 +1,6 @@
 <script>
 	import clui from './clui.js';
-	import { fade, fly } from 'svelte/transition';
+	import {fade, fly} from 'svelte/transition';
 	import {current, value, store} from './stores.js';
 
 	let selection = 0;
@@ -34,11 +34,11 @@
 	};
 </script>
 
-<svelte:window on:error={(err)=>new clui.Toast(err.message)} />
+<svelte:window on:error={(err)=>new clui.Toast(err.message, 'red')} />
 
 <div class="clui-toasts">
 	{#each $store.toasts as toast}
-		<div class="clui-toast" in:fly={{x: 200, duration: 500}} out:fade={{duration: 300}}>{toast.msg}</div>
+		<div class="clui-toast clui-toast-{toast.color}" in:fly={{x: 200, duration: 500}} out:fade={{duration: 300}}>{toast.msg}</div>
 	{/each}
 </div>
 
@@ -85,6 +85,16 @@
 	  border-radius: 3px;
 	  background-color: hsl(225, 35%, 36%);
 	  color: var(--text-light);
+	}
+	.clui-toasts > .clui-toast-red {
+	  /* border-bottom: 0.4rem solid hsl(0, 70%, 40%); */
+	  background-color: hsl(0, 70%, 40%);
+	}
+	.clui-toasts > .clui-toast-yellow {
+	  background-color: hsl(50, 70%, 40%);
+	}
+	.clui-toasts > .clui-toast-green {
+	  background-color: hsl(100, 70%, 40%);
 	}
 
 	.clui-cli {
