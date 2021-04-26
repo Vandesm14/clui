@@ -1,5 +1,5 @@
 # The CLUI
-The CLUI is a unified command system for the web inspired by the project built by [replit](https://docs.replit.com/misc/clui).The CLUI has the speed of a CLI while having the convenience of a UI. Instead of fumbling through CLI documentation, spend more time running commands by using the CLUI's integrated form system to easily understand and fill out parameters and arguments. Adding a reactive command line to your website is as easy as including a plugin and adding commands!
+The CLUI is a unified command system for the web inspired by the project built by [replit](https://docs.replit.com/misc/clui). The CLUI has the speed of a CLI while having the convenience of a UI. Instead of fumbling through CLI documentation, spend more time running commands by using the CLUI's integrated form system to easily understand and fill out parameters and arguments. Adding a reactive command line to your website is as easy as including a plugin and adding commands!
 
 ![](clui-screenshot.png)
 
