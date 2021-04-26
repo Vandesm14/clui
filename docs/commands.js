@@ -3,6 +3,14 @@ const arg = (name, description, type, options) => {
 };
 
 const commands = {
+	'help': {
+		description: 'get help with the CLUI',
+		commands: {
+			'about': {
+				description: 'print an about page'
+			}
+		}
+	},
 	'test': {
 		description: 'tests a specific subsystem',
 		commands: {
@@ -16,8 +24,8 @@ const commands = {
 					arg('flag-string', 'a flag with a single argument', 'string'),
 					arg('flag-enum', 'a flag with a enum argument', 'enum')
 				],
-				run: (args, state, gui) => {
-					console.log(args, state, gui);
+				run: (gui, args) => {
+					console.log({gui, args});
 					// gui.render(args); // renders the args onto the GUI page
 				}
 			}
