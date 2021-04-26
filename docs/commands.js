@@ -12,7 +12,7 @@ const commands = {
 					arg('string', 'either a single word or a multi-word string using quotes', 'string',	{required: true}),
 					arg('number', 'either an integer or a float', ['integer', 'float'],	{required: true}),
 					arg('optional', 'a boolean value: true or false', 'boolean', {isArg: true}),
-					arg(['flag', 'f'], 'a small boolean flag', 'boolean'),
+					arg('flag', 'a small boolean flag', 'boolean', {short: 'f'}),
 					arg('flag-string', 'a flag with a single argument', 'string')
 				],
 				run: (args, state, gui) => {
@@ -30,7 +30,7 @@ const commands = {
 				args: [
 					arg('remote', 'the name of the remote to push to', 'string', {required: true}),
 					arg('branch', 'the name of the branch to push to', 'string', {required: true}),
-					arg(['f', 'force'], 'overwrite remote state with local state', 'boolean')
+					arg('force', 'overwrite remote state with local state', 'boolean', {short: 'f'})
 				]
 			},
 			'remote': {

@@ -26,8 +26,8 @@
 		{:else if $current?.args}
 			{#each clui.filter($value) as argument}
 				<div class="clui-dropdown-item">
-					<span class="clui-dropdown-name">{Array.isArray(argument.name) ? argument.name.join(', ') : argument.name}</span>
-					<span class="clui-dropdown-description">{argument.description}</span>
+					<span class="clui-dropdown-name">{argument?.name}</span>
+					<span class="clui-dropdown-description">{argument?.description}</span>
 				</div>
 			{/each}
 		{/if}

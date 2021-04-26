@@ -12,11 +12,11 @@ const clui = {
 	execute: function(name) {
 		if (Object.keys(current.commands).includes(name)) { // if command exists
 			console.log('run:', name);
-			// parse args
-			// check args
-			// run command
+			// TODO: parse args
+			// TODO: check args
+			// TODO: run command
 		} else {
-			// command does not exist
+			// TODO: command does not exist (toast message system)
 		}
 	},
 	parse: function(string) {
@@ -26,11 +26,11 @@ const clui = {
 		depth = 0;
 		for (let token of string) {
 			if (command?.commands && Object.keys(command.commands).includes(token)) { // if command exists
-				if (raw[raw.indexOf(token) + token.length]) {
+				if (raw[raw.indexOf(token) + token.length] === ' ') {
 					command = command.commands[token];
 					depth++;
 				}
-			// } else if (argument) {
+			// } else if (argument) { // TODO: this
 			}
 		}
 		_current.update(val => command);
@@ -44,7 +44,7 @@ const clui = {
 				_value.update(val => [...tokens, name, ''].join(' '));
 			}
 			this.parse(value);
-		// } else if (argument) {
+		// } else if (argument) { // TODO: this
 		}
 	},
 	filter: function(string) {
@@ -52,31 +52,72 @@ const clui = {
 		let name = tokens[tokens.length - 1];
 
 		if (current?.args) {
-			// calc required input from position (param)
-			// display unused flags/optional params
-
-			return current.args;
+			return this.getArgs(string);
 		} else if (current?.commands) {
 			if (tokens.length > depth) { // If half-completed in CLI
 				let commands = Object.keys(current.commands).filter(el => el.indexOf(name) !== -1);
-	
 				let obj = {};
 				commands.map(el => obj[el] = current.commands[el]);
-	
 				return obj;
 			} else {
 				return current.commands;
 			}
 		} else {
+			// TODO: this should probably not need to exist
 			return current.commands;
 		}
 	},
+	getArgs: function(string) {
+		let tokens = this.tokenize(string);
+		let params = current?.args.filter(el => el.required);
+		let optional = current?.args.filter(el => !el.required && el.isArg);
+		let flags = current?.args.filter(el => !el.required && !el.isArg);
+		let separated = this.separateArgs(tokens.slice(depth));
+
+		let param = [...params, ...optional][separated.params.length];
+		flags = flags.filter(el => !separated.flags.includes(el.name));
+		
+		// TODO: only show next param if a space follows the previous command/flag
+
+
+		return [param, ...flags];
+	},
+	separateArgs: function(tokens) {
+		let flags = [];
+		let params = [];
+
+		for (let i = 0; i < tokens.length; i++) {
+			let token = tokens[i];
+
+			if (token.startsWith('-')) { // is flag
+				if (token.match(/^(-)(\w)+/g) !== null) { // short flag "-f"
+					flags.push(token.split('').slice(1));
+				} else if (token.match(/^(--)(.)+/g) !== null) { // long flag "--flag"
+					let arg = current?.args?.find(el => el.name === token.substr(2));
+					if (arg === undefined) continue;
+
+					if (arg?.type !== 'boolean') {
+						// flags.push([arg.name, tokens[i+1]]);
+						flags.push(arg.name);
+						i++;
+					} else if (arg?.type === 'boolean') {
+						flags.push(arg.name);
+					} else {
+						// TODO: arg does not exist (invalid CLI)
+					}
+				}
+			} else { // parameter
+				params.push(token);
+			}
+		}
+
+		return {flags, params};
+	},
 	setCurrent: function(name) {
 		if (Object.keys(current.commands).includes(name)) { // if command exists
-			console.log('set:', name);
 			_current.update(val => current.commands[name]);
 		} else {
-			// command does not exist
+			// TODO: command does not exist (toast message system)
 		}
 	},
 	tokenize: function(input) {
