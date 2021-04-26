@@ -22,7 +22,11 @@ const commands = {
 					arg('optional', 'a boolean value: true or false', 'boolean', {isArg: true}),
 					arg('flag', 'a small boolean flag', 'boolean', {short: 'f'}),
 					arg('flag-string', 'a flag with a single argument', 'string'),
-					arg('flag-enum', 'a flag with a enum argument', 'enum')
+					arg('flag-enum', 'a flag with a enum argument', 'enum', {items: [
+						arg('a', 'the first option'),
+						arg('b', 'the second option'),
+						arg('c', 'the third option')
+					]})
 				],
 				run: (gui, args) => {
 					console.log({gui, args});

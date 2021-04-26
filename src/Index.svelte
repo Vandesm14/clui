@@ -2,10 +2,39 @@
 	import clui from './clui.js';
 	import {current, value, store} from './stores.js';
 
+	let selection = 0;
+
 	$current = {commands};
 
 	const parse = () => {
 		clui.parse($value);
+	};
+
+	const keydown = (e) => {
+		if (e.key === 'Enter') {
+
+		} else if (e.key === 'Tab') {
+			e.preventDefault();
+			if ($current?.commands) clui.select(Object.keys(clui.filter($value))[selection]);
+			if ($current?.args) clui.select(clui.filter($value)[selection]);
+		} else if (e.key === 'ArrowUp') {
+			e.preventDefault();
+			selection--;
+		} else if (e.key === 'ArrowDown') {
+			e.preventDefault();
+			selection++;
+		}
+
+		if ($current?.commands)
+		selection = selection >= Object.keys(clui.filter($value)).length ? Object.keys(clui.filter($value)).length - 1 : selection;
+		else if ($current?.args)
+		selection = selection >= clui.filter($value).length ? clui.filter($value).length - 1 : selection;
+		
+		selection = selection < 0 ? 0 : selection;
+	};
+
+	const hover = (index) => {
+		selection = index;
 	};
 </script>
 
@@ -13,19 +42,19 @@
 	<div class="clui-cli-input">
 		<img src="icons/cli.png" alt="" class="clui-cli-icon">
 		<div class="clui-cli-autocomplete">{$store?.tokens.slice(0, $store.depth + $store.argDepth).join(' ')}</div>
-		<input type="text" placeholder="enter a command" bind:value={$value} on:input={parse}>
+		<input type="text" placeholder="enter a command" bind:value={$value} on:input={parse} on:keydown={keydown}>
 	</div>
 	<div class="clui-cli-dropdown">
 		{#if $current?.commands}
-			{#each Object.keys(clui.filter($value)) as command}
-				<div class="clui-dropdown-item" on:click={()=>{clui.select(command)}}>
+			{#each Object.keys(clui.filter($value)) as command, i}
+				<div class="clui-dropdown-item {i === selection ? 'clui-selected' : ''}"	on:click={()=>clui.select(command)} on:mouseover={()=>hover(i)}>
 					<span class="clui-dropdown-name">{command}</span>
 					<span class="clui-dropdown-description">{$current.commands[command].description}</span>
 				</div>
 			{/each}
 		{:else if $current?.args}
-			{#each clui.filter($value) as argument}
-				<div class="clui-dropdown-item">
+			{#each clui.filter($value) as argument, i}
+				<div class="clui-dropdown-item {i === selection ? 'clui-selected' : ''}" on:mouseover={()=>hover(i)} on:click={()=>clui.select(argument.name)}>
 					<span class="clui-dropdown-name">{(argument.short ? argument.short + ', ' : '') + argument.name}</span>
 					<span class="clui-dropdown-description">{argument?.description}</span>
 				</div>

@@ -14,7 +14,6 @@ let storeMain = {};
 _store.subscribe(val => storeMain = val);
 
 const upd = (path, val, prevVal, name) => {
-	console.log('updated', {path, val, prevVal, name});
 	_store.update(val => storeMain);
 };
 
@@ -34,7 +33,7 @@ const clui = {
 			// TODO: command does not exist (toast message system)
 		}
 	},
-	parse: function(string) {
+	parse: function(string) { // parse CLI and check for completed commands
 		let raw = string;
 		let tokens = this.tokenize(string);
 		let command = {commands};
@@ -51,19 +50,26 @@ const clui = {
 		store.tokens = tokens;
 		_current.update(val => command);
 	},
-	select: function(name) {
+	select: function(name) { // select command or argument to be pushed to the CLI
 		let tokens = this.tokenize(value);
-		if (Object.keys(current.commands).includes(name)) { // if command exists
+		if (current?.commands && Object.keys(current?.commands).includes(name)) { // if command exists
 			if (tokens.length > store.depth) { // If half-completed in CLI
 				_value.update(val => [...tokens.slice(0, tokens.length - 1), name, ''].join(' '));
 			} else {
 				_value.update(val => [...tokens, name, ''].join(' '));
 			}
 			this.parse(value);
-		// } else if (argument) { // TODO: this
+		} else if (current?.args && current.args.filter(el => !el.required && !el.isArg).some(el => el.name === name)) {
+			if (tokens.length > store.depth) { // If half-completed in CLI
+				_value.update(val => [...tokens.slice(0, tokens.length - 1), `--${name}`, ''].join(' '));
+			} else {
+				_value.update(val => [...tokens, `--${name}`, ''].join(' '));
+			}
+			this.parse(value);
 		}
+		console.log('args:', name, current, current?.args?.filter(el => !el.required && !el.isArg));
 	},
-	filter: function(string) {
+	filter: function(string) { // filter commands and arguments for dropdown
 		let tokens = this.tokenize(string);
 		let name = tokens[tokens.length - 1];
 
@@ -82,7 +88,7 @@ const clui = {
 			return [];
 		}
 	},
-	getArgs: function(string) {
+	getArgs: function(string) { // get and order arguments for dropdown
 		let tokens = this.tokenize(string);
 		let params = current?.args.filter(el => el.required);
 		let optional = current?.args.filter(el => !el.required && el.isArg);
@@ -94,7 +100,7 @@ const clui = {
 
 		return [param, ...flags].filter(el => el !== undefined);
 	},
-	separateArgs: function(tokens, string = '') {
+	separateArgs: function(tokens, string = '') { // separates arguments from tokens into flags and params
 		let flags = [];
 		let params = [];
 		let args = 0;
