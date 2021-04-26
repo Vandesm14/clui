@@ -26,7 +26,7 @@ const clui = {
 		depth = 0;
 		for (let token of string) {
 			if (command?.commands && Object.keys(command.commands).includes(token)) { // if command exists
-				if (raw[raw.indexOf(token) + token.length] === ' ') {
+				if (raw[raw.lastIndexOf(token) + token.length] === ' ') { // TODO: jank method, make better
 					command = command.commands[token];
 					depth++;
 				}
@@ -62,8 +62,7 @@ const clui = {
 			} else {
 				return current.commands;
 			}
-		} else {
-			// TODO: this should probably not need to exist
+		} else { // TODO: this should probably not need to exist
 			return current.commands;
 		}
 	},
@@ -72,26 +71,27 @@ const clui = {
 		let params = current?.args.filter(el => el.required);
 		let optional = current?.args.filter(el => !el.required && el.isArg);
 		let flags = current?.args.filter(el => !el.required && !el.isArg);
-		let separated = this.separateArgs(tokens.slice(depth));
 
-		let param = [...params, ...optional][separated.params.length];
+		let separated = this.separateArgs(tokens.slice(depth), string);
+		let param = [...params, ...optional][separated.withSpace.params.length];
 		flags = flags.filter(el => !separated.flags.includes(el.name));
 		
 		// TODO: only show next param if a space follows the previous command/flag
 
-
-		return [param, ...flags];
+		return [param, ...flags].filter(el => el !== undefined);
 	},
-	separateArgs: function(tokens) {
+	separateArgs: function(tokens, string = '') {
 		let flags = [];
 		let params = [];
+		let withSpace = {params: [], flags: []};
 
 		for (let i = 0; i < tokens.length; i++) {
 			let token = tokens[i];
 
 			if (token.startsWith('-')) { // is flag
 				if (token.match(/^(-)(\w)+/g) !== null) { // short flag "-f"
-					flags.push(token.split('').slice(1));
+					console.log(token.split('').slice(1).map(el => current?.args?.find(el2 => el2.short === el)?.name));
+					flags.push(...token.split('').slice(1).map(el => current?.args?.find(el2 => el2.short === el)?.name));
 				} else if (token.match(/^(--)(.)+/g) !== null) { // long flag "--flag"
 					let arg = current?.args?.find(el => el.name === token.substr(2));
 					if (arg === undefined) continue;
@@ -108,10 +108,11 @@ const clui = {
 				}
 			} else { // parameter
 				params.push(token);
+				if (string[string.lastIndexOf(token) + token.length] === ' ') withSpace.params.push(token);
 			}
 		}
 
-		return {flags, params};
+		return {flags, params, withSpace};
 	},
 	setCurrent: function(name) {
 		if (Object.keys(current.commands).includes(name)) { // if command exists
