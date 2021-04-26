@@ -3,5 +3,5 @@ The CLUI is a unified command system for the web inspired by the project built b
 
 ![](clui-screenshot.png)
 
-## This project is still a WIP so don't yell at it if it doesn't work
+## This project is still a WIP so don't yell at it if it doesn't work!
 *Open to contributions, just email me at vandesm14@gmail.com, DM me on [Twitter](https://twitter.com/vandesm14), or find me on [Discord](https://discord.gg/UKQUkhjxRT)*
