@@ -22,15 +22,32 @@ const store = onChange(storeMain, upd);
 store.depth = 0;
 store.argDepth = 0;
 store.tokens = [];
+store.pages = [];
+store.toasts = [];
+
+class Page {
+
+};
+
+class Toast {
+	constructor(...msg) {
+		this.msg = msg.join(' ');
+		store.toasts.push(this);
+		setTimeout(function(){
+			store.toasts.splice(this, 1);
+		}, 3000)
+	}
+};
 
 const clui = {
-	execute: function(name) {
-		if (Object.keys(current.commands).includes(name)) { // if command exists
+	Toast,
+	execute: function(command) {
+		if (command?.run) { // if command has run function
 			// TODO: parse args
 			// TODO: check args
 			// TODO: run command
 		} else {
-			// TODO: command does not exist (toast message system)
+			// TODO: command does not have run function (toast message system)
 		}
 	},
 	parse: function(string) { // parse CLI and check for completed commands
@@ -38,6 +55,7 @@ const clui = {
 		let tokens = this.tokenize(string);
 		let command = {commands};
 		store.depth = 0;
+
 		for (let token of tokens) {
 			if (command?.commands && Object.keys(command.commands).includes(token)) { // if command exists
 				if (raw[raw.lastIndexOf(token) + token.length] === ' ') {
@@ -67,7 +85,6 @@ const clui = {
 			}
 			this.parse(value);
 		}
-		console.log('args:', name, current, current?.args?.filter(el => !el.required && !el.isArg));
 	},
 	filter: function(string) { // filter commands and arguments for dropdown
 		let tokens = this.tokenize(string);

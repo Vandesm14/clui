@@ -1,14 +1,14 @@
 <script>
 	import clui from './clui.js';
+	import { fade, fly } from 'svelte/transition';
 	import {current, value, store} from './stores.js';
 
 	let selection = 0;
 
 	$current = {commands};
 
-	const parse = () => {
-		clui.parse($value);
-	};
+	const parse = () => clui.parse($value);
+	const hover = (index) => selection = index;
 
 	const keydown = (e) => {
 		if (e.key === 'Enter') {
@@ -16,7 +16,7 @@
 		} else if (e.key === 'Tab') {
 			e.preventDefault();
 			if ($current?.commands) clui.select(Object.keys(clui.filter($value))[selection]);
-			if ($current?.args) clui.select(clui.filter($value)[selection]);
+			if ($current?.args) clui.select(clui.filter($value)[selection]?.name);
 		} else if (e.key === 'ArrowUp') {
 			e.preventDefault();
 			selection--;
@@ -32,11 +32,15 @@
 		
 		selection = selection < 0 ? 0 : selection;
 	};
-
-	const hover = (index) => {
-		selection = index;
-	};
 </script>
+
+<svelte:window on:error={(err)=>new clui.Toast(err.message)} />
+
+<div class="clui-toasts">
+	{#each $store.toasts as toast}
+		<div class="clui-toast" in:fly={{x: 200, duration: 500}} out:fade={{duration: 300}}>{toast.msg}</div>
+	{/each}
+</div>
 
 <div class="clui-cli">
 	<div class="clui-cli-input">
@@ -61,10 +65,28 @@
 			{/each}
 		{/if}
 	</div>
-	<div class="clui-pages"></div>
 </div>
 
+<div class="clui-pages"></div>
+
 <style>
+	.clui-toasts {
+	  position: absolute;
+	  right: 0;
+	  bottom: 0;
+	  display: flex;
+	  overflow: hidden;
+	  flex-direction: column;
+	}
+
+	.clui-toasts > .clui-toast {
+	  margin: 0.6rem 1.2rem;
+	  padding: 0.6rem 1.2rem;
+	  border-radius: 3px;
+	  background-color: hsl(225, 35%, 36%);
+	  color: var(--text-light);
+	}
+
 	.clui-cli {
 	  display: flex;
 	  flex-direction: column;
