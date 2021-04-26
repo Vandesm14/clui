@@ -13,7 +13,8 @@ const commands = {
 					arg('number', 'either an integer or a float', ['integer', 'float'],	{required: true}),
 					arg('optional', 'a boolean value: true or false', 'boolean', {isArg: true}),
 					arg('flag', 'a small boolean flag', 'boolean', {short: 'f'}),
-					arg('flag-string', 'a flag with a single argument', 'string')
+					arg('flag-string', 'a flag with a single argument', 'string'),
+					arg('flag-enum', 'a flag with a enum argument', 'enum')
 				],
 				run: (args, state, gui) => {
 					console.log(args, state, gui);
