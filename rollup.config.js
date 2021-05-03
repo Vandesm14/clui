@@ -4,6 +4,8 @@ import resolve from "@rollup/plugin-node-resolve";
 import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
 import css from "rollup-plugin-css-only";
+import sveltePreprocess from "svelte-preprocess";
+import typescript from '@rollup/plugin-typescript';
 
 import { readdirSync } from "fs";
 
@@ -37,7 +39,7 @@ for(let page of readdirSync("./docs").filter(name => name.endsWith(".html"))) {
 
 	exports.push(
 		{
-			input: `src/${name}.js`,
+			input: `src/${name}.ts`,
 			output: {
 				name,
 				file: `docs/build/${name}.js`,
@@ -46,11 +48,16 @@ for(let page of readdirSync("./docs").filter(name => name.endsWith(".html"))) {
 			plugins: [
 				svelte({
 					dev,
-					emitCss: true
+					emitCss: true,
+					preprocess: sveltePreprocess({ sourceMap: dev })
 				}),
 				css({ output: `${name}.css` }),
 				resolve({ browser: true, dedupe: ["svelte"] }),
 				commonjs(),
+				typescript({
+					sourceMap: dev,
+					inlineSources: dev
+				}),
 
 				dev && livereload("docs"),
 				!dev && terser()

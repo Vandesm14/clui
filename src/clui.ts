@@ -1,4 +1,5 @@
 import onChange from 'on-change';
+import type * as types from './clui.types';
 
 import {
 	current as _current,
@@ -6,18 +7,19 @@ import {
 	store as _store
 } from './stores.js';
 
-let current = {commands};
-_current.subscribe(val => current = val);
+// @ts-ignore
+let current: types.Command = {commands};
+_current.subscribe((val: types.Command) => current = val);
 let value = '';
 _value.subscribe(val => value = val);
-let storeMain = {};
+let storeMain: types.storeMain = {};
 _store.subscribe(val => storeMain = val);
 
 const upd = (path, val, prevVal, name) => {
 	_store.update(val => storeMain);
 };
 
-const store = onChange(storeMain, upd);
+const store: types.storeMain = onChange(storeMain, upd);
 
 store.depth = 0;
 store.argDepth = 0;
@@ -30,7 +32,10 @@ class Page {
 };
 
 class Toast {
-	constructor(msg, color) {
+	msg: string;
+	color: string;
+
+	constructor(msg: string, color: 'red' | 'yellow' | 'green') {
 		this.msg = Array.isArray(msg) ? msg.join(' ') : msg;
 		this.color = color;
 		store.toasts.push(this);
@@ -54,6 +59,8 @@ const clui = {
 	parse: function(string) { // parse CLI and check for completed commands
 		let raw = string;
 		let tokens = this.tokenize(string);
+
+		// @ts-expect-error
 		let command = {commands};
 		store.depth = 0;
 
@@ -164,7 +171,7 @@ const clui = {
 		let arr = input.split('');
 		let tokens = [];
 		let accumulator = '';
-		let stringType = false;
+		let stringType: false | string = false;
 		for (let i = 0; i < arr.length; i++) {
 			const char = arr[i]
 			if (char === ' ') {
