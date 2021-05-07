@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>CLUI (Beta)</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="shortcut icon" href="icons/cli.png" type="image/png">
+	<script src="js/zepto.min.js"></script>
+	<script src="js/clui.js"></script>
+	<script src="js/commands.js"></script>
+	<script src="js/script.js"></script>
+</head>
+
+<body>
+	<div class="clui">
+		<div class="clui-view clui-cli" id="clui-cli">
+			<div class="clui-input clui-input-text">
+				<div class="cli-highlight-list" id="cli-highlight-list"></div>
+				<img class="cli-icon" src="icons/cli.png">
+				<input type="text" placeholder="Enter a command">
+				<button class="clui-cli-run">run</button>
+			</div>
+			<div class="clui-dropdown" id="clui-dropdown"></div>
+		</div>
+		<div class="clui-form-container"></div>
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,461 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: var(--ui-background);
+  color: white;
+  font-family: Raleway;
+}
+
+div,
+h1,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+a,
+a:visited {
+  color: #0000dd;
+}
+
+/* ----------Global---------- */
+:root {
+  --text-active: #eaeaea;
+  --text-blur: #717171;
+  --ui-background: #151515;
+  --ui-primary-active: #3485e4;
+  --ui-secondary-active: #313131;
+  --ui-secondary-blur: #212121;
+}
+
+button {
+  outline: none;
+}
+
+/* ----------CLUI---------- */
+.clui {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 40px 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--ui-background);
+  color: var(--text-active);
+  font-family: Raleway;
+}
+
+/* ----------CLUI/View---------- */
+.clui-view,
+.clui-input > * {
+  border-radius: 6px;
+  font-size: 18px;
+}
+
+/* TODO: Make it not as global (aka seperate for each component) */
+.clui-input *,
+.clui-view * {
+  border-radius: 6px;
+}
+
+/* ----------CLUI/CLI---------- */
+.clui-cli {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  background-color: var(--ui-background);
+}
+
+.clui-cli > .clui-input-text {
+  display: flex;
+  background-color: var(--ui-secondary-blur);
+  color: var(--text-active);
+  font-family: inherit;
+  /* border-radius: 6px 6px 0 0; */
+  /* overflow: hidden; */
+}
+
+.clui-cli > .clui-input-text > input {
+  padding: 14px;
+  padding-left: 3px;
+  width: 100%;
+  outline: none;
+  border: none;
+  background-color: var(--ui-secondary-blur);
+}
+.clui-cli > .clui-input-text > .cli-highlight-list:empty + input {
+  padding-left: 14px;
+}
+
+.clui-cli > .clui-input-text > .cli-highlight-list {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.clui-cli > .clui-input-text > .cli-highlight-list > .cli-highlight {
+  margin: 0 3px;
+  padding: 8px;
+  width: max-content;
+  background-color: var(--ui-secondary-active);
+  cursor: pointer;
+}
+
+.clui-cli > .clui-input-text > .cli-icon {
+  display: none;
+  margin: auto;
+  padding: 0 4px;
+  width: 26px;
+  height: 26px;
+}
+.clui-cli > .clui-input-text > .cli-highlight-list:empty + .cli-icon {
+  display: block;
+}
+
+.clui-cli > .clui-input-text > .clui-cli-run {
+  position: relative;
+  right: 6px;
+  display: none;
+  margin: auto 0;
+  padding: 4px;
+  height: max-content;
+  border: none;
+  background-color: var(--ui-secondary-active);
+  color: var(--text-blur);
+  cursor: pointer;
+}
+.clui-cli > .clui-input-text > .clui-cli-run:hover {
+  color: var(--text-active);
+}
+
+/* ----------CLUI/Dropdown---------- */
+.clui-dropdown {
+  display: flex;
+  overflow: hidden;
+  flex-direction: row;
+  border-radius: 0 0 6px 6px;
+}
+
+.clui-dropdown-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: max-content;
+  border-radius: 5px;
+  background-color: var(--ui-background);
+  transition: width 140ms ease-out;
+}
+.clui-dropdown-section:not(:first-child) {
+  margin-left: 5px;
+}
+.clui-dropdown-section.clui-dropdown-collapsed {
+  width: 0;
+}
+
+/* ----------CLUI/Dropdown/Item---------- */
+.clui-dropdown-item {
+  /* TODO: Slide from left to right transition for color */
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  padding: 0 2px;
+  background-color: var(--ui-background);
+  cursor: pointer;
+}
+
+.clui-dropdown-item:hover,
+.clui-dropdown-item.clui-active {
+  background-color: var(--ui-secondary-blur);
+}
+
+.clui-dropdown-item > * {
+  margin: 6px 4px;
+}
+
+.clui-dropdown-item > button {
+  padding: 8px;
+  border: none;
+  background-color: var(--ui-secondary-blur);
+  color: var(--text-blur);
+  text-align: center;
+  font-size: inherit;
+  cursor: pointer;
+  transition: width 100ms ease-out;
+}
+
+.clui-dropdown-item:hover > button,
+.clui-dropdown-item.clui-active > button {
+  background-color: var(--ui-secondary-active);
+  color: var(--text-active);
+}
+
+.clui-dropdown-section.clui-dropdown-collapsed .clui-dropdown-item > button {
+  width: 100% !important;
+  transition-delay: 160ms;
+  transition-duration: 200ms;
+}
+
+.clui-dropdown-item > p {
+  overflow: hidden;
+  margin-top: 11px;
+  margin-left: 2px;
+  height: 24px;
+  color: var(--text-blur);
+  transition-delay: 100ms;
+  transition-timing-function: ease-out;
+  transition-duration: 0;
+  transition-property: margin, width, height;
+
+  user-select: none;
+}
+
+.clui-dropdown-item:hover > p,
+.clui-dropdown-item.clui-active > p {
+  color: var(--text-active);
+}
+
+.clui-dropdown-section.clui-dropdown-collapsed .clui-dropdown-item > p {
+  margin: 0;
+  width: 0 !important;
+  transition-delay: 100ms;
+}
+
+/* ----------CLUI/Form-Container---------- */
+.clui-form-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+
+  widtH: 60%;
+}
+
+/* ----------CLUI/Form---------- */
+.clui-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+}
+
+/* ----------CLUI/Form-Buttons---------- */
+.clui-form-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  margin-bottom: 4px;
+}
+
+.clui-form-buttons > img {
+  padding: 6px;
+  width: 14px;
+  border-radius: 4px;
+  opacity: 0.3;
+  cursor: pointer;
+  transition: opacity 100ms ease-out;
+}
+.clui-form-container:hover > .clui-form-buttons > img {
+  opacity: 0.5;
+}
+.clui-form-buttons > img:hover {
+  background-color: var(--ui-secondary-active);
+  opacity: 1 !important;
+}
+
+/* ----------CLUI/Form-Box---------- */
+.clui-form-box {
+  padding: 0 20px;
+  border-radius: 6px;
+  background-color: var(--ui-secondary-blur);
+}
+
+/* ----------CLUI/Form-Box/Form-Group---------- */
+.clui-form-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.clui-form-group > * {
+  text-align: center;
+}
+
+/* ----------CLUI/Form-Box/Input---------- */
+.clui-form .clui-input,
+.clui-form .clui-output {
+  display: flex;
+  flex-direction: column;
+  margin: 30px 0;
+  width: max-content;
+}
+
+/* ----------CLUI/Input/Text---------- */
+.clui-input-text {
+  font-size: 18px;
+}
+
+.clui-input-text > .clui-text-placeholder {
+  position: relative;
+  top: 37px;
+  left: 10px;
+  margin-top: -24px;
+  width: max-content;
+  color: var(--text-blur);
+  font-size: inherit;
+  transition: 200ms ease-out;
+}
+
+/* FIXME: Don't cover text box on hover */
+.clui-input-text > .clui-text-placeholder:hover {
+  display: none;
+}
+
+.clui-input-text > .clui-text-placeholder.clui-shrink-active,
+.clui-input-text > .clui-text-placeholder.clui-shrink-blur {
+  top: 19px;
+  left: 3px;
+  transform: scale(76%);
+  transform-origin: center left;
+}
+
+.clui-input-text > .clui-text-placeholder.clui-shrink-active {
+  color: var(--text-active);
+}
+
+.clui-input-text > .clui-text-placeholder.clui-shrink-blur {
+  color: var(--text-blur);
+}
+
+.clui-input-text > input {
+  padding: 16px 10px;
+  border: none;
+  background-color: var(--ui-background);
+  color: var(--text-active);
+  font-family: inherit;
+}
+
+.clui-input-text > input::placeholder {
+  color: var(--text-active);
+  transition: color 500ms ease-out;
+}
+
+.clui-input-text > label {
+  margin-top: 6px;
+  color: var(--text-blur);
+  font-size: 16px;
+}
+
+/* ----------CLUI/Input/Button---------- */
+.clui-input-button > button {
+  padding: 8px 10px;
+  width: max-content;
+  border: none;
+  background-color: var(--ui-background);
+  color: var(--text-active);
+  font-family: inherit;
+  cursor: pointer;
+  transition: 100ms ease-out;
+}
+.clui-input-button > button:hover {
+  background-color: var(--ui-secondary-active);
+  color: var(--text-active);
+}
+
+.clui-input-button > label {
+  margin-top: 6px;
+  color: var(--text-blur);
+  font-size: 16px;
+}
+
+/* ----------CLUI/Input/Checkbox---------- */
+.clui-input-checkbox {
+  font-size: 18px;
+}
+
+.clui-input-checkbox > .clui-checkbox-container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  width: max-content;
+}
+
+.clui-input-checkbox p {
+  color: var(--text-blur);
+}
+
+.clui-input-checkbox input {
+  position: relative;
+  z-index: 1;
+  margin-right: 10px;
+  margin-left: 10px;
+  width: 30px;
+  height: 30px;
+  opacity: 0;
+}
+
+.clui-input-checkbox .clui-checkbox-checkmark {
+  position: relative;
+  top: 0;
+  left: -40px;
+  width: 30px;
+  height: 30px;
+  background-color: var(--ui-background);
+  transition: background-color 50ms ease-out;
+}
+.clui-input-checkbox input:checked ~ .clui-checkbox-checkmark {
+  background-color: var(--ui-secondary-active);
+}
+
+.clui-input-checkbox > label {
+  margin-top: 6px;
+  color: var(--text-blur);
+  font-size: 16px;
+}
+
+/* FIXME: Get this to work */
+.clui-input-checkbox > .clui-checkbox-container input:checked ~ p {
+  color: var(--text-active) !important;
+}
+
+/* ----------CLUI/Output/Label---------- */
+.clui-output-label {
+  width: 100% !important;
+}
+
+.clui-output-label > * {
+  margin: 4px 0;
+}
+
+.clui-output-label > p {
+  color: var(--text-active);
+  font-size: 26px;
+}
+
+.clui-output-label > label {
+  color: var(--text-blur);
+  font-size: 18px;
+}
+
+/* ----------CLUI/Output/Table---------- */
+.clui-output-table th,
+.clui-output-table td {
+  padding: 4px 10px;
+  text-align: center;
+}
+
+.clui-output-table th:not(:last-child),
+.clui-output-table td:not(:last-child) {
+  border-right: 1px solid var(--ui-secondary-active);
+}
+
+.clui-output-table th {
+  border-bottom: 1px solid var(--ui-secondary-active);
+  font-size: 18px;
+}
