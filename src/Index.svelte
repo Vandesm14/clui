@@ -152,7 +152,6 @@
 	  padding: 0.6rem 1.2rem;
 	  border-radius: 3px;
 	}
-	.clui-dropdown-item:hover,
 	.clui-dropdown-item.clui-selected {
 	  background-color: var(--light);
 	  color: var(--text-light);
