@@ -1,6 +1,6 @@
 <script>
 	import clui from './clui.js';
-	import {fade, fly} from 'svelte/transition';
+	import {fade, fly, slide} from 'svelte/transition';
 	import {current, value, store} from './stores.js';
 
 	let selection = 0;
@@ -12,7 +12,7 @@
 
 	const keydown = (e) => {
 		if (e.key === 'Enter') {
-
+			clui.execute($value);
 		} else if (e.key === 'Tab') {
 			e.preventDefault();
 			if ($current?.commands) clui.select(Object.keys(clui.filter($value))[selection]);
@@ -47,7 +47,11 @@
 		<img src="icons/cli.png" alt="" class="clui-cli-icon">
 		<div class="clui-cli-autocomplete">{$store?.tokens.slice(0, $store.depth + $store.argDepth).join(' ')}</div>
 		<input type="text" placeholder="enter a command" bind:value={$value} on:input={parse} on:keydown={keydown}>
+		{#if $current?.run}
+		<button class="clui-cli-run" on:click={clui.execute($value)}>run</button>
+		{/if}
 	</div>
+
 	<div class="clui-cli-dropdown">
 		{#if $current?.commands}
 			{#each Object.keys(clui.filter($value)) as command, i}
@@ -65,104 +69,185 @@
 			{/each}
 		{/if}
 	</div>
+
+	<div class="clui-pages">
+		{#each $store.pages as page}
+			<div class="clui-page-container" in:slide={{duration: 200}} out:slide={{duration: 200}}>
+				<div class="clui-page-buttons">
+					<button on:click={page.close()}>X</button>
+				</div>
+				<div class="clui-page">{page.isForm}</div>
+			</div>
+		{/each}
+	</div>
 </div>
 
-<div class="clui-pages"></div>
 
 <style>
 	.clui-toasts {
-	  position: absolute;
-	  right: 0;
-	  bottom: 0;
-	  display: flex;
-	  overflow: hidden;
-	  flex-direction: column;
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		display: flex;
+		overflow: hidden;
+		flex-direction: column;
 	}
 
-	.clui-toasts > .clui-toast {
-	  margin: 0.6rem 1.2rem;
-	  padding: 0.6rem 1.2rem;
-	  border-radius: 3px;
-	  background-color: hsl(225, 35%, 36%);
-	  color: var(--text-light);
+	.clui-toast {
+		margin: 0.6rem 1.2rem;
+		padding: 0.6rem 1.2rem;
+		border-radius: 3px;
+		background-color: hsl(225, 35%, 36%);
+		color: var(--text-light);
 	}
-	.clui-toasts > .clui-toast-red {
-	  /* border-bottom: 0.4rem solid hsl(0, 70%, 40%); */
-	  background-color: hsl(0, 70%, 40%);
+	.clui-toast-red {
+		background-color: hsl(0, 70%, 40%);
 	}
-	.clui-toasts > .clui-toast-yellow {
-	  background-color: hsl(50, 70%, 40%);
+	.clui-toast-yellow {
+		background-color: hsl(50, 70%, 40%);
 	}
-	.clui-toasts > .clui-toast-green {
-	  background-color: hsl(100, 70%, 40%);
+	.clui-toast-green {
+		background-color: hsl(100, 70%, 40%);
 	}
 
 	.clui-cli {
-	  display: flex;
-	  flex-direction: column;
-	  margin: 4vh auto;
-	  width: max-content;
+		display: flex;
+		flex-direction: column;
+		margin: 4vh auto;
+		width: max-content;
 	}
 
 	.clui-cli-input {
-	  position: relative;
-	  display: flex;
-	  align-items: center;
-	  margin-left: -0.9rem;
-	  width: 40vw;
-	  border-radius: 3px 3px 0 0;
+		position: relative;
+		display: flex;
+		align-items: center;
+		/* margin-left: -0.9rem; */
+		/* width: 40vw; */
+		border-radius: 3px 3px 0 0;
+		background-color: var(--dark);
+		border: 2px solid var(--medium);
 	}
 
 	.clui-cli-input > .clui-cli-icon {
-	  margin: auto;
-	  width: 1.6rem;
-	  height: 1.6rem;
+		/* margin: auto; */
+		width: 1.6rem;
 	}
 
 	.clui-cli-input > .clui-cli-autocomplete {
-	  position: absolute;
-	  left: 1.8rem;
-	  padding: 0 0.2rem;
-	  background-color: var(--light);
+		position: absolute;
+		left: 1.8rem;
+		z-index: 1;
+		padding: 0 0.2rem;
+		border-radius: 2px;
+		background-color: var(--light);
 	}
 
 	.clui-cli-input > input {
-	  position: relative;
-	  z-index: 1;
-	  flex: 1;
-	  /* padding: 0.6rem 1.2rem; */
-	  padding: 0.6rem 0.4rem;
-	  outline: none;
-	  border: none;
-	  background-color: transparent;
-	  color: var(--text-light);
-	  font-size: inherit;
-	  font-family: Calibri, sans-serif;
+		position: relative;
+		z-index: 1;
+		flex: 1;
+
+		/* padding: 0.6rem 1.2rem; */
+		padding: 0.6rem 0.4rem;
+		outline: none;
+		border: none;
+		background-color: transparent;
+		color: var(--text-light);
+		font-size: inherit;
+		font-family: Calibri, sans-serif;
 	}
 	.clui-cli-input > input::placeholder {
-	  color: var(--text-medium);
+		color: var(--text-medium);
+	}
+
+	.clui-cli-run {
+		padding: 0 0.2rem;
+		margin: 0 0.4rem;
+		border: none;
+		border-radius: 2px;
+		background-color: transparent;
+		font: inherit;
+		color: var(--text-medium);
+		cursor: pointer;
+		outline: 2px solid var(--light);
+	}
+	.clui-cli-run:hover {
+		color: var(--text-light);
+		background-color: var(--light);
 	}
 
 	.clui-cli-dropdown {
-	  width: 40vw;
-	  border-radius: 0 0 3px 3px;
+		min-width: 40vw;
+		max-width: 60vw;
+		border-radius: 0 0 3px 3px;
 	}
 
 	.clui-dropdown-item {
-	  padding: 0.6rem 1.2rem;
-	  border-radius: 3px;
+		padding: 0.6rem 1.2rem;
+		padding-left: 2.2rem;
+		border-radius: 3px;
+		z-index: 1;
+		position: relative;
 	}
 	.clui-dropdown-item.clui-selected {
-	  background-color: var(--light);
-	  color: var(--text-light);
-	  cursor: pointer;
+		background-color: var(--light);
+		color: var(--text-light);
+		cursor: pointer;
+		background-color: var(--medium);
+		outline: 2px solid var(--light);
 	}
 
 	.clui-dropdown-name {
-	  margin-right: 0.3rem;
-	  margin-left: -0.5rem;
-	  padding: 0.3rem 0.5rem;
-	  border-radius: 3px;
-	  background-color: var(--light);
+		margin-right: 0.3rem;
+		margin-left: -0.5rem;
+		padding: 0.3rem 0.5rem;
+		border-radius: 3px;
+		border: 2px solid var(--light);
+	}
+	.clui-selected > .clui-dropdown-name {
+		background-color: var(--light);
+	}
+
+	.clui-pages {
+		display: flex;
+		flex-direction: column;
+		margin: 4vh auto;
+		min-width: 40vw;
+		max-width: 60vw;
+	}
+
+	.clui-page-container {
+		margin: 0.8rem 0;
+	}
+
+	.clui-page-buttons {
+		display: flex;
+		flex-direction: row;
+		justify-content: right;
+	}
+
+	.clui-page-buttons > button {
+		padding: 0.3rem 0.5rem;
+		border-radius: 3px;
+		background-color: transparent;
+		border: 2px solid var(--medium);
+		color: var(--text-medium);
+		cursor: pointer;
+	}
+	.clui-page-buttons > button:hover {
+		color: var(--text-light);
+		background-color: var(--light);
+		border: 2px solid var(--light);
+	}
+
+	.clui-page {
+		display: flex;
+		flex-direction: column;
+		background-color: var(--dark);
+		border: 2px solid var(--medium);
+		border-radius: 3px;
+		padding: 0.6rem 1.2rem;
+		width: 100%;
+		margin: 0.2rem 0;
 	}
 </style>

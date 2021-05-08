@@ -7,7 +7,7 @@ import {
 	store as _store
 } from './stores.js';
 
-// @ts-ignore
+// @ts-expect-error
 let current: types.Command = {commands};
 _current.subscribe((val: types.Command) => current = val);
 let value = '';
@@ -16,7 +16,7 @@ let storeMain: types.storeMain = {};
 _store.subscribe(val => storeMain = val);
 
 const upd = (path, val, prevVal, name) => {
-	_store.update(val => storeMain);
+	_store.set(storeMain);
 };
 
 const store: types.storeMain = onChange(storeMain, upd);
@@ -28,18 +28,36 @@ store.pages = [];
 store.toasts = [];
 
 class Page {
-
+	args: types.Arg[];
+	isForm: boolean;
+	
+	constructor(args: types.Arg[], isForm?: boolean) {
+		this.args = args;
+		this.isForm = isForm;
+		
+		if (isForm) {
+			// append form button
+		}
+		
+		store.pages.push(this);
+	}
+	
+	close(this): void {
+		store.pages.splice(this, 1);
+	}
 };
 
 class Toast {
 	msg: string;
 	color: string;
 
-	constructor(msg: string, color: 'red' | 'yellow' | 'green') {
+	constructor(msg: string, color?: 'red' | 'yellow' | 'green') {
 		this.msg = Array.isArray(msg) ? msg.join(' ') : msg;
 		this.color = color;
+		
 		store.toasts.push(this);
-		setTimeout(function(){
+		setTimeout(() => {
+			// @ts-expect-error
 			store.toasts.splice(this, 1);
 		}, 3000);
 	}
@@ -47,16 +65,26 @@ class Toast {
 
 const clui = {
 	Toast,
-	execute: function(command) {
-		if (command?.run) { // if command has run function
+	execute: function(string: string) {
+		if (current?.run) { // if command has run function
+			console.log('run', current);
 			// TODO: parse args
 			// TODO: check args
 			// TODO: run command
+
+			new Page([], true);
+			// @ts-expect-error
+			_current.set({commands});
+			_value.set('');
+			store.tokens = [];
+			store.depth = 0;
+			store.argDepth = 0;
 		} else {
+			console.log('no run', current);
 			// TODO: command does not have run function (toast message system)
 		}
 	},
-	parse: function(string) { // parse CLI and check for completed commands
+	parse: function(string: string) { // parse CLI and check for completed commands
 		let raw = string;
 		let tokens = this.tokenize(string);
 
@@ -74,27 +102,27 @@ const clui = {
 			}
 		}
 		store.tokens = tokens;
-		_current.update(val => command);
+		_current.set(command);
 	},
-	select: function(name) { // select command or argument to be pushed to the CLI
+	select: function(name: string) { // select command or argument to be pushed to the CLI
 		let tokens = this.tokenize(value);
 		if (current?.commands && Object.keys(current?.commands).includes(name)) { // if command exists
 			if (tokens.length > store.depth) { // If half-completed in CLI
-				_value.update(val => [...tokens.slice(0, tokens.length - 1), name, ''].join(' '));
+				_value.set([...tokens.slice(0, tokens.length - 1), name, ''].join(' '));
 			} else {
-				_value.update(val => [...tokens, name, ''].join(' '));
+				_value.set([...tokens, name, ''].join(' '));
 			}
 			this.parse(value);
 		} else if (current?.args && current.args.filter(el => !el.required && !el.isArg).some(el => el.name === name)) {
 			if (tokens.length > store.depth) { // If half-completed in CLI
-				_value.update(val => [...tokens.slice(0, tokens.length - 1), `--${name}`, ''].join(' '));
+				_value.set([...tokens.slice(0, tokens.length - 1), `--${name}`, ''].join(' '));
 			} else {
-				_value.update(val => [...tokens, `--${name}`, ''].join(' '));
+				_value.set([...tokens, `--${name}`, ''].join(' '));
 			}
 			this.parse(value);
 		}
 	},
-	filter: function(string) { // filter commands and arguments for dropdown
+	filter: function(string: string) { // filter commands and arguments for dropdown
 		let tokens = this.tokenize(string);
 		let name = tokens[tokens.length - 1];
 
@@ -113,7 +141,7 @@ const clui = {
 			return [];
 		}
 	},
-	getArgs: function(string) { // get and order arguments for dropdown
+	getArgs: function(string: string) { // get and order arguments for dropdown
 		let tokens = this.tokenize(string);
 		let params = current?.args.filter(el => el.required);
 		let optional = current?.args.filter(el => !el.required && el.isArg);
@@ -125,7 +153,7 @@ const clui = {
 
 		return [param, ...flags].filter(el => el !== undefined);
 	},
-	separateArgs: function(tokens, string = '') { // separates arguments from tokens into flags and params
+	separateArgs: function(tokens: string[], string = '') { // separates arguments from tokens into flags and params
 		let flags = [];
 		let params = [];
 		let args = 0;
@@ -160,14 +188,14 @@ const clui = {
 		store.argDepth = flags.length + withSpace.params.length + args;
 		return {flags, params, withSpace};
 	},
-	setCurrent: function(name) {
+	setCurrent: function(name: string) {
 		if (Object.keys(current.commands).includes(name)) { // if command exists
 			_current.update(val => current.commands[name]);
 		} else {
 			// TODO: command does not exist (toast message system)
 		}
 	},
-	tokenize: function(input) {
+	tokenize: function(input: string) {
 		let arr = input.split('');
 		let tokens = [];
 		let accumulator = '';

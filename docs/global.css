@@ -1,8 +1,9 @@
 :root {
+	--darker: #0a0d16;
 	--dark: #171D2D;
 	--medium: #20283D;
 	--light: #3C4C7D;
-	--text-medium: #D3DEF2;
+	--text-medium: #869bc2;
 	--text-light: #D3DEF2;
 }
 
@@ -20,10 +21,10 @@ html, body {
 body {
 	display: flex;
 	flex-direction: column;
-	background-color: var(--dark);
+	background-color: var(--darker);
 	color: var(--text-medium);
 	font-family: Calibri, sans-serif;
-	font-size: 1.4rem;
+	font-size: 1.3rem;
 }
 
 div, h1, p {

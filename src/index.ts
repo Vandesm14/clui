@@ -1,4 +1,3 @@
-// @ts-ignore
 import App from './Index.svelte';
 
 const app = new App({
