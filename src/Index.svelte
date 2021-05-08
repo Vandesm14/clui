@@ -1,7 +1,10 @@
 <script>
-	import clui from './clui.js';
-	import {fade, fly, slide} from 'svelte/transition';
+	'use strict';
+
+	import clui from './clui.ts';
+	import Item from './comps/Item.svelte';
 	import {current, value, store} from './stores.js';
+	import {fade, fly, slide} from 'svelte/transition';
 
 	window.clui = clui;
 
@@ -83,7 +86,11 @@
 				<div class="clui-page-buttons">
 					<button on:click={page.close()}>X</button>
 				</div>
-				<div class="clui-page">{page.isForm}</div>
+				<div class="clui-page">
+					{#each page.args as arg (page.args)}
+						<Item arg={arg} />
+					{/each}
+				</div>
 			</div>
 		{/each}
 	</div>
@@ -188,6 +195,7 @@
 		min-width: 40vw;
 		max-width: 60vw;
 		border-radius: 0 0 3px 3px;
+		background-color: var(--darker);
 	}
 
 	.clui-dropdown-item {
@@ -251,7 +259,7 @@
 	.clui-page {
 		display: flex;
 		flex-direction: column;
-		background-color: var(--dark);
+		background-color: var(--darker);
 		border: 2px solid var(--medium);
 		border-radius: 3px;
 		padding: 0.6rem 1.2rem;

@@ -1,10 +1,18 @@
 :root {
-	--darker: #0a0d16;
-	--dark: #171D2D;
-	--medium: #20283D;
-	--light: #3C4C7D;
-	--text-medium: #869bc2;
-	--text-light: #D3DEF2;
+	/* --darkest:     hsl(225, 38%, 6%);
+	--darker:      hsl(229, 35%, 9%);
+	--dark:        hsl(224, 32%, 13%);
+	--medium:      hsl(223, 31%, 18%);
+	--light:       hsl(225, 35%, 36%);
+	--text-medium: hsl(219, 33%, 64%);
+	--text-light:  hsl(219, 54%, 89%); */
+	--darkest:     hsl(225, 38%, 6%);
+	--darker:      hsl(225, 35%, 9%);
+	--dark:        hsl(225, 32%, 13%);
+	--medium:      hsl(225, 31%, 18%);
+	--light:       hsl(225, 35%, 36%);
+	--text-medium: hsl(225, 33%, 64%);
+	--text-light:  hsl(225, 54%, 89%);
 }
 
 * {
@@ -21,7 +29,7 @@ html, body {
 body {
 	display: flex;
 	flex-direction: column;
-	background-color: var(--darker);
+	background-color: var(--darkest);
 	color: var(--text-medium);
 	font-family: Calibri, sans-serif;
 	font-size: 1.3rem;

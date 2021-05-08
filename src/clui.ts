@@ -1,3 +1,5 @@
+'use strict';
+
 import onChange from 'on-change';
 import type * as types from './clui.types';
 
@@ -35,7 +37,9 @@ class Page {
 		this.isForm = isForm;
 		
 		if (isForm) {
-			// append form button
+			this.args.push({name: 'submit', value: 'submit', type: 'button', run: () => {
+				console.log('clicked!!!!');
+			}});
 		}
 		
 		store.pages.push(this);
@@ -66,6 +70,10 @@ class Toast {
 
 const clui = {
 	Toast,
+	Page,
+	arg: (name, desc, type, options) => {
+		return {name, desc, type, ...options};
+	},
 	init: function(commands: Record<string, types.Command>): void {
 		_current.set({commands});
 	},
@@ -77,21 +85,30 @@ const clui = {
 		store.depth = 0;
 		store.argDepth = 0;
 	},
+	/** executes the current command */
 	execute: function(): void {
 		if (current?.run) { // if command has run function
-			// TODO: parse args
+			let args = clui.getArgs(value, true);
 			// TODO: check args
 			// TODO: run command
 
-			new Page([], true);
-			this.clear();
+			if (args.length < current.args?.filter(el => el.required).length) { // if required args are not complete
+				console.log('from form', current.args, args.length);
+				new Page([...args, ...current.args.slice(args.length)], true);
+			} else {
+				console.log('normal');
+				new Page(args);
+			}
+
+			clui.clear();
 		} else {
 			new Toast('Command does not have a run function', 'red');
 		}
 	},
-	parse: function(string: string) { // parse CLI and check for completed commands
+	/** parses CLI and checks for completed commands */
+	parse: function(string: string): void {
 		let raw = string;
-		let tokens = this.tokenize(string);
+		let tokens = clui.tokenize(string);
 
 		// @ts-expect-error
 		let command = {commands};
@@ -109,30 +126,32 @@ const clui = {
 		store.tokens = tokens;
 		_current.set(command);
 	},
-	select: function(name: string) { // select command or argument to be pushed to the CLI
-		let tokens = this.tokenize(value);
+	/** selects command or argument to be pushed to the CLI */
+	select: function(name: string): void {
+		let tokens = clui.tokenize(value);
 		if (current?.commands && Object.keys(current?.commands).includes(name)) { // if command exists
 			if (tokens.length > store.depth) { // If half-completed in CLI
 				_value.set([...tokens.slice(0, tokens.length - 1), name, ''].join(' '));
 			} else {
 				_value.set([...tokens, name, ''].join(' '));
 			}
-			this.parse(value);
+			clui.parse(value);
 		} else if (current?.args && current.args.filter(el => !el.required && !el.isArg).some(el => el.name === name)) {
 			if (tokens.length > store.depth) { // If half-completed in CLI
 				_value.set([...tokens.slice(0, tokens.length - 1), `--${name}`, ''].join(' '));
 			} else {
 				_value.set([...tokens, `--${name}`, ''].join(' '));
 			}
-			this.parse(value);
+			clui.parse(value);
 		}
 	},
-	filter: function(string: string) { // filter commands and arguments for dropdown
-		let tokens = this.tokenize(string);
+	/** filters commands and arguments for dropdown */
+	filter: function(string: string): types.Arg[] | Record<string, types.Command> {
+		let tokens = clui.tokenize(string);
 		let name = tokens[tokens.length - 1];
 
 		if (current?.args) {
-			return this.getArgs(string);
+			return clui.getArgs(string);
 		} else if (current?.commands) {
 			if (tokens.length > store.depth) { // If half-completed in CLI
 				let commands = Object.keys(current.commands).filter(el => el.indexOf(name) !== -1);
@@ -146,20 +165,38 @@ const clui = {
 			new Toast('filter: Command has no children', 'yellow');
 		}
 	},
-	getArgs: function(string: string) { // get and order arguments for dropdown
-		let tokens = this.tokenize(string);
+	/** gets and orders arguments for dropdown */
+	getArgs: function(string: string, inverse = false): types.Arg[] {
+		let tokens = clui.tokenize(string);
 		let params = current?.args.filter(el => el.required);
 		let optional = current?.args.filter(el => !el.required && el.isArg);
 		let flags = current?.args.filter(el => !el.required && !el.isArg);
 
-		let separated = this.separateArgs(tokens.slice(store.depth), string);
-		let param = [...params, ...optional][separated.withSpace.params.length];
-		flags = flags.filter(el => !separated.flags.includes(el.name));
+		if (!inverse) { // filter unused args
+			let separated = clui.separateArgs(tokens.slice(store.depth), string);
+			let param = [...params, ...optional][separated.withSpace.params.length];
+			flags = flags.filter(el => !separated.flags.includes(el.name));
+	
+			return [param, ...flags].filter(el => el !== undefined);
+		} else { // filter used args
+			let separated = clui.separateArgs(tokens.slice(store.depth), string);
+			let param = [...params, ...optional].slice(0, separated.params.length);
 
-		return [param, ...flags].filter(el => el !== undefined);
+			param.forEach((el, i) => {
+				el.value = separated.params[i];
+				if (el.type === 'string' && el.value[0].match(/["']/) !== null) el.value = el.value.slice(1, -1);
+			});
+			separated.flagData.forEach(el => {
+				if (el.type === 'string') el.value = el.value.slice(1, -1);
+			});
+
+			return [...param, ...separated.flagData].filter(el => el !== undefined);
+		}
 	},
-	separateArgs: function(tokens: string[], string = '') { // separates arguments from tokens into flags and params
+	/** separates arguments from tokens into flags and params */
+	separateArgs: function(tokens: string[], string = ''): {flags: string[], flagData: types.Arg[],params: string[], withSpace: {flags: string[], params: string[]}} {
 		let flags = [];
+		let flagData = [];
 		let params = [];
 		let args = 0;
 		let withSpace = {params: [], flags: []};
@@ -170,16 +207,19 @@ const clui = {
 			if (token.startsWith('-')) { // is flag
 				if (token.match(/^(-)(\w)+/g) !== null) { // short flag "-f"
 					flags.push(...token.split('').slice(1).map(el => current?.args?.find(el2 => el2.short === el)?.name));
+					flagData.push(...token.split('').slice(1).map(el => {return {...current?.args?.find(el2 => el2.short === el), value: true}}));
 				} else if (token.match(/^(--)(.)+/g) !== null) { // long flag "--flag"
 					let arg = current?.args?.find(el => el.name === token.substr(2));
 					if (arg === undefined) continue;
 
-					if (arg?.type !== 'boolean') {
+					if (arg?.type !== 'boolean') { // if not boolean
 						flags.push(arg.name);
+						flagData.push({...arg, value: tokens[i+1]});
 						args++;
 						i++;
-					} else if (arg?.type === 'boolean') {
+					} else if (arg?.type === 'boolean') { // if boolean flag
 						flags.push(arg.name);
+						flagData.push({...arg, value: true});
 					} else {
 						// TODO: arg does not exist (invalid CLI)
 					}
@@ -191,16 +231,19 @@ const clui = {
 		}
 
 		store.argDepth = flags.length + withSpace.params.length + args;
-		return {flags, params, withSpace};
+
+		return {flags, params, withSpace, flagData};
 	},
-	setCurrent: function(name: string) {
+	/** sets the current command */
+	setCurrent: function(name: string): void {
 		if (Object.keys(current.commands).includes(name)) { // if command exists
 			_current.update(val => current.commands[name]);
 		} else {
 			new Toast('setCurrent: Command has no children', 'yellow');
 		}
 	},
-	tokenize: function(input: string) {
+	/** tokenizes a cli input string */
+	tokenize: function(input: string): string[] {
 		let arr = input.split('');
 		let tokens = [];
 		let accumulator = '';

@@ -14,12 +14,21 @@ export interface Toast {
 export interface Arg {
 	name: string,
 	desc?: string,
-	type: 'string' | 'boolean' | 'number' | 'enum',
+	type: 'string' | 'boolean' | 'number' | 'enum' | 'button' | 'paragraph' | 'table',
 	value?: string,
 	short?: string,
 	isArg?: true,
 	required?: true,
+	run?: () => void
 }
+
+// export interface Item {
+// 	name?: string,
+// 	value: string,
+// 	desc?: string,
+// 	type: 'button' | 'paragraph' | 'table',
+// 	run?: () => void
+// }
 
 export interface Command {
 	desc?: string,

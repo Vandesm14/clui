@@ -1,5 +1,8 @@
 # node modules
 node_modules/*
 
+# .vscode
+.vscode/*
+
 # build files
 # docs/build/*
