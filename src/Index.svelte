@@ -3,9 +3,9 @@
 	import {fade, fly, slide} from 'svelte/transition';
 	import {current, value, store} from './stores.js';
 
-	let selection = 0;
+	window.clui = clui;
 
-	$current = {commands};
+	let selection = 0;
 
 	const parse = () => clui.parse($value);
 	const hover = (index) => selection = index;

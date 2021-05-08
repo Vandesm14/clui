@@ -7,8 +7,7 @@ import {
 	store as _store
 } from './stores.js';
 
-// @ts-expect-error
-let current: types.Command = {commands};
+let current: types.Command;
 _current.subscribe((val: types.Command) => current = val);
 let value = '';
 _value.subscribe(val => value = val);
@@ -65,6 +64,9 @@ class Toast {
 
 const clui = {
 	Toast,
+	init: function(commands: Record<string, types.Command>) {
+		_current.set({commands});
+	},
 	execute: function(string: string) {
 		if (current?.run) { // if command has run function
 			console.log('run', current);

@@ -67,3 +67,5 @@ const commands = {
 		}
 	}
 };
+
+clui.init(commands);
