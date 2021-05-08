@@ -39,7 +39,7 @@
 <svelte:window on:error={(err)=>new clui.Toast(err.message, 'red')} />
 
 <div class="clui-toasts">
-	{#each $store.toasts as toast}
+	{#each $store.toasts as toast (toast.id)}
 		<div class="clui-toast clui-toast-{toast.color}" in:fly={{x: 200, duration: 500}} out:slide={{duration: 300}}>{toast.msg}</div>
 	{/each}
 </div>

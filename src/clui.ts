@@ -49,10 +49,12 @@ class Page {
 class Toast {
 	msg: string;
 	color: string;
+	id: {};
 
 	constructor(msg: string, color?: 'red' | 'yellow' | 'green') {
 		this.msg = Array.isArray(msg) ? msg.join(' ') : msg;
 		this.color = color;
+		this.id = {};
 		
 		store.toasts.push(this);
 		setTimeout(() => {

@@ -1,2 +1,5 @@
-/node_modules/
-/public/build/
+# node modules
+node_modules/*
+
+# build files
+# docs/build/*
