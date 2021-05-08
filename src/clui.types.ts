@@ -13,7 +13,7 @@ export interface Toast {
 
 export interface Arg {
 	name: string,
-	description?: string,
+	desc?: string,
 	type: 'string' | 'boolean' | 'number' | 'enum',
 	value?: string,
 	short?: string,
@@ -22,7 +22,7 @@ export interface Arg {
 }
 
 export interface Command {
-	description?: string,
+	desc?: string,
 	commands?: Record<string, Command>,
 	run?: (gui: GUI, args: Arg[]) => void,
 	args?: Arg[]

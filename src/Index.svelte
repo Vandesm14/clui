@@ -45,10 +45,15 @@
 <div class="clui-cli">
 	<div class="clui-cli-input">
 		<img src="icons/cli.png" alt="" class="clui-cli-icon">
-		<div class="clui-cli-autocomplete">{$store?.tokens.slice(0, $store.depth + $store.argDepth).join(' ')}</div>
+		{#if $store?.tokens}
+			<div class="clui-cli-autocomplete">{$store?.tokens.slice(0, $store.depth + $store.argDepth).join(' ')}</div>
+		{/if}
 		<input type="text" placeholder="enter a command" bind:value={$value} on:input={parse} on:keydown={keydown}>
 		{#if $current?.run}
-		<button class="clui-cli-run" on:click={clui.execute($value)}>run</button>
+			<button class="clui-cli-run" on:click={clui.execute($value)}>run</button>
+		{/if}
+		{#if $value}
+			<button class="clui-cli-run" on:click={() => {$value = ''; parse()}}>x</button>
 		{/if}
 	</div>
 
@@ -57,14 +62,14 @@
 			{#each Object.keys(clui.filter($value)) as command, i}
 				<div class="clui-dropdown-item {i === selection ? 'clui-selected' : ''}"	on:click={()=>clui.select(command)} on:mouseover={()=>hover(i)}>
 					<span class="clui-dropdown-name">{command}</span>
-					<span class="clui-dropdown-description">{$current.commands[command].description}</span>
+					<span class="clui-dropdown-description">{$current.commands[command]?.desc}</span>
 				</div>
 			{/each}
 		{:else if $current?.args}
 			{#each clui.filter($value) as argument, i}
 				<div class="clui-dropdown-item {i === selection ? 'clui-selected' : ''}" on:mouseover={()=>hover(i)} on:click={()=>clui.select(argument.name)}>
 					<span class="clui-dropdown-name">{(argument.short ? argument.short + ', ' : '') + argument.name}</span>
-					<span class="clui-dropdown-description">{argument?.description}</span>
+					<span class="clui-dropdown-description">{argument?.desc}</span>
 				</div>
 			{/each}
 		{/if}
