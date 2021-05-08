@@ -15,10 +15,12 @@ export interface Arg {
 	name: string,
 	desc?: string,
 	type: 'string' | 'boolean' | 'number' | 'enum' | 'button' | 'paragraph' | 'table',
-	value?: string,
+	// value?: string | boolean | number | string[][],
+	value?: any,
 	short?: string,
 	isArg?: true,
 	required?: true,
+	items?: Arg[],
 	run?: () => void
 }
 

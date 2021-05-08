@@ -136,15 +136,12 @@
 		position: relative;
 		display: flex;
 		align-items: center;
-		/* margin-left: -0.9rem; */
-		/* width: 40vw; */
 		border-radius: 3px 3px 0 0;
 		background-color: var(--dark);
 		border: 2px solid var(--medium);
 	}
 
 	.clui-cli-input > .clui-cli-icon {
-		/* margin: auto; */
 		width: 1.6rem;
 	}
 
@@ -162,7 +159,6 @@
 		z-index: 1;
 		flex: 1;
 
-		/* padding: 0.6rem 1.2rem; */
 		padding: 0.6rem 0.4rem;
 		outline: none;
 		border: none;
@@ -265,5 +261,9 @@
 		padding: 0.6rem 1.2rem;
 		width: 100%;
 		margin: 0.2rem 0;
+	}
+
+	:global(.clui-page > div) {
+		padding: 0.4rem 0;
 	}
 </style>

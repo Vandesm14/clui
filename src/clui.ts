@@ -93,10 +93,10 @@ const clui = {
 			// TODO: run command
 
 			if (args.length < current.args?.filter(el => el.required).length) { // if required args are not complete
-				console.log('from form', current.args, args.length);
+				console.log('from form', current.args, args);
 				new Page([...args, ...current.args.slice(args.length)], true);
 			} else {
-				console.log('normal');
+				console.log('normal', args);
 				new Page(args);
 			}
 
