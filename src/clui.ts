@@ -64,26 +64,27 @@ class Toast {
 
 const clui = {
 	Toast,
-	init: function(commands: Record<string, types.Command>) {
+	init: function(commands: Record<string, types.Command>): void {
 		_current.set({commands});
 	},
-	execute: function(string: string) {
+	clear: function(): void {
+		// @ts-expect-error
+		_current.set({commands});
+		_value.set('');
+		store.tokens = [];
+		store.depth = 0;
+		store.argDepth = 0;
+	},
+	execute: function(): void {
 		if (current?.run) { // if command has run function
-			console.log('run', current);
 			// TODO: parse args
 			// TODO: check args
 			// TODO: run command
 
 			new Page([], true);
-			// @ts-expect-error
-			_current.set({commands});
-			_value.set('');
-			store.tokens = [];
-			store.depth = 0;
-			store.argDepth = 0;
+			this.clear();
 		} else {
-			console.log('no run', current);
-			// TODO: command does not have run function (toast message system)
+			new Toast('Command does not have a run function', 'red');
 		}
 	},
 	parse: function(string: string) { // parse CLI and check for completed commands
@@ -140,7 +141,7 @@ const clui = {
 				return current.commands;
 			}
 		} else { // TODO: this should probably not need to exist
-			return [];
+			new Toast('filter: Command has no children', 'yellow');
 		}
 	},
 	getArgs: function(string: string) { // get and order arguments for dropdown
@@ -194,7 +195,7 @@ const clui = {
 		if (Object.keys(current.commands).includes(name)) { // if command exists
 			_current.update(val => current.commands[name]);
 		} else {
-			// TODO: command does not exist (toast message system)
+			new Toast('setCurrent: Command has no children', 'yellow');
 		}
 	},
 	tokenize: function(input: string) {

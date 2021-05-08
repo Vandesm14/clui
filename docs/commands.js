@@ -2,6 +2,14 @@ const arg = (name, desc, type, options) => {
 	return {name, desc, type, ...options};
 };
 
+const cmd = (name, desc, commands) => {
+	return [name, {name, desc, commands}];
+};
+
+const cmdArgs = (name, desc, args) => {
+	return [name, {name, desc, args}];
+};
+
 const commands = {
 	'help': {
 		desc: 'get help with the CLUI',

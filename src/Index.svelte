@@ -8,6 +8,8 @@
 	let selection = 0;
 
 	const parse = () => clui.parse($value);
+	const execute = () => clui.execute();
+	const clear = () => clui.clear();
 	const hover = (index) => selection = index;
 
 	const keydown = (e) => {
@@ -38,7 +40,7 @@
 
 <div class="clui-toasts">
 	{#each $store.toasts as toast}
-		<div class="clui-toast clui-toast-{toast.color}" in:fly={{x: 200, duration: 500}} out:fade={{duration: 300}}>{toast.msg}</div>
+		<div class="clui-toast clui-toast-{toast.color}" in:fly={{x: 200, duration: 500}} out:slide={{duration: 300}}>{toast.msg}</div>
 	{/each}
 </div>
 
@@ -50,10 +52,10 @@
 		{/if}
 		<input type="text" placeholder="enter a command" bind:value={$value} on:input={parse} on:keydown={keydown}>
 		{#if $current?.run}
-			<button class="clui-cli-run" on:click={clui.execute($value)}>run</button>
+			<button class="clui-cli-run" on:click={execute}>run</button>
 		{/if}
 		{#if $value}
-			<button class="clui-cli-run" on:click={() => {$value = ''; parse()}}>x</button>
+			<button class="clui-cli-run" on:click={clear}>x</button>
 		{/if}
 	</div>
 
@@ -104,6 +106,7 @@
 		border-radius: 3px;
 		background-color: hsl(225, 35%, 36%);
 		color: var(--text-light);
+		max-width: 30ch;
 	}
 	.clui-toast-red {
 		background-color: hsl(0, 70%, 40%);
