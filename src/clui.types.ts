@@ -3,6 +3,7 @@ import type clui from './clui';
 export interface storeMain {
 	depth?: number,
 	argDepth?:number,
+	divider?: number,
 	tokens?: string[],
 	pages?: object[],
 	toasts?: Toast[],

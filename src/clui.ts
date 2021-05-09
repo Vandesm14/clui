@@ -24,14 +24,16 @@ const store: types.storeMain = onChange(storeMain, upd);
 
 store.depth = 0;
 store.argDepth = 0;
+store.divider = 0;
 store.tokens = [];
 store.pages = [];
 store.toasts = [];
 store.canRun = false;
 
 const copy = (obj: Record<any, any> | any[]) => JSON.parse(JSON.stringify(obj));
-
 const uuid = () => (Math.random()*0xf**6|0).toString(16);
+
+let history = [];
 
 class Page {
 	args: types.Arg[];
@@ -145,6 +147,8 @@ const clui = {
 				new Page(args);
 			}
 
+			history.push(value);
+			history = history.filter((el, i) => history.lastIndexOf(el) === i);
 			clui.clear();
 		} else {
 			new Toast('Command does not have a run function', 'red');
@@ -187,21 +191,26 @@ const clui = {
 	},
 	/** selects command or argument to be pushed to the CLI */
 	select: function(name: string) {
-		let tokens = clui.tokenize(value);
-		if (current?.commands && Object.keys(current?.commands).includes(name)) { // if command exists
-			if (tokens.length > store.depth) { // If half-completed in CLI
-				_value.set([...tokens.slice(0, tokens.length - 1), name, ''].join(' '));
-			} else {
-				_value.set([...tokens, name, ''].join(' '));
-			}
+		if (value.startsWith('=')) {
+			_value.set(history[name]);
 			clui.parse(value);
-		} else if (current?.args && current.args.filter(el => !el.required && !el.isArg).some(el => el.name === name)) {
-			if (tokens.length > store.depth) { // If half-completed in CLI
-				_value.set([...tokens.slice(0, tokens.length - 1), `--${name}`, ''].join(' '));
-			} else {
-				_value.set([...tokens, `--${name}`, ''].join(' '));
+		} else {
+			let tokens = clui.tokenize(value);
+			if (current?.commands && Object.keys(current?.commands).includes(name)) { // if command exists
+				if (tokens.length > store.depth) { // If half-completed in CLI
+					_value.set([...tokens.slice(0, tokens.length - 1), name, ''].join(' '));
+				} else {
+					_value.set([...tokens, name, ''].join(' '));
+				}
+				clui.parse(value);
+			} else if (current?.args && current.args.filter(el => !el.required && !el.isArg).some(el => el.name === name)) {
+				if (tokens.length > store.depth) { // If half-completed in CLI
+					_value.set([...tokens.slice(0, tokens.length - 1), `--${name}`, ''].join(' '));
+				} else {
+					_value.set([...tokens, `--${name}`, ''].join(' '));
+				}
+				clui.parse(value);
 			}
-			clui.parse(value);
 		}
 	},
 	/** filters commands and arguments for dropdown */
@@ -209,19 +218,24 @@ const clui = {
 		let tokens = clui.tokenize(string);
 		let name = tokens[tokens.length - 1];
 
-		if (current?.args) {
-			return clui.getArgs(string);
-		} else if (current?.commands) {
-			if (tokens.length > store.depth) { // If half-completed in CLI
-				let commands = Object.keys(current.commands).filter(el => el.indexOf(name) !== -1);
-				let obj = {};
-				commands.map(el => obj[el] = current.commands[el]);
-				return obj;
-			} else {
-				return current.commands;
+		if (string.startsWith('=')) {
+			// @ts-expect-error
+			return history.filter(el => el.indexOf(string.slice(1)) !== -1).map((el, i) => {return {name: i, desc: el}});
+		} else {
+			if (current?.args) {
+				return clui.getArgs(string);
+			} else if (current?.commands) {
+				let arr = [];
+				if (tokens.length > store.depth) { // If half-completed in CLI
+					let commands = Object.keys(current.commands).filter(el => el.indexOf(name) !== -1);
+					commands.map(el => arr.push({name: el, ...current.commands[el]}));
+				} else {
+					Object.keys(current.commands).map(el => arr.push({name: el, ...current.commands[el]}));
+				}
+				return arr;
+			} else { // TODO: this should probably not need to exist
+				new Toast('filter: Command has no children', 'yellow');
 			}
-		} else { // TODO: this should probably not need to exist
-			new Toast('filter: Command has no children', 'yellow');
 		}
 	},
 	/** gets and orders arguments for dropdown */

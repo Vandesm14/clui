@@ -20,8 +20,7 @@
 			clui.execute($value);
 		} else if (e.key === 'Tab') {
 			e.preventDefault();
-			if ($current?.commands) clui.select(Object.keys(clui.filter($value))[selection]);
-			if ($current?.args) clui.select(clui.filter($value)[selection]?.name);
+			clui.select(clui.filter($value)[selection]?.name);
 		} else if (e.key === 'ArrowUp') {
 			e.preventDefault();
 			selection--;
@@ -64,14 +63,22 @@
 
 	<div class="clui-cli-dropdown">
 		{#if $current?.commands}
-			{#each Object.keys(clui.filter($value)) as command, i}
-				<div class="clui-dropdown-item {i === selection ? 'clui-selected' : ''}"	on:click={()=>clui.select(command)} on:mouseover={()=>hover(i)}>
-					<span class="clui-dropdown-name">{command}</span>
-					<span class="clui-dropdown-description">{$current.commands[command]?.desc}</span>
+			{#each clui.filter($value) as command, i}
+				{#if $store.divider > 0 && i === $store.divider}
+					<hr>
+				{/if}
+				<div class="clui-dropdown-item {i === selection ? 'clui-selected' : ''}"	on:click={()=>clui.select(command.name)} on:mouseover={()=>hover(i)}>
+					{#if typeof command.name !== 'number'}
+						<span class="clui-dropdown-name">{command.name}</span>
+					{/if}
+					<span class="clui-dropdown-description">{command.desc}</span>
 				</div>
 			{/each}
 		{:else if $current?.args}
 			{#each clui.filter($value) as argument, i}
+				{#if $store.divider > 0 && i === $store.divider}
+					<hr>
+				{/if}
 				<div class="clui-dropdown-item {i === selection ? 'clui-selected' : ''}" on:mouseover={()=>hover(i)} on:click={()=>clui.select(argument.name)}>
 					<span class="clui-dropdown-name">{(argument.short ? argument.short + ', ' : '') + argument.name}</span>
 					<span class="clui-dropdown-description">{argument?.desc}</span>
@@ -197,6 +204,11 @@
 		background-color: var(--darker);
 		max-height: 40vh;
 		overflow-y: auto;
+	}
+
+	.clui-cli-dropdown > hr {
+		color: var(--light);
+		margin: 0.4rem 0.2rem;
 	}
 
 	.clui-dropdown-item {
