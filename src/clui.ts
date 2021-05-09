@@ -129,7 +129,6 @@ const clui = {
 		store.commands = commands;
 	},
 	clear: function() {
-		// @ts-expect-error
 		_current.set({commands: store.commands});
 		_value.set('');
 		store.tokens = [];
