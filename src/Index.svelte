@@ -81,14 +81,14 @@
 	</div>
 
 	<div class="clui-pages">
-		{#each $store.pages as page}
+		{#each $store.pages as page (page.items)}
 			<div class="clui-page-container" in:slide={{duration: 200}} out:slide={{duration: 200}}>
 				<div class="clui-page-buttons">
 					<button on:click={page.close()}>X</button>
 				</div>
 				<div class="clui-page">
-					{#each page.args as arg (page.args)}
-						<Item arg={arg} />
+					{#each page.items as item}
+						<Item arg={item} />
 					{/each}
 				</div>
 			</div>
@@ -116,13 +116,16 @@
 		max-width: 30ch;
 	}
 	.clui-toast-red {
-		background-color: hsl(0, 70%, 40%);
+		/* background-color: hsl(0, 70%, 40%); */
+		background-color: hsl(0, 54%, 40%);
 	}
 	.clui-toast-yellow {
-		background-color: hsl(50, 70%, 40%);
+		/* background-color: hsl(50, 70%, 40%); */
+		background-color: hsl(50, 54%, 40%);
 	}
 	.clui-toast-green {
-		background-color: hsl(100, 70%, 40%);
+		/* background-color: hsl(100, 70%, 40%); */
+		background-color: hsl(100, 54%, 40%);
 	}
 
 	.clui-cli {
@@ -192,6 +195,8 @@
 		max-width: 60vw;
 		border-radius: 0 0 3px 3px;
 		background-color: var(--darker);
+		max-height: 40vh;
+		overflow-y: auto;
 	}
 
 	.clui-dropdown-item {
@@ -207,6 +212,7 @@
 		cursor: pointer;
 		background-color: var(--medium);
 		outline: 2px solid var(--light);
+		outline-offset: -2px;
 	}
 
 	.clui-dropdown-name {
@@ -261,6 +267,8 @@
 		padding: 0.6rem 1.2rem;
 		width: 100%;
 		margin: 0.2rem 0;
+		max-height: 70vh;
+		overflow-y: auto;
 	}
 
 	:global(.clui-page > div) {

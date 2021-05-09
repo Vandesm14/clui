@@ -4,29 +4,27 @@
 	
 	if (arg.type === 'string') arg.value = arg.value || '';
 	else if (arg.type === 'boolean') arg.value = arg.value || false;
-
-	let value = arg.value;
 </script>
 
 {#if arg?.type === 'string'}
 	<div class="ciui-page-item">
-		<label for=""><span>{arg.name}:</span> {arg.type}</label>
-		<input type="text" required={arg.required} bind:value class={value === '' ? 'clui-empty' : ''}>
+		<span class="clui-item-label"><span>{arg.name}:</span> {arg.type} {arg.required ? '*' : ''}</span>
+		<input type="text" required={arg.required} bind:value={arg.value} class={arg.value === '' ? 'clui-empty' : ''}>
 	</div>
 {:else if arg?.type === 'number'}
 	<div class="ciui-page-item">
-		<label for=""><span>{arg.name}:</span> {arg.type}</label>
-		<input type="number" required={arg.required} bind:value class={value === '' ? 'clui-empty' : ''}>
+		<span class="clui-item-label"><span>{arg.name}:</span> {arg.type} {arg.required ? '*' : ''}</span>
+		<input type="number" required={arg.required} bind:value={arg.value} class={arg.value === '' ? 'clui-empty' : ''}>
 	</div>
 {:else if arg?.type === 'boolean'}
 	<div class="ciui-page-item" style="flex-direction: row">
-		<div class="checkbox {value ? 'checked' : ''}" on:click={() => value = !value}></div>
-		<input type="checkbox" required={arg.required} bind:checked={value}>
-		<label for=""><span>{arg.name}:</span> {arg.type}</label>
+		<div class="checkbox {arg.value ? 'checked' : ''}" on:click={() => arg.value = !arg.value}></div>
+		<input type="checkbox" required={arg.required} bind:checked={arg.value}>
+		<span class="clui-item-label"><span>{arg.name}:</span> {arg.type} {arg.required ? '*' : ''}</span>
 	</div>
 {:else if arg?.type === 'enum'}
 	<div class="ciui-page-item">
-		<label for=""><span>{arg.name}:</span> {arg.type}</label>
+		<span class="clui-item-label"><span>{arg.name}:</span> {arg.type} {arg.required ? '*' : ''}</span>
 		<select>
 			{#each arg.items as item}
 				<option>{item.name}</option>
@@ -37,6 +35,15 @@
 	<div class="ciui-page-item">
 		<button on:click={arg.run}>{arg.value}</button>
 	</div>
+{:else if arg?.type === 'paragraph'}
+	<div class="ciui-page-item">
+		{#if arg.name}
+		<h1>{arg.name}</h1>
+		{/if}
+		{#if arg.value}
+		<p>{@html arg.value.replace(/\n/g, '<br>')}</p>
+		{/if}
+	</div>
 {/if}
 
 <style>
@@ -45,12 +52,12 @@
 		flex-direction: column;
 	}
 
-	div > label {
+	div > .clui-item-label {
 		/* font-size: 1rem; */
 		color: var(--text-medium);
 	}
 
-	div > label > span {
+	div > .clui-item-label > span {
 		/* font-size: 1rem; */
 		color: var(--text-light);
 	}

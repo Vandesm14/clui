@@ -27,8 +27,10 @@ const commands = {
 					]})
 				],
 				run: (gui, args) => {
-					console.log({gui, args});
-					// gui.render(args); // renders the args onto the GUI page
+					gui.render([{name: 'Success!', value: `The CLI works!
+					String: ${args.find(el => el.name === 'string').value}
+					Number: ${args.find(el => el.name === 'number').value}`, type: 'paragraph'}]);
+					gui.append({type: 'button', value: 'Close', run: gui.close});
 				}
 			}
 		}

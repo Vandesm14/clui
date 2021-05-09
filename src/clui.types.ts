@@ -1,3 +1,5 @@
+import type clui from './clui';
+
 export interface storeMain {
 	depth?: number,
 	argDepth?:number,
@@ -24,21 +26,10 @@ export interface Arg {
 	run?: () => void
 }
 
-// export interface Item {
-// 	name?: string,
-// 	value: string,
-// 	desc?: string,
-// 	type: 'button' | 'paragraph' | 'table',
-// 	run?: () => void
-// }
-
 export interface Command {
 	desc?: string,
 	commands?: Record<string, Command>,
-	run?: (gui: GUI, args: Arg[]) => void,
+	mode?: 'form' | 'toast',
+	run?: (gui: typeof clui.Page | typeof clui.Toast, args: Arg[]) => void,
 	args?: Arg[]
-}
-
-export interface GUI {
-	any
 }

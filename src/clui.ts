@@ -16,7 +16,7 @@ _value.subscribe(val => value = val);
 let storeMain: types.storeMain = {};
 _store.subscribe(val => storeMain = val);
 
-const upd = (path, val, prevVal, name) => {
+const upd = (path?, val?, prevVal?, name?) => {
 	_store.set(storeMain);
 };
 
@@ -28,42 +28,85 @@ store.tokens = [];
 store.pages = [];
 store.toasts = [];
 
+const copy = (obj: Record<any, any> | any[]) => JSON.parse(JSON.stringify(obj));
+
+const uuid = () => (Math.random()*0xf**6|0).toString(16);
+
 class Page {
 	args: types.Arg[];
+	items: types.Arg[];
 	isForm: boolean;
+	command: types.Command;
 	
 	constructor(args: types.Arg[], isForm?: boolean) {
 		this.args = args;
+		this.items = [];
 		this.isForm = isForm;
-		
+		this.command = {...current};
+		 
 		if (isForm) {
-			this.args.push({name: 'submit', value: 'submit', type: 'button', run: () => {
-				console.log('clicked!!!!');
+			this.items = args.concat({name: 'submit', value: 'submit', type: 'button', run: () => {
+				this.items = [];
+				if (this.command.mode === 'toast') {
+					this.command.run(Toast, this.args);
+					this.close();
+				} else {
+					// @ts-expect-error
+					this.command.run(this, this.args);
+				}
 			}});
+		} else {
+			// @ts-expect-error
+			this.command.run(this, this.args);
 		}
 		
 		store.pages.push(this);
 	}
-	
-	close(this): void {
-		store.pages.splice(this, 1);
+
+	reset = () => {
+		this.render(this.command.args.concat({name: 'submit', value: 'submit', type: 'button', run: () => {
+			this.items = [];
+			// @ts-expect-error
+			this.command.run(this, this.args);
+		}}));
+	}
+	clear = () => {
+		this.render([]);
+	}
+	render = (items: types.Arg[]) => {
+		this.items = items;
+		upd();
+	}
+	append = (...items) => {
+		this.items = [...this.items, ...items];
+	}
+	prepend = (...items) => {
+		this.items = [...items, ...this.items];
+	}
+	list = () => {
+		return this.items.slice();
+	}
+	update = () => {
+		upd();
+	}
+	close = () => {
+		store.pages.splice(store.pages.indexOf(this), 1);
 	}
 };
 
 class Toast {
 	msg: string;
 	color: string;
-	id: {};
+	id: string;
 
 	constructor(msg: string, color?: 'red' | 'yellow' | 'green') {
 		this.msg = Array.isArray(msg) ? msg.join(' ') : msg;
 		this.color = color;
-		this.id = {};
+		this.id = uuid();
 		
 		store.toasts.push(this);
 		setTimeout(() => {
-			// @ts-expect-error
-			store.toasts.splice(this, 1);
+			store.toasts.splice(store.toasts.indexOf(this), 1);
 		}, 3000);
 	}
 };
@@ -71,13 +114,14 @@ class Toast {
 const clui = {
 	Toast,
 	Page,
+	uuid,
 	arg: (name, desc, type, options) => {
 		return {name, desc, type, ...options};
 	},
 	init: function(commands: Record<string, types.Command>): void {
 		_current.set({commands});
 	},
-	clear: function(): void {
+	clear: function() {
 		// @ts-expect-error
 		_current.set({commands});
 		_value.set('');
@@ -86,17 +130,15 @@ const clui = {
 		store.argDepth = 0;
 	},
 	/** executes the current command */
-	execute: function(): void {
+	execute: function() {
 		if (current?.run) { // if command has run function
-			let args = clui.getArgs(value, true);
-			// TODO: check args
-			// TODO: run command
+			let args = copy(clui.getArgs(value, true));
 
 			if (args.length < current.args?.filter(el => el.required).length) { // if required args are not complete
-				console.log('from form', current.args, args);
-				new Page([...args, ...current.args.slice(args.length)], true);
+				new Page([...args, ...copy(current.args.slice(args.length))], true);
+			} else if (current.mode === 'toast') {
+				current.run(Toast, args);
 			} else {
-				console.log('normal', args);
 				new Page(args);
 			}
 
@@ -106,7 +148,7 @@ const clui = {
 		}
 	},
 	/** parses CLI and checks for completed commands */
-	parse: function(string: string): void {
+	parse: function(string: string) {
 		let raw = string;
 		let tokens = clui.tokenize(string);
 
@@ -127,7 +169,7 @@ const clui = {
 		_current.set(command);
 	},
 	/** selects command or argument to be pushed to the CLI */
-	select: function(name: string): void {
+	select: function(name: string) {
 		let tokens = clui.tokenize(value);
 		if (current?.commands && Object.keys(current?.commands).includes(name)) { // if command exists
 			if (tokens.length > store.depth) { // If half-completed in CLI
@@ -235,7 +277,7 @@ const clui = {
 		return {flags, params, withSpace, flagData};
 	},
 	/** sets the current command */
-	setCurrent: function(name: string): void {
+	setCurrent: function(name: string) {
 		if (Object.keys(current.commands).includes(name)) { // if command exists
 			_current.update(val => current.commands[name]);
 		} else {
