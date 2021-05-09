@@ -55,7 +55,7 @@
 		{/if}
 		<input type="text" placeholder="enter a command" bind:value={$value} on:input={parse} on:keydown={keydown}>
 		{#if $current?.run}
-			<button class="clui-cli-run" on:click={execute}>run</button>
+			<button class="clui-cli-run" on:click={execute}>{$store.canRun ? 'run' : 'form'}</button>
 		{/if}
 		{#if $value}
 			<button class="clui-cli-run" on:click={clear}>x</button>

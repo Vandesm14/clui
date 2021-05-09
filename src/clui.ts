@@ -27,6 +27,7 @@ store.argDepth = 0;
 store.tokens = [];
 store.pages = [];
 store.toasts = [];
+store.canRun = false;
 
 const copy = (obj: Record<any, any> | any[]) => JSON.parse(JSON.stringify(obj));
 
@@ -43,7 +44,7 @@ class Page {
 		this.items = [];
 		this.isForm = isForm;
 		this.command = {...current};
-		 
+
 		if (isForm) {
 			this.items = args.concat({name: 'submit', value: 'submit', type: 'button', run: () => {
 				this.items = [];
@@ -62,6 +63,8 @@ class Page {
 		
 		store.pages.push(this);
 	}
+
+	Toast = Toast;
 
 	reset = () => {
 		this.render(this.command.args.concat({name: 'submit', value: 'submit', type: 'button', run: () => {
@@ -147,6 +150,20 @@ const clui = {
 			new Toast('Command does not have a run function', 'red');
 		}
 	},
+	/** checks if all required args are met */
+	checkRun: function() {
+		if (current?.run) { // if command has run function
+			let args = copy(clui.getArgs(value, true));
+
+			if (args.length < current.args?.filter(el => el.required).length) { // if required args are not complete
+				store.canRun = false;
+			} else {
+				store.canRun = true;
+			}
+		} else {
+			store.canRun = false;
+		}
+	},
 	/** parses CLI and checks for completed commands */
 	parse: function(string: string) {
 		let raw = string;
@@ -158,15 +175,15 @@ const clui = {
 
 		for (let token of tokens) {
 			if (command?.commands && Object.keys(command.commands).includes(token)) { // if command exists
-				if (raw[raw.lastIndexOf(token) + token.length] === ' ') {
+				if (raw[raw.lastIndexOf(token) + token.length] === ' ' || Object.keys(command.commands).filter(el => el.indexOf(token) === 0).length === 1) {
 					command = command.commands[token];
 					store.depth++;
 				}
-			// } else if (argument) { // TODO: this
 			}
 		}
 		store.tokens = tokens;
 		_current.set(command);
+		clui.checkRun();
 	},
 	/** selects command or argument to be pushed to the CLI */
 	select: function(name: string) {
@@ -221,8 +238,8 @@ const clui = {
 	
 			return [param, ...flags].filter(el => el !== undefined);
 		} else { // filter used args
-			let separated = clui.separateArgs(tokens.slice(store.depth), string);
-			let param = [...params, ...optional].slice(0, separated.params.length);
+			let separated = copy(clui.separateArgs(tokens.slice(store.depth), string));
+			let param = copy([...params, ...optional].slice(0, separated.params.length));
 
 			param.forEach((el, i) => {
 				el.value = separated.params[i];

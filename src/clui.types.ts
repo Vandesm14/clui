@@ -5,7 +5,8 @@ export interface storeMain {
 	argDepth?:number,
 	tokens?: string[],
 	pages?: object[],
-	toasts?: Toast[]
+	toasts?: Toast[],
+	canRun?: boolean
 }
 
 export interface Toast {
