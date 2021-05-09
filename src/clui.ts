@@ -9,7 +9,7 @@ import {
 	store as _store
 } from './stores.js';
 
-let current: types.Command;
+let current: types.Command = {};
 _current.subscribe((val: types.Command) => current = val);
 let value = '';
 _value.subscribe(val => value = val);
@@ -29,6 +29,7 @@ store.tokens = [];
 store.pages = [];
 store.toasts = [];
 store.canRun = false;
+store.commands = {};
 
 const copy = (obj: Record<any, any> | any[]) => JSON.parse(JSON.stringify(obj));
 const uuid = () => (Math.random()*0xf**6|0).toString(16);
@@ -123,12 +124,13 @@ const clui = {
 	arg: (name, desc, type, options) => {
 		return {name, desc, type, ...options};
 	},
-	init: function(commands: Record<string, types.Command>): void {
+	load: function(commands: Record<string, types.Command>): void {
 		_current.set({commands});
+		store.commands = commands;
 	},
 	clear: function() {
 		// @ts-expect-error
-		_current.set({commands});
+		_current.set({commands: store.commands});
 		_value.set('');
 		store.tokens = [];
 		store.depth = 0;
@@ -173,13 +175,13 @@ const clui = {
 		let raw = string;
 		let tokens = clui.tokenize(string);
 
-		// @ts-expect-error
-		let command = {commands};
+		let command = {commands: store.commands};
 		store.depth = 0;
 
 		for (let token of tokens) {
 			if (command?.commands && Object.keys(command.commands).includes(token)) { // if command exists
 				if (raw[raw.lastIndexOf(token) + token.length] === ' ' || Object.keys(command.commands).filter(el => el.indexOf(token) === 0).length === 1) {
+					// @ts-expect-error
 					command = command.commands[token];
 					store.depth++;
 				}
@@ -234,7 +236,7 @@ const clui = {
 				}
 				return arr;
 			} else { // TODO: this should probably not need to exist
-				new Toast('filter: Command has no children', 'yellow');
+				return [];
 			}
 		}
 	},
@@ -312,7 +314,7 @@ const clui = {
 		if (Object.keys(current.commands).includes(name)) { // if command exists
 			_current.update(val => current.commands[name]);
 		} else {
-			new Toast('setCurrent: Command has no children', 'yellow');
+			new Toast('setCurrent: Command has no children', 'red');
 		}
 	},
 	/** tokenizes a cli input string */

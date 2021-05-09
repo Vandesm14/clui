@@ -103,4 +103,4 @@ const commands = {
 	}
 };
 
-clui.init(commands);
+clui.load(commands);

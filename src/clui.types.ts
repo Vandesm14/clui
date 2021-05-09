@@ -7,7 +7,8 @@ export interface storeMain {
 	tokens?: string[],
 	pages?: object[],
 	toasts?: Toast[],
-	canRun?: boolean
+	canRun?: boolean,
+	commands?: Record<string, Command>
 }
 
 export interface Toast {

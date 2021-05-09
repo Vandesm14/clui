@@ -50,9 +50,11 @@
 	<div class="clui-cli-input">
 		<img src="icons/cli.png" alt="" class="clui-cli-icon">
 		{#if $store?.tokens}
-			<div class="clui-cli-autocomplete">{$store?.tokens.slice(0, $store.depth + $store.argDepth).join(' ')}</div>
+			<div class="clui-cli-autocomplete">
+				{$store.tokens.slice(0, $store.depth + $store.argDepth).join(' ')} {' '} {clui.filter($value)[selection]?.name ?? ''}
+			</div>
 		{/if}
-		<input type="text" placeholder="enter a command" bind:value={$value} on:input={parse} on:keydown={keydown}>
+		<input type="text" placeholder={''} bind:value={$value} on:input={parse} on:keydown={keydown}>
 		{#if $current?.run}
 			<button class="clui-cli-run" on:click={execute}>{$store.canRun ? 'run' : 'form'}</button>
 		{/if}
