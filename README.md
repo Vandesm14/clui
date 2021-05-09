@@ -7,7 +7,9 @@ Instead of fumbling through CLI documentation, spend more time running commands 
 
 ![](clui-screenshot.png)
 
-*Open to contributions, just email me at vandesm14@gmail.com, DM me on [Twitter](https://twitter.com/vandesm14), or find me on [Discord](https://discord.gg/UKQUkhjxRT)*
+### [Demo](https://vandesm14.github.io/clui/)
+
+*Open to contributions, just email me at vandesm14@gmail.com, DM me on [Twitter](https://twitter.com/vandesm14), or find me on [Discord](https://respdev.com/discord)*
 
 # Changelog
 ## [5/9/2021](https://github.com/Vandesm14/clui/tree/40aba6e84cc6f4d10bd3f73beb0abd596c71ede1)
