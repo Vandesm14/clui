@@ -34,6 +34,30 @@ store.commands = {};
 const copy = (obj: Record<any, any> | any[]) => JSON.parse(JSON.stringify(obj));
 const uuid = () => (Math.random()*0xf**6|0).toString(16);
 
+function deepCopyObj(obj) {
+	if (null == obj || "object" != typeof obj) return obj;
+	if (obj instanceof Date) {
+		var copy = new Date();
+		copy.setTime(obj.getTime());
+		return copy;
+	}
+	if (obj instanceof Array) {
+		var copy = [];
+		for (var i = 0, len = obj.length; i < len; i++) {
+			copy[i] = deepCopyObj(obj[i]);
+		}
+		return copy;
+	}
+	if (obj instanceof Object) {
+		var copy = {};
+		for (var attr in obj) {
+			if (obj.hasOwnProperty(attr)) copy[attr] = deepCopyObj(obj[attr]);
+		}
+		return copy;
+	}
+	throw new Error("Unable to copy obj this object.");
+}
+
 let history = [];
 
 class Page {
@@ -120,13 +144,14 @@ class Toast {
 const clui = {
 	Toast,
 	Page,
-	uuid,
+	commands: storeMain.commands,
 	arg: (name, desc, type, options) => {
 		return {name, desc, type, ...options};
 	},
 	load: function(commands: Record<string, types.Command>): void {
 		_current.set({commands});
 		store.commands = commands;
+		clui.commands = storeMain.commands;
 	},
 	clear: function() {
 		_current.set({commands: store.commands});
@@ -136,14 +161,14 @@ const clui = {
 		store.argDepth = 0;
 	},
 	/** executes the current command */
-	execute: function() {
-		if (current?.run) { // if command has run function
+	execute: function(command = current) {
+		if (command?.run) { // if command has run function
 			let args = copy(clui.getArgs(value, true));
 
-			if (args.length < current.args?.filter(el => el.required).length) { // if required args are not complete
-				new Page([...args, ...copy(current.args.slice(args.length))], true);
-			} else if (current.mode === 'toast') {
-				current.run(Toast, args);
+			if (args.length < command.args?.filter(el => el.required).length) { // if required args are not complete
+				new Page([...args, ...copy(command.args.slice(args.length))], true);
+			} else if (command.mode === 'toast') {
+				command.run(Toast, args);
 			} else {
 				new Page(args);
 			}

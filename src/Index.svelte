@@ -15,9 +15,20 @@
 	const clear = () => clui.clear();
 	const hover = (index) => selection = index;
 
+	const updSelection = () => {
+		if ($current?.commands)
+		selection = selection >= Object.keys(clui.filter($value)).length ? Object.keys(clui.filter($value)).length - 1 : selection;
+		else if ($current?.args)
+		selection = selection >= clui.filter($value).length ? clui.filter($value).length - 1 : selection;
+		
+		selection = selection < 0 ? 0 : selection;
+	};
+
+	$: updSelection($store.depth, $store.argDepth);
+
 	const keydown = (e) => {
 		if (e.key === 'Enter') {
-			clui.execute($value);
+			clui.execute();
 		} else if (e.key === 'Tab') {
 			e.preventDefault();
 			clui.select(clui.filter($value)[selection]?.name);
@@ -29,12 +40,7 @@
 			selection++;
 		}
 
-		if ($current?.commands)
-		selection = selection >= Object.keys(clui.filter($value)).length ? Object.keys(clui.filter($value)).length - 1 : selection;
-		else if ($current?.args)
-		selection = selection >= clui.filter($value).length ? clui.filter($value).length - 1 : selection;
-		
-		selection = selection < 0 ? 0 : selection;
+		updSelection();
 	};
 </script>
 
@@ -51,7 +57,7 @@
 		<img src="icons/cli.png" alt="" class="clui-cli-icon">
 		{#if $store?.tokens}
 			<div class="clui-cli-autocomplete">
-				{$store.tokens.slice(0, $store.depth + $store.argDepth).join(' ')} {' '} {clui.filter($value)[selection]?.name ?? ''}
+				{$store.tokens.slice(0, $store.depth + $store.argDepth).join(' ')} {' '} {$current?.commands ? clui.filter($value)[selection]?.name ?? '' : ''}
 			</div>
 		{/if}
 		<input type="text" placeholder={''} bind:value={$value} on:input={parse} on:keydown={keydown}>
@@ -96,7 +102,7 @@
 					<button on:click={page.close()}>X</button>
 				</div>
 				<div class="clui-page">
-					{#each page.items as item}
+					{#each page.items as item (page)}
 						<Item arg={item} />
 					{/each}
 				</div>

@@ -41,7 +41,8 @@ div, h1, p {
 }
 
 a, a:visited {
-	color: #0000dd;
+	color: var(--text-medium);
 }
-
-/* ----------App---------- */
+a:hover {
+	color: var(--text-light);
+}

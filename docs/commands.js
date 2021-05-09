@@ -3,9 +3,31 @@ const arg = clui.arg;
 const commands = {
 	'help': {
 		desc: 'get help with the CLUI',
-		commands: {
-			'about': {
-				desc: 'print an about page'
+		args: [
+			arg('command', 'get help with a specific command', 'string', {isArg: true})
+		],
+		run: (gui, args) => {
+			gui.close();
+			if (args[0]?.value) {
+				// if (clui.commands[args[0].value]) {
+				// 	gui.append({type: 'paragraph', name: args[0].value, value: clui.commands[args[0].value].desc});
+				// 	gui.append({type: 'button', value: 'Run Command', run: () => {
+				// 		clui.clear();
+				// 		clui.execute(clui.commands[args[0].value]);
+				// 		gui.close();
+				// 	}});
+				// } else {
+				// 	gui.append({type: 'paragraph', value: `Command "${args[0].value}" does not exist`});
+				// }
+				new gui.Toast('Not yet implemented', 'yellow');
+			} else {
+				gui.append({type: 'paragraph', name: 'About', value: `
+				The CLUI is a unified command system for the web. The CLUI has the speed of a CLI while having the convenience of a UI.
+				
+				Instead of fumbling through CLI documentation, spend more time running commands by using the CLUI\'s integrated form system to easily understand and fill out parameters and arguments. Adding a reactive command line to your website is as easy as including a plugin and adding commands!
+				
+				More Info: <a target="_blank" href="https://clui.respdev.com">https://clui.respdev.com</a>
+				`.trim()});
 			}
 		}
 	},

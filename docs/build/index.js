@@ -1,1 +1,3641 @@
-var index=function(){"use strict";function e(){}const t=e=>e;function n(e){return e()}function s(){return Object.create(null)}function i(e){e.forEach(n)}function r(e){return"function"==typeof e}function l(e,t){return e!=e?t==t:e!==t||e&&"object"==typeof e||"function"==typeof e}function o(t,n,s){t.$$.on_destroy.push(function(t,...n){if(null==t)return e;const s=t.subscribe(...n);return s.unsubscribe?()=>s.unsubscribe():s}(n,s))}function c(e){return null==e?"":e}const a="undefined"!=typeof window;let u=a?()=>window.performance.now():()=>Date.now(),d=a?e=>requestAnimationFrame(e):e;const h=new Set;function f(e){h.forEach((t=>{t.c(e)||(h.delete(t),t.f())})),0!==h.size&&d(f)}function p(e){let t;return 0===h.size&&d(f),{promise:new Promise((n=>{h.add(t={c:e,f:n})})),abort(){h.delete(t)}}}function g(e,t){e.appendChild(t)}function m(e,t,n){e.insertBefore(t,n||null)}function v(e){e.parentNode.removeChild(e)}function y(e,t){for(let n=0;n<e.length;n+=1)e[n]&&e[n].d(t)}function b(e){return document.createElement(e)}function k(e){return document.createTextNode(e)}function _(){return k(" ")}function w(){return k("")}function $(e,t,n,s){return e.addEventListener(t,n,s),()=>e.removeEventListener(t,n,s)}function x(e,t,n){null==n?e.removeAttribute(t):e.getAttribute(t)!==n&&e.setAttribute(t,n)}function O(e){return""===e?null:+e}function C(e,t){t=""+t,e.wholeText!==t&&(e.data=t)}function S(e,t){e.value=null==t?"":t}const P=new Set;let j,A=0;function M(e,t,n,s,i,r,l,o=0){const c=16.666/s;let a="{\n";for(let e=0;e<=1;e+=c){const s=t+(n-t)*r(e);a+=100*e+`%{${l(s,1-s)}}\n`}const u=a+`100% {${l(n,1-n)}}\n}`,d=`__svelte_${function(e){let t=5381,n=e.length;for(;n--;)t=(t<<5)-t^e.charCodeAt(n);return t>>>0}(u)}_${o}`,h=e.ownerDocument;P.add(h);const f=h.__svelte_stylesheet||(h.__svelte_stylesheet=h.head.appendChild(b("style")).sheet),p=h.__svelte_rules||(h.__svelte_rules={});p[d]||(p[d]=!0,f.insertRule(`@keyframes ${d} ${u}`,f.cssRules.length));const g=e.style.animation||"";return e.style.animation=`${g?`${g}, `:""}${d} ${s}ms linear ${i}ms 1 both`,A+=1,d}function R(e,t){const n=(e.style.animation||"").split(", "),s=n.filter(t?e=>e.indexOf(t)<0:e=>-1===e.indexOf("__svelte")),i=n.length-s.length;i&&(e.style.animation=s.join(", "),A-=i,A||d((()=>{A||(P.forEach((e=>{const t=e.__svelte_stylesheet;let n=t.cssRules.length;for(;n--;)t.deleteRule(n);e.__svelte_rules={}})),P.clear())})))}function z(e){j=e}const D=[],q=[],T=[],E=[],I=Promise.resolve();let U=!1;function W(e){T.push(e)}let N=!1;const H=new Set;function B(){if(!N){N=!0;do{for(let e=0;e<D.length;e+=1){const t=D[e];z(t),F(t.$$)}for(z(null),D.length=0;q.length;)q.pop()();for(let e=0;e<T.length;e+=1){const t=T[e];H.has(t)||(H.add(t),t())}T.length=0}while(D.length);for(;E.length;)E.pop()();U=!1,N=!1,H.clear()}}function F(e){if(null!==e.fragment){e.update(),i(e.before_update);const t=e.dirty;e.dirty=[-1],e.fragment&&e.fragment.p(e.ctx,t),e.after_update.forEach(W)}}let G;function L(){return G||(G=Promise.resolve(),G.then((()=>{G=null}))),G}function V(e,t,n){e.dispatchEvent(function(e,t){const n=document.createEvent("CustomEvent");return n.initCustomEvent(e,!1,!1,t),n}(`${t?"intro":"outro"}${n}`))}const J=new Set;let K;function X(){K={r:0,c:[],p:K}}function Q(){K.r||i(K.c),K=K.p}function Y(e,t){e&&e.i&&(J.delete(e),e.i(t))}function Z(e,t,n,s){if(e&&e.o){if(J.has(e))return;J.add(e),K.c.push((()=>{J.delete(e),s&&(n&&e.d(1),s())})),e.o(t)}}const ee={duration:0};function te(n,s,i){let l,o,c=s(n,i),a=!1,d=0;function h(){l&&R(n,l)}function f(){const{delay:s=0,duration:i=300,easing:r=t,tick:f=e,css:g}=c||ee;g&&(l=M(n,0,1,i,s,r,g,d++)),f(0,1);const m=u()+s,v=m+i;o&&o.abort(),a=!0,W((()=>V(n,!0,"start"))),o=p((e=>{if(a){if(e>=v)return f(1,0),V(n,!0,"end"),h(),a=!1;if(e>=m){const t=r((e-m)/i);f(t,1-t)}}return a}))}let g=!1;return{start(){g||(R(n),r(c)?(c=c(),L().then(f)):f())},invalidate(){g=!1},end(){a&&(h(),a=!1)}}}function ne(n,s,l){let o,c=s(n,l),a=!0;const d=K;function h(){const{delay:s=0,duration:r=300,easing:l=t,tick:h=e,css:f}=c||ee;f&&(o=M(n,1,0,r,s,l,f));const g=u()+s,m=g+r;W((()=>V(n,!1,"start"))),p((e=>{if(a){if(e>=m)return h(0,1),V(n,!1,"end"),--d.r||i(d.c),!1;if(e>=g){const t=l((e-g)/r);h(1-t,t)}}return a}))}return d.r+=1,r(c)?L().then((()=>{c=c(),h()})):h(),{end(e){e&&c.tick&&c.tick(1,0),a&&(o&&R(n,o),a=!1)}}}const se="undefined"!=typeof window?window:"undefined"!=typeof globalThis?globalThis:global;function ie(e,t){Z(e,1,1,(()=>{t.delete(e.key)}))}function re(e,t,n,s,i,r,l,o,c,a,u,d){let h=e.length,f=r.length,p=h;const g={};for(;p--;)g[e[p].key]=p;const m=[],v=new Map,y=new Map;for(p=f;p--;){const e=d(i,r,p),o=n(e);let c=l.get(o);c?s&&c.p(e,t):(c=a(o,e),c.c()),v.set(o,m[p]=c),o in g&&y.set(o,Math.abs(p-g[o]))}const b=new Set,k=new Set;function _(e){Y(e,1),e.m(o,u),l.set(e.key,e),u=e.first,f--}for(;h&&f;){const t=m[f-1],n=e[h-1],s=t.key,i=n.key;t===n?(u=t.first,h--,f--):v.has(i)?!l.has(s)||b.has(s)?_(t):k.has(i)?h--:y.get(s)>y.get(i)?(k.add(s),_(t)):(b.add(i),h--):(c(n,l),h--)}for(;h--;){const t=e[h];v.has(t.key)||c(t,l)}for(;f;)_(m[f-1]);return m}function le(e,t,s,l){const{fragment:o,on_mount:c,on_destroy:a,after_update:u}=e.$$;o&&o.m(t,s),l||W((()=>{const t=c.map(n).filter(r);a?a.push(...t):i(t),e.$$.on_mount=[]})),u.forEach(W)}function oe(e,t){const n=e.$$;null!==n.fragment&&(i(n.on_destroy),n.fragment&&n.fragment.d(t),n.on_destroy=n.fragment=null,n.ctx=[])}function ce(e,t){-1===e.$$.dirty[0]&&(D.push(e),U||(U=!0,I.then(B)),e.$$.dirty.fill(0)),e.$$.dirty[t/31|0]|=1<<t%31}function ae(t,n,r,l,o,c,a=[-1]){const u=j;z(t);const d=t.$$={fragment:null,ctx:null,props:c,update:e,not_equal:o,bound:s(),on_mount:[],on_destroy:[],on_disconnect:[],before_update:[],after_update:[],context:new Map(u?u.$$.context:[]),callbacks:s(),dirty:a,skip_bound:!1};let h=!1;if(d.ctx=r?r(t,n.props||{},((e,n,...s)=>{const i=s.length?s[0]:n;return d.ctx&&o(d.ctx[e],d.ctx[e]=i)&&(!d.skip_bound&&d.bound[e]&&d.bound[e](i),h&&ce(t,e)),n})):[],d.update(),h=!0,i(d.before_update),d.fragment=!!l&&l(d.ctx),n.target){if(n.hydrate){const e=function(e){return Array.from(e.childNodes)}(n.target);d.fragment&&d.fragment.l(e),e.forEach(v)}else d.fragment&&d.fragment.c();n.intro&&Y(t.$$.fragment),le(t,n.target,n.anchor,n.customElement),B()}z(u)}class ue{$destroy(){oe(this,1),this.$destroy=e}$on(e,t){const n=this.$$.callbacks[e]||(this.$$.callbacks[e]=[]);return n.push(t),()=>{const e=n.indexOf(t);-1!==e&&n.splice(e,1)}}$set(e){var t;this.$$set&&(t=e,0!==Object.keys(t).length)&&(this.$$.skip_bound=!0,this.$$set(e),this.$$.skip_bound=!1)}}var de={PATH_SEPARATOR:".",TARGET:Symbol("target"),UNSUBSCRIBE:Symbol("unsubscribe")};var he={withMutableMethods:e=>e instanceof Date||e instanceof Set||e instanceof Map||e instanceof WeakSet||e instanceof WeakMap,withoutMutableMethods:e=>("object"==typeof e?null===e:"function"!=typeof e)||e instanceof RegExp},fe=Array.isArray,pe=e=>"symbol"==typeof e;const{PATH_SEPARATOR:ge}=de;var me=(e,t)=>fe(e)?e.slice(t.length):""===t?e:e.slice(t.length+1),ve=(e,t)=>fe(e)?(e=e.slice(),t&&e.push(t),e):t&&void 0!==t.toString?(""!==e&&(e+=ge),pe(t)?e+t.toString():e+t):e,ye=e=>{if(fe(e))return e.slice(0,-1);if(""===e)return e;const t=e.lastIndexOf(ge);return-1===t?"":e.slice(0,t)},be=e=>{if(fe(e))return e[e.length-1]||"";if(""===e)return e;const t=e.lastIndexOf(ge);return-1===t?e:e.slice(t+1)},ke=(e,t)=>{if(fe(e))e.forEach((e=>t(e)));else if(""!==e){let n=0,s=e.indexOf(ge);if(-1===s)t(e);else for(;n<e.length;)-1===s&&(s=e.length),t(e.slice(n,s)),n=s+1,s=e.indexOf(ge,n)}};const{TARGET:_e}=de;var we=(e,t,n,s,i)=>{const r=e.next;if("entries"===t.name)e.next=function(){const e=r.call(this);return!1===e.done&&(e.value[0]=i(e.value[0],t,e.value[0],s),e.value[1]=i(e.value[1],t,e.value[0],s)),e};else if("values"===t.name){const l=n[_e].keys();e.next=function(){const e=r.call(this);return!1===e.done&&(e.value=i(e.value,t,l.next().value,s)),e}}else e.next=function(){const e=r.call(this);return!1===e.done&&(e.value=i(e.value,t,e.value,s)),e};return e},$e=(e,t,n)=>e.isUnsubscribed||t.ignoreSymbols&&pe(n)||t.ignoreUnderscores&&"_"===n.charAt(0)||"ignoreKeys"in t&&t.ignoreKeys.includes(n);var xe=class{constructor(e){this._equals=e,this._proxyCache=new WeakMap,this._pathCache=new WeakMap,this.isUnsubscribed=!1}_getDescriptorCache(){return void 0===this._descriptorCache&&(this._descriptorCache=new WeakMap),this._descriptorCache}_getProperties(e){const t=this._getDescriptorCache();let n=t.get(e);return void 0===n&&(n={},t.set(e,n)),n}_getOwnPropertyDescriptor(e,t){if(this.isUnsubscribed)return Reflect.getOwnPropertyDescriptor(e,t);const n=this._getProperties(e);let s=n[t];return void 0===s&&(s=Reflect.getOwnPropertyDescriptor(e,t),n[t]=s),s}getProxy(e,t,n,s){if(this.isUnsubscribed)return e;this._pathCache.set(e,t);let i=this._proxyCache.get(e);return void 0===i&&(i=void 0===e[s]?new Proxy(e,n):e,this._proxyCache.set(e,i)),i}getPath(e){return this.isUnsubscribed?void 0:this._pathCache.get(e)}isDetached(e,t){return ke(this.getPath(e),(e=>{t&&(t=t[e])})),!Object.is(e,t)}defineProperty(e,t,n){return!!Reflect.defineProperty(e,t,n)&&(this.isUnsubscribed||(this._getProperties(e)[t]=n),!0)}setProperty(e,t,n,s,i){if(!this._equals(i,n)||!(t in e)){const i=this._getOwnPropertyDescriptor(e,t);return void 0!==i&&"set"in i?Reflect.set(e,t,n,s):Reflect.set(e,t,n)}return!0}deleteProperty(e,t,n){if(Reflect.deleteProperty(e,t)){if(!this.isUnsubscribed){const s=this._getDescriptorCache().get(e);s&&(delete s[t],this._pathCache.delete(n))}return!0}return!1}isSameDescriptor(e,t,n){const s=this._getOwnPropertyDescriptor(t,n);return void 0!==e&&void 0!==s&&Object.is(e.value,s.value)&&(e.writable||!1)===(s.writable||!1)&&(e.enumerable||!1)===(s.enumerable||!1)&&(e.configurable||!1)===(s.configurable||!1)&&e.get===s.get&&e.set===s.set}isGetInvariant(e,t){const n=this._getOwnPropertyDescriptor(e,t);return void 0!==n&&!0!==n.configurable&&!0!==n.writable}unsubscribe(){this._descriptorCache=null,this._pathCache=null,this._proxyCache=null,this.isUnsubscribed=!0}},Oe=e=>"[object Object]"===toString.call(e);const Ce=()=>!0,Se=(e,t)=>e.length!==t.length||e.some(((e,n)=>t[n]!==e)),Pe=(e,t)=>{if(e.size!==t.size)return!0;for(const n of e)if(!t.has(n))return!0;return!1},je=(e,t)=>{if(e.size!==t.size)return!0;let n;for(const[s,i]of e)if(n=t.get(s),n!==i||void 0===n&&!t.has(s))return!0;return!1},Ae=new Set(["hasOwnProperty","isPrototypeOf","propertyIsEnumerable","toLocaleString","toString","valueOf"]),Me=new Set(["concat","includes","indexOf","join","keys","lastIndexOf"]),Re=new Set(["has","toString"]),ze=new Set([...Re].concat(["get"])),De={push:Ce,pop:Ce,shift:Ce,unshift:Ce,copyWithin:Se,reverse:Se,sort:Se,splice:Se,flat:Se,fill:Se},qe={add:Pe,clear:Pe,delete:Pe},Te=["keys","values","entries"],Ee={set:je,clear:je,delete:je},Ie=new Set([...Ae].concat([...Me]).concat(Object.keys(De))),Ue=new Set([...Re].concat(Object.keys(qe)).concat(Te)),We=new Set([...ze].concat(Object.keys(Ee)).concat(Te));class Ne{constructor(e,t,n){this._path=t,this._isChanged=!1,this._clonedCache=new Set,e instanceof WeakSet?this._weakValue=e.has(n[0]):e instanceof WeakMap?this._weakValue=e.get(n[0]):this.clone=void 0===t?e:this._shallowClone(e)}_shallowClone(e){let t;return Oe(e)?t={...e}:fe(e)?t=[...e]:e instanceof Date?t=new Date(e):e instanceof Set?t=new Set(e):e instanceof Map&&(t=new Map(e)),this._clonedCache.add(t),t}preferredThisArg(e,t,n){const{name:s}=e;return He.isHandledMethod(n,s)?(fe(n)?this._onIsChanged=De[s]:n instanceof Set?this._onIsChanged=qe[s]:n instanceof Map&&(this._onIsChanged=Ee[s]),n):t}update(e,t,n){if(void 0!==n&&"length"!==t){let s=this.clone;ke(me(e,this._path),(e=>{this._clonedCache.has(s[e])||(s[e]=this._shallowClone(s[e])),s=s[e]})),s[t]=n}this._isChanged=!0}isChanged(e,t,n){return e instanceof Date?!t(this.clone.valueOf(),e.valueOf()):e instanceof WeakSet?this._weakValue!==e.has(n[0]):e instanceof WeakMap?this._weakValue!==e.get(n[0]):void 0===this._onIsChanged?this._isChanged:this._onIsChanged(this.clone,e)}}class He{constructor(){this.stack=[]}static isHandledType(e){return Oe(e)||fe(e)||he.withMutableMethods(e)}static isHandledMethod(e,t){return Oe(e)?Ae.has(t):fe(e)?Ie.has(t):e instanceof Set?Ue.has(t):e instanceof Map?We.has(t):he.withMutableMethods(e)}get isCloning(){return 0!==this.stack.length}start(e,t,n){this.stack.push(new Ne(e,t,n))}update(e,t,n){this.stack[this.stack.length-1].update(e,t,n)}preferredThisArg(e,t,n){return this.stack[this.stack.length-1].preferredThisArg(e,t,n)}isChanged(e,t,n,s){return this.stack[this.stack.length-1].isChanged(e,t,n,s)}stop(){return this.stack.pop().clone}}var Be=He;const{TARGET:Fe,UNSUBSCRIBE:Ge}=de,Le={equals:Object.is,isShallow:!1,pathAsArray:!1,ignoreSymbols:!1,ignoreUnderscores:!1,ignoreDetached:!1},Ve=(e,t,n={})=>{n={...Le,...n};const s=Symbol("ProxyTarget"),{equals:i,isShallow:r,ignoreDetached:l}=n,o=new xe(i),c=new Be,a=(t,s,i,r)=>{$e(o,n,s)||l&&o.isDetached(t,e)||u(o.getPath(t),s,i,r)},u=(e,n,s,i,r)=>{c.isCloning?c.update(e,n,s):t(ve(e,n),i,s,r)},d=e=>e&&e[s]||e,h=(t,i,c,a)=>he.withoutMutableMethods(t)||"constructor"===c||r&&!Be.isHandledMethod(i,c)||$e(o,n,c)||o.isGetInvariant(i,c)||l&&o.isDetached(i,e)?t:(void 0===a&&(a=o.getPath(i)),o.getProxy(t,ve(a,c),f,s)),f={get(e,t,n){if(pe(t)){if(t===s||t===Fe)return e;if(t===Ge&&!o.isUnsubscribed&&0===o.getPath(e).length)return o.unsubscribe(),e}const i=he.withMutableMethods(e)?Reflect.get(e,t):Reflect.get(e,t,n);return h(i,e,t)},set(e,t,n,r){n=d(n);const l=e[s]||e,c=l[t],u=t in e;return!!o.setProperty(l,t,n,r,c)&&(i(c,n)&&u||a(e,t,c,n),!0)},defineProperty(e,t,n){if(!o.isSameDescriptor(n,e,t)){if(!o.defineProperty(e,t,n))return!1;a(e,t,void 0,n.value)}return!0},deleteProperty(e,t){if(!Reflect.has(e,t))return!0;const n=Reflect.get(e,t);return!!o.deleteProperty(e,t,n)&&(a(e,t,n),!0)},apply(e,t,n){const r=t[s]||t;if(o.isUnsubscribed)return Reflect.apply(e,r,n);if(Be.isHandledType(r)){const l=ye(o.getPath(e)),a=Be.isHandledMethod(r,e.name);c.start(r,l,n);const p=Reflect.apply(e,c.preferredThisArg(e,t,r),a?n.map((e=>d(e))):n),g=c.isChanged(r,i,n),m=c.stop();return g&&(c.isCloning?u(ye(l),be(l),m,r,e.name):u(l,"",m,r,e.name)),(t instanceof Map||t instanceof Set)&&(e=>"object"==typeof e&&"function"==typeof e.next)(p)?we(p,e,t,l,h):Be.isHandledType(p)&&a?o.getProxy(p,l,f,s):p}return Reflect.apply(e,t,n)}},p=o.getProxy(e,n.pathAsArray?[]:"",f);return t=t.bind(p),p};Ve.target=e=>e[Fe]||e,Ve.unsubscribe=e=>e[Ge]||e;var Je=Ve;const Ke=[];function Xe(t,n=e){let s;const i=[];function r(e){if(l(t,e)&&(t=e,s)){const e=!Ke.length;for(let e=0;e<i.length;e+=1){const n=i[e];n[1](),Ke.push(n,t)}if(e){for(let e=0;e<Ke.length;e+=2)Ke[e][0](Ke[e+1]);Ke.length=0}}}return{set:r,update:function(e){r(e(t))},subscribe:function(l,o=e){const c=[l,o];return i.push(c),1===i.length&&(s=n(r)||e),l(t),()=>{const e=i.indexOf(c);-1!==e&&i.splice(e,1),0===i.length&&(s(),s=null)}}}}const Qe=Xe({}),Ye=Xe(""),Ze=Xe({});let et={};Qe.subscribe((e=>et=e));let tt="";Ye.subscribe((e=>tt=e));let nt={};Ze.subscribe((e=>nt=e));const st=(e,t,n,s)=>{Ze.set(nt)},it=Je(nt,st);it.depth=0,it.argDepth=0,it.divider=0,it.tokens=[],it.pages=[],it.toasts=[],it.canRun=!1,it.commands={};const rt=e=>JSON.parse(JSON.stringify(e)),lt=()=>(Math.random()*15**6|0).toString(16);let ot=[];class ct{constructor(e,t){this.Toast=at,this.reset=()=>{this.render(this.command.args.concat({name:"submit",value:"submit",type:"button",run:()=>{this.items=[],this.command.run(this,this.args)}}))},this.clear=()=>{this.render([])},this.render=e=>{this.items=e,st()},this.append=(...e)=>{this.items=[...this.items,...e]},this.prepend=(...e)=>{this.items=[...e,...this.items]},this.list=()=>this.items.slice(),this.update=()=>{st()},this.close=()=>{it.pages.splice(it.pages.indexOf(this),1)},this.args=e,this.items=[],this.isForm=t,this.command=Object.assign({},et),t?this.items=e.concat({name:"submit",value:"submit",type:"button",run:()=>{this.items=[],"toast"===this.command.mode?(this.command.run(at,this.args),this.close()):this.command.run(this,this.args)}}):this.command.run(this,this.args),it.pages.push(this)}}class at{constructor(e,t){this.msg=Array.isArray(e)?e.join(" "):e,this.color=t,this.id=lt(),it.toasts.push(this),setTimeout((()=>{it.toasts.splice(it.toasts.indexOf(this),1)}),3e3)}}const ut={Toast:at,Page:ct,uuid:lt,arg:(e,t,n,s)=>Object.assign({name:e,desc:t,type:n},s),load:function(e){Qe.set({commands:e}),it.commands=e},clear:function(){Qe.set({commands:it.commands}),Ye.set(""),it.tokens=[],it.depth=0,it.argDepth=0},execute:function(){var e;if(null==et?void 0:et.run){let t=rt(ut.getArgs(tt,!0));t.length<(null===(e=et.args)||void 0===e?void 0:e.filter((e=>e.required)).length)?new ct([...t,...rt(et.args.slice(t.length))],!0):"toast"===et.mode?et.run(at,t):new ct(t),ot.push(tt),ot=ot.filter(((e,t)=>ot.lastIndexOf(e)===t)),ut.clear()}else new at("Command does not have a run function","red")},checkRun:function(){var e;if(null==et?void 0:et.run){rt(ut.getArgs(tt,!0)).length<(null===(e=et.args)||void 0===e?void 0:e.filter((e=>e.required)).length)?it.canRun=!1:it.canRun=!0}else it.canRun=!1},parse:function(e){let t=e,n=ut.tokenize(e),s={commands:it.commands};it.depth=0;for(let e of n)(null==s?void 0:s.commands)&&Object.keys(s.commands).includes(e)&&(" "!==t[t.lastIndexOf(e)+e.length]&&1!==Object.keys(s.commands).filter((t=>0===t.indexOf(e))).length||(s=s.commands[e],it.depth++));it.tokens=n,Qe.set(s),ut.checkRun()},select:function(e){if(tt.startsWith("="))Ye.set(ot[e]),ut.parse(tt);else{let t=ut.tokenize(tt);(null==et?void 0:et.commands)&&Object.keys(null==et?void 0:et.commands).includes(e)?(t.length>it.depth?Ye.set([...t.slice(0,t.length-1),e,""].join(" ")):Ye.set([...t,e,""].join(" ")),ut.parse(tt)):(null==et?void 0:et.args)&&et.args.filter((e=>!e.required&&!e.isArg)).some((t=>t.name===e))&&(t.length>it.depth?Ye.set([...t.slice(0,t.length-1),`--${e}`,""].join(" ")):Ye.set([...t,`--${e}`,""].join(" ")),ut.parse(tt))}},filter:function(e){let t=ut.tokenize(e),n=t[t.length-1];if(e.startsWith("="))return ot.filter((t=>-1!==t.indexOf(e.slice(1)))).map(((e,t)=>({name:t,desc:e})));if(null==et?void 0:et.args)return ut.getArgs(e);if(null==et?void 0:et.commands){let e=[];if(t.length>it.depth){Object.keys(et.commands).filter((e=>-1!==e.indexOf(n))).map((t=>e.push(Object.assign({name:t},et.commands[t]))))}else Object.keys(et.commands).map((t=>e.push(Object.assign({name:t},et.commands[t]))));return e}return[]},getArgs:function(e,t=!1){let n=ut.tokenize(e),s=null==et?void 0:et.args.filter((e=>e.required)),i=null==et?void 0:et.args.filter((e=>!e.required&&e.isArg)),r=null==et?void 0:et.args.filter((e=>!e.required&&!e.isArg));if(t){let t=rt(ut.separateArgs(n.slice(it.depth),e)),r=rt([...s,...i].slice(0,t.params.length));return r.forEach(((e,n)=>{e.value=t.params[n],"string"===e.type&&null!==e.value[0].match(/["']/)&&(e.value=e.value.slice(1,-1))})),t.flagData.forEach((e=>{"string"===e.type&&(e.value=e.value.slice(1,-1))})),[...r,...t.flagData].filter((e=>void 0!==e))}{let t=ut.separateArgs(n.slice(it.depth),e),l=[...s,...i][t.withSpace.params.length];return r=r.filter((e=>!t.flags.includes(e.name))),[l,...r].filter((e=>void 0!==e))}},separateArgs:function(e,t=""){var n;let s=[],i=[],r=[],l=0,o={params:[],flags:[]};for(let c=0;c<e.length;c++){let a=e[c];if(a.startsWith("-")){if(null!==a.match(/^(-)(\w)+/g))s.push(...a.split("").slice(1).map((e=>{var t,n;return null===(n=null===(t=null==et?void 0:et.args)||void 0===t?void 0:t.find((t=>t.short===e)))||void 0===n?void 0:n.name}))),i.push(...a.split("").slice(1).map((e=>{var t;return Object.assign(Object.assign({},null===(t=null==et?void 0:et.args)||void 0===t?void 0:t.find((t=>t.short===e))),{value:!0})})));else if(null!==a.match(/^(--)(.)+/g)){let t=null===(n=null==et?void 0:et.args)||void 0===n?void 0:n.find((e=>e.name===a.substr(2)));if(void 0===t)continue;"boolean"!==(null==t?void 0:t.type)?(s.push(t.name),i.push(Object.assign(Object.assign({},t),{value:e[c+1]})),l++,c++):"boolean"===(null==t?void 0:t.type)&&(s.push(t.name),i.push(Object.assign(Object.assign({},t),{value:!0})))}}else r.push(a)," "===t[t.lastIndexOf(a)+a.length]&&o.params.push(a)}return it.argDepth=s.length+o.params.length+l,{flags:s,params:r,withSpace:o,flagData:i}},setCurrent:function(e){Object.keys(et.commands).includes(e)?Qe.update((t=>et.commands[e])):new at("setCurrent: Command has no children","red")},tokenize:function(e){let t=e.split(""),n=[],s="",i=!1;for(let e=0;e<t.length;e++){const r=t[e];" "===r?!1===i?(n.push(s),s=""):s+=r:'"'===r?'"'===i?(i=!1,s+=r,n.push(s),s="",e++):"'"===i?s+=r:(s+=r,i='"'):"'"===r?"'"===i?(i=!1,s+=r,n.push(s),s="",e++):'"'===i?s+=r:(s+=r,i="'"):s+=r}return""!==s&&n.push(s),n}};function dt(e,t,n){const s=e.slice();return s[5]=t[n],s}function ht(e){let t,n,s=e[0].name&&yt(e),i=e[0].value&&bt(e);return{c(){t=b("div"),s&&s.c(),n=_(),i&&i.c(),x(t,"class","ciui-page-item svelte-1kmziob")},m(e,r){m(e,t,r),s&&s.m(t,null),g(t,n),i&&i.m(t,null)},p(e,r){e[0].name?s?s.p(e,r):(s=yt(e),s.c(),s.m(t,n)):s&&(s.d(1),s=null),e[0].value?i?i.p(e,r):(i=bt(e),i.c(),i.m(t,null)):i&&(i.d(1),i=null)},d(e){e&&v(t),s&&s.d(),i&&i.d()}}}function ft(e){let t,n,s,i,l,o=e[0].value+"";return{c(){t=b("div"),n=b("button"),s=k(o),x(n,"class","svelte-1kmziob"),x(t,"class","ciui-page-item svelte-1kmziob")},m(o,c){m(o,t,c),g(t,n),g(n,s),i||(l=$(n,"click",(function(){r(e[0].run)&&e[0].run.apply(this,arguments)})),i=!0)},p(t,n){e=t,1&n&&o!==(o=e[0].value+"")&&C(s,o)},d(e){e&&v(t),i=!1,l()}}}function pt(e){let t,n,s,i,r,l,o,c,a,u,d,h=e[0].name+"",f=e[0].type+"",p=e[0].required?"*":"",w=e[0].items,$=[];for(let t=0;t<w.length;t+=1)$[t]=kt(dt(e,w,t));return{c(){t=b("div"),n=b("span"),s=b("span"),i=k(h),r=k(":"),l=_(),o=k(f),c=_(),a=k(p),u=_(),d=b("select");for(let e=0;e<$.length;e+=1)$[e].c();x(s,"class","svelte-1kmziob"),x(n,"class","clui-item-label svelte-1kmziob"),x(d,"class","svelte-1kmziob"),x(t,"class","ciui-page-item svelte-1kmziob")},m(e,h){m(e,t,h),g(t,n),g(n,s),g(s,i),g(s,r),g(n,l),g(n,o),g(n,c),g(n,a),g(t,u),g(t,d);for(let e=0;e<$.length;e+=1)$[e].m(d,null)},p(e,t){if(1&t&&h!==(h=e[0].name+"")&&C(i,h),1&t&&f!==(f=e[0].type+"")&&C(o,f),1&t&&p!==(p=e[0].required?"*":"")&&C(a,p),1&t){let n;for(w=e[0].items,n=0;n<w.length;n+=1){const s=dt(e,w,n);$[n]?$[n].p(s,t):($[n]=kt(s),$[n].c(),$[n].m(d,null))}for(;n<$.length;n+=1)$[n].d(1);$.length=w.length}},d(e){e&&v(t),y($,e)}}}function gt(e){let t,n,s,r,l,o,c,a,u,d,h,f,p,y,w,O,S,P=e[0].name+"",j=e[0].type+"",A=e[0].required?"*":"";return{c(){t=b("div"),n=b("div"),r=_(),l=b("input"),c=_(),a=b("span"),u=b("span"),d=k(P),h=k(":"),f=_(),p=k(j),y=_(),w=k(A),x(n,"class",s="checkbox "+(e[0].value?"checked":"")+" svelte-1kmziob"),x(l,"type","checkbox"),l.required=o=e[0].required,x(l,"class","svelte-1kmziob"),x(u,"class","svelte-1kmziob"),x(a,"class","clui-item-label svelte-1kmziob"),x(t,"class","ciui-page-item svelte-1kmziob"),function(e,t,n,s){e.style.setProperty(t,n,s?"important":"")}(t,"flex-direction","row")},m(s,i){m(s,t,i),g(t,n),g(t,r),g(t,l),l.checked=e[0].value,g(t,c),g(t,a),g(a,u),g(u,d),g(u,h),g(a,f),g(a,p),g(a,y),g(a,w),O||(S=[$(n,"click",e[3]),$(l,"change",e[4])],O=!0)},p(e,t){1&t&&s!==(s="checkbox "+(e[0].value?"checked":"")+" svelte-1kmziob")&&x(n,"class",s),1&t&&o!==(o=e[0].required)&&(l.required=o),1&t&&(l.checked=e[0].value),1&t&&P!==(P=e[0].name+"")&&C(d,P),1&t&&j!==(j=e[0].type+"")&&C(p,j),1&t&&A!==(A=e[0].required?"*":"")&&C(w,A)},d(e){e&&v(t),O=!1,i(S)}}}function mt(e){let t,n,s,i,r,l,o,a,u,d,h,f,p,y,w,P=e[0].name+"",j=e[0].type+"",A=e[0].required?"*":"";return{c(){t=b("div"),n=b("span"),s=b("span"),i=k(P),r=k(":"),l=_(),o=k(j),a=_(),u=k(A),d=_(),h=b("input"),x(s,"class","svelte-1kmziob"),x(n,"class","clui-item-label svelte-1kmziob"),x(h,"type","number"),h.required=f=e[0].required,x(h,"class",p=c(""===e[0].value?"clui-empty":"")+" svelte-1kmziob"),x(t,"class","ciui-page-item svelte-1kmziob")},m(c,f){m(c,t,f),g(t,n),g(n,s),g(s,i),g(s,r),g(n,l),g(n,o),g(n,a),g(n,u),g(t,d),g(t,h),S(h,e[0].value),y||(w=$(h,"input",e[2]),y=!0)},p(e,t){1&t&&P!==(P=e[0].name+"")&&C(i,P),1&t&&j!==(j=e[0].type+"")&&C(o,j),1&t&&A!==(A=e[0].required?"*":"")&&C(u,A),1&t&&f!==(f=e[0].required)&&(h.required=f),1&t&&p!==(p=c(""===e[0].value?"clui-empty":"")+" svelte-1kmziob")&&x(h,"class",p),1&t&&O(h.value)!==e[0].value&&S(h,e[0].value)},d(e){e&&v(t),y=!1,w()}}}function vt(e){let t,n,s,i,r,l,o,a,u,d,h,f,p,y,w,O=e[0].name+"",P=e[0].type+"",j=e[0].required?"*":"";return{c(){t=b("div"),n=b("span"),s=b("span"),i=k(O),r=k(":"),l=_(),o=k(P),a=_(),u=k(j),d=_(),h=b("input"),x(s,"class","svelte-1kmziob"),x(n,"class","clui-item-label svelte-1kmziob"),x(h,"type","text"),h.required=f=e[0].required,x(h,"class",p=c(""===e[0].value?"clui-empty":"")+" svelte-1kmziob"),x(t,"class","ciui-page-item svelte-1kmziob")},m(c,f){m(c,t,f),g(t,n),g(n,s),g(s,i),g(s,r),g(n,l),g(n,o),g(n,a),g(n,u),g(t,d),g(t,h),S(h,e[0].value),y||(w=$(h,"input",e[1]),y=!0)},p(e,t){1&t&&O!==(O=e[0].name+"")&&C(i,O),1&t&&P!==(P=e[0].type+"")&&C(o,P),1&t&&j!==(j=e[0].required?"*":"")&&C(u,j),1&t&&f!==(f=e[0].required)&&(h.required=f),1&t&&p!==(p=c(""===e[0].value?"clui-empty":"")+" svelte-1kmziob")&&x(h,"class",p),1&t&&h.value!==e[0].value&&S(h,e[0].value)},d(e){e&&v(t),y=!1,w()}}}function yt(e){let t,n,s=e[0].name+"";return{c(){t=b("h1"),n=k(s)},m(e,s){m(e,t,s),g(t,n)},p(e,t){1&t&&s!==(s=e[0].name+"")&&C(n,s)},d(e){e&&v(t)}}}function bt(e){let t,n=e[0].value.replace(/\n/g,"<br>")+"";return{c(){t=b("p")},m(e,s){m(e,t,s),t.innerHTML=n},p(e,s){1&s&&n!==(n=e[0].value.replace(/\n/g,"<br>")+"")&&(t.innerHTML=n)},d(e){e&&v(t)}}}function kt(e){let t,n,s,i=e[5].name+"";return{c(){t=b("option"),n=k(i),t.__value=s=e[5].name,t.value=t.__value},m(e,s){m(e,t,s),g(t,n)},p(e,r){1&r&&i!==(i=e[5].name+"")&&C(n,i),1&r&&s!==(s=e[5].name)&&(t.__value=s,t.value=t.__value)},d(e){e&&v(t)}}}function _t(t){let n;function s(e,t){return"string"===e[0]?.type?vt:"number"===e[0]?.type?mt:"boolean"===e[0]?.type?gt:"enum"===e[0]?.type?pt:"button"===e[0]?.type?ft:"paragraph"===e[0]?.type?ht:void 0}let i=s(t),r=i&&i(t);return{c(){r&&r.c(),n=w()},m(e,t){r&&r.m(e,t),m(e,n,t)},p(e,[t]){i===(i=s(e))&&r?r.p(e,t):(r&&r.d(1),r=i&&i(e),r&&(r.c(),r.m(n.parentNode,n)))},i:e,o:e,d(e){r&&r.d(e),e&&v(n)}}}function wt(e,t,n){let{arg:s}=t;"string"===s.type?s.value=s.value||"":"boolean"===s.type&&(s.value=s.value||!1);return e.$$set=e=>{"arg"in e&&n(0,s=e.arg)},[s,function(){s.value=this.value,n(0,s)},function(){s.value=O(this.value),n(0,s)},()=>n(0,s.value=!s.value,s),function(){s.value=this.checked,n(0,s)}]}class $t extends ue{constructor(e){super(),ae(this,e,wt,_t,l,{arg:0})}}function xt(e){const t=e-1;return t*t*t+1}function Ot(e,{delay:t=0,duration:n=400,easing:s=xt,x:i=0,y:r=0,opacity:l=0}={}){const o=getComputedStyle(e),c=+o.opacity,a="none"===o.transform?"":o.transform,u=c*(1-l);return{delay:t,duration:n,easing:s,css:(e,t)=>`\n\t\t\ttransform: ${a} translate(${(1-e)*i}px, ${(1-e)*r}px);\n\t\t\topacity: ${c-u*t}`}}function Ct(e,{delay:t=0,duration:n=400,easing:s=xt}={}){const i=getComputedStyle(e),r=+i.opacity,l=parseFloat(i.height),o=parseFloat(i.paddingTop),c=parseFloat(i.paddingBottom),a=parseFloat(i.marginTop),u=parseFloat(i.marginBottom),d=parseFloat(i.borderTopWidth),h=parseFloat(i.borderBottomWidth);return{delay:t,duration:n,easing:s,css:e=>`overflow: hidden;opacity: ${Math.min(20*e,1)*r};height: ${e*l}px;padding-top: ${e*o}px;padding-bottom: ${e*c}px;margin-top: ${e*a}px;margin-bottom: ${e*u}px;border-top-width: ${e*d}px;border-bottom-width: ${e*h}px;`}}const{window:St}=se;function Pt(e,t,n){const s=e.slice();return s[15]=t[n],s}function jt(e,t,n){const s=e.slice();return s[18]=t[n],s}function At(e,t,n){const s=e.slice();return s[24]=t[n],s[23]=n,s}function Mt(e,t,n){const s=e.slice();return s[21]=t[n],s[23]=n,s}function Rt(e,t,n){const s=e.slice();return s[26]=t[n],s}function zt(e,t){let n,s,i,r,l,o,c=t[26].msg+"";return{key:e,first:null,c(){n=b("div"),s=k(c),x(n,"class",i="clui-toast clui-toast-"+t[26].color+" svelte-1yg4ncs"),this.first=n},m(e,t){m(e,n,t),g(n,s),o=!0},p(e,r){t=e,(!o||8&r)&&c!==(c=t[26].msg+"")&&C(s,c),(!o||8&r&&i!==(i="clui-toast clui-toast-"+t[26].color+" svelte-1yg4ncs"))&&x(n,"class",i)},i(e){o||(W((()=>{l&&l.end(1),r||(r=te(n,Ot,{x:200,duration:500})),r.start()})),o=!0)},o(e){r&&r.invalidate(),l=ne(n,Ct,{duration:300}),o=!1},d(e){e&&v(n),e&&l&&l.end()}}}function Dt(e){let t,n,s,i,r,l,o=e[3].tokens.slice(0,e[3].depth+e[3].argDepth).join(" ")+"",c=(ut.filter(e[1])[e[0]]?.name??"")+"";return{c(){t=b("div"),n=k(o),s=_(),i=k(" "),r=_(),l=k(c),x(t,"class","clui-cli-autocomplete svelte-1yg4ncs")},m(e,o){m(e,t,o),g(t,n),g(t,s),g(t,i),g(t,r),g(t,l)},p(e,t){8&t&&o!==(o=e[3].tokens.slice(0,e[3].depth+e[3].argDepth).join(" ")+"")&&C(n,o),3&t&&c!==(c=(ut.filter(e[1])[e[0]]?.name??"")+"")&&C(l,c)},d(e){e&&v(t)}}}function qt(e){let t,n,s,i,r=e[3].canRun?"run":"form";return{c(){t=b("button"),n=k(r),x(t,"class","clui-cli-run svelte-1yg4ncs")},m(r,l){m(r,t,l),g(t,n),s||(i=$(t,"click",e[5]),s=!0)},p(e,t){8&t&&r!==(r=e[3].canRun?"run":"form")&&C(n,r)},d(e){e&&v(t),s=!1,i()}}}function Tt(t){let n,s,i;return{c(){n=b("button"),n.textContent="x",x(n,"class","clui-cli-run svelte-1yg4ncs")},m(e,r){m(e,n,r),s||(i=$(n,"click",t[6]),s=!0)},p:e,d(e){e&&v(n),s=!1,i()}}}function Et(e){let t,n=ut.filter(e[1]),s=[];for(let t=0;t<n.length;t+=1)s[t]=Wt(At(e,n,t));return{c(){for(let e=0;e<s.length;e+=1)s[e].c();t=w()},m(e,n){for(let t=0;t<s.length;t+=1)s[t].m(e,n);m(e,t,n)},p(e,i){if(139&i){let r;for(n=ut.filter(e[1]),r=0;r<n.length;r+=1){const l=At(e,n,r);s[r]?s[r].p(l,i):(s[r]=Wt(l),s[r].c(),s[r].m(t.parentNode,t))}for(;r<s.length;r+=1)s[r].d(1);s.length=n.length}},d(e){y(s,e),e&&v(t)}}}function It(e){let t,n=ut.filter(e[1]),s=[];for(let t=0;t<n.length;t+=1)s[t]=Bt(Mt(e,n,t));return{c(){for(let e=0;e<s.length;e+=1)s[e].c();t=w()},m(e,n){for(let t=0;t<s.length;t+=1)s[t].m(e,n);m(e,t,n)},p(e,i){if(139&i){let r;for(n=ut.filter(e[1]),r=0;r<n.length;r+=1){const l=Mt(e,n,r);s[r]?s[r].p(l,i):(s[r]=Bt(l),s[r].c(),s[r].m(t.parentNode,t))}for(;r<s.length;r+=1)s[r].d(1);s.length=n.length}},d(e){y(s,e),e&&v(t)}}}function Ut(e){let t;return{c(){t=b("hr"),x(t,"class","svelte-1yg4ncs")},m(e,n){m(e,t,n)},d(e){e&&v(t)}}}function Wt(e){let t,n,s,r,l,o,c,a,u,d,h,f=(e[24].short?e[24].short+", ":"")+e[24].name,p=e[24]?.desc+"",y=e[3].divider>0&&e[23]===e[3].divider&&Ut();function w(){return e[13](e[23])}function O(){return e[14](e[24])}return{c(){y&&y.c(),t=_(),n=b("div"),s=b("span"),r=k(f),l=_(),o=b("span"),c=k(p),a=_(),x(s,"class","clui-dropdown-name svelte-1yg4ncs"),x(o,"class","clui-dropdown-description"),x(n,"class",u="clui-dropdown-item "+(e[23]===e[0]?"clui-selected":"")+" svelte-1yg4ncs")},m(e,i){y&&y.m(e,i),m(e,t,i),m(e,n,i),g(n,s),g(s,r),g(n,l),g(n,o),g(o,c),g(n,a),d||(h=[$(n,"mouseover",w),$(n,"click",O)],d=!0)},p(s,i){(e=s)[3].divider>0&&e[23]===e[3].divider?y||(y=Ut(),y.c(),y.m(t.parentNode,t)):y&&(y.d(1),y=null),2&i&&f!==(f=(e[24].short?e[24].short+", ":"")+e[24].name)&&C(r,f),2&i&&p!==(p=e[24]?.desc+"")&&C(c,p),1&i&&u!==(u="clui-dropdown-item "+(e[23]===e[0]?"clui-selected":"")+" svelte-1yg4ncs")&&x(n,"class",u)},d(e){y&&y.d(e),e&&v(t),e&&v(n),d=!1,i(h)}}}function Nt(e){let t;return{c(){t=b("hr"),x(t,"class","svelte-1yg4ncs")},m(e,n){m(e,t,n)},d(e){e&&v(t)}}}function Ht(e){let t,n,s=e[21].name+"";return{c(){t=b("span"),n=k(s),x(t,"class","clui-dropdown-name svelte-1yg4ncs")},m(e,s){m(e,t,s),g(t,n)},p(e,t){2&t&&s!==(s=e[21].name+"")&&C(n,s)},d(e){e&&v(t)}}}function Bt(e){let t,n,s,r,l,o,c,a,u,d=e[21].desc+"",h=e[3].divider>0&&e[23]===e[3].divider&&Nt(),f="number"!=typeof e[21].name&&Ht(e);function p(){return e[11](e[21])}function y(){return e[12](e[23])}return{c(){h&&h.c(),t=_(),n=b("div"),f&&f.c(),s=_(),r=b("span"),l=k(d),o=_(),x(r,"class","clui-dropdown-description"),x(n,"class",c="clui-dropdown-item "+(e[23]===e[0]?"clui-selected":"")+" svelte-1yg4ncs")},m(e,i){h&&h.m(e,i),m(e,t,i),m(e,n,i),f&&f.m(n,null),g(n,s),g(n,r),g(r,l),g(n,o),a||(u=[$(n,"click",p),$(n,"mouseover",y)],a=!0)},p(i,r){(e=i)[3].divider>0&&e[23]===e[3].divider?h||(h=Nt(),h.c(),h.m(t.parentNode,t)):h&&(h.d(1),h=null),"number"!=typeof e[21].name?f?f.p(e,r):(f=Ht(e),f.c(),f.m(n,s)):f&&(f.d(1),f=null),2&r&&d!==(d=e[21].desc+"")&&C(l,d),1&r&&c!==(c="clui-dropdown-item "+(e[23]===e[0]?"clui-selected":"")+" svelte-1yg4ncs")&&x(n,"class",c)},d(e){h&&h.d(e),e&&v(t),e&&v(n),f&&f.d(),a=!1,i(u)}}}function Ft(e){let t,n;return t=new $t({props:{arg:e[18]}}),{c(){var e;(e=t.$$.fragment)&&e.c()},m(e,s){le(t,e,s),n=!0},p(e,n){const s={};8&n&&(s.arg=e[18]),t.$set(s)},i(e){n||(Y(t.$$.fragment,e),n=!0)},o(e){Z(t.$$.fragment,e),n=!1},d(e){oe(t,e)}}}function Gt(e,t){let n,s,i,l,o,c,a,u,d,h,f,p=t[15].items,k=[];for(let e=0;e<p.length;e+=1)k[e]=Ft(jt(t,p,e));const w=e=>Z(k[e],1,1,(()=>{k[e]=null}));return{key:e,first:null,c(){n=b("div"),s=b("div"),i=b("button"),i.textContent="X",l=_(),o=b("div");for(let e=0;e<k.length;e+=1)k[e].c();c=_(),x(i,"class","svelte-1yg4ncs"),x(s,"class","clui-page-buttons svelte-1yg4ncs"),x(o,"class","clui-page svelte-1yg4ncs"),x(n,"class","clui-page-container svelte-1yg4ncs"),this.first=n},m(e,a){m(e,n,a),g(n,s),g(s,i),g(n,l),g(n,o);for(let e=0;e<k.length;e+=1)k[e].m(o,null);g(n,c),d=!0,h||(f=$(i,"click",(function(){r(t[15].close())&&t[15].close().apply(this,arguments)})),h=!0)},p(e,n){if(t=e,8&n){let e;for(p=t[15].items,e=0;e<p.length;e+=1){const s=jt(t,p,e);k[e]?(k[e].p(s,n),Y(k[e],1)):(k[e]=Ft(s),k[e].c(),Y(k[e],1),k[e].m(o,null))}for(X(),e=p.length;e<k.length;e+=1)w(e);Q()}},i(e){if(!d){for(let e=0;e<p.length;e+=1)Y(k[e]);W((()=>{u&&u.end(1),a||(a=te(n,Ct,{duration:200})),a.start()})),d=!0}},o(e){k=k.filter(Boolean);for(let e=0;e<k.length;e+=1)Z(k[e]);a&&a.invalidate(),u=ne(n,Ct,{duration:200}),d=!1},d(e){e&&v(n),y(k,e),e&&u&&u.end(),h=!1,f()}}}function Lt(e){let t,n,s,r,l,o,c,a,u,d,h,f,p,y,k,w,O,C,P=[],j=new Map,A=[],M=new Map,R=e[3].toasts;const z=e=>e[26].id;for(let t=0;t<R.length;t+=1){let n=Rt(e,R,t),s=z(n);j.set(s,P[t]=zt(s,n))}let D=e[3]?.tokens&&Dt(e),q=e[2]?.run&&qt(e),T=e[1]&&Tt(e);function E(e,t){return e[2]?.commands?It:e[2]?.args?Et:void 0}let I=E(e),U=I&&I(e),W=e[3].pages;const N=e=>e[15].items;for(let t=0;t<W.length;t+=1){let n=Pt(e,W,t),s=N(n);M.set(s,A[t]=Gt(s,n))}return{c(){t=b("div");for(let e=0;e<P.length;e+=1)P[e].c();n=_(),s=b("div"),r=b("div"),l=b("img"),c=_(),D&&D.c(),a=_(),u=b("input"),d=_(),q&&q.c(),h=_(),T&&T.c(),f=_(),p=b("div"),U&&U.c(),y=_(),k=b("div");for(let e=0;e<A.length;e+=1)A[e].c();x(t,"class","clui-toasts svelte-1yg4ncs"),l.src!==(o="icons/cli.png")&&x(l,"src","icons/cli.png"),x(l,"alt",""),x(l,"class","clui-cli-icon svelte-1yg4ncs"),x(u,"type","text"),x(u,"placeholder",""),x(u,"class","svelte-1yg4ncs"),x(r,"class","clui-cli-input svelte-1yg4ncs"),x(p,"class","clui-cli-dropdown svelte-1yg4ncs"),x(k,"class","clui-pages svelte-1yg4ncs"),x(s,"class","clui-cli svelte-1yg4ncs")},m(i,o){m(i,t,o);for(let e=0;e<P.length;e+=1)P[e].m(t,null);m(i,n,o),m(i,s,o),g(s,r),g(r,l),g(r,c),D&&D.m(r,null),g(r,a),g(r,u),S(u,e[1]),g(r,d),q&&q.m(r,null),g(r,h),T&&T.m(r,null),g(s,f),g(s,p),U&&U.m(p,null),g(s,y),g(s,k);for(let e=0;e<A.length;e+=1)A[e].m(k,null);w=!0,O||(C=[$(St,"error",e[9]),$(u,"input",e[10]),$(u,"input",e[4]),$(u,"keydown",e[8])],O=!0)},p(e,[n]){8&n&&(R=e[3].toasts,X(),P=re(P,n,z,1,e,R,j,t,ie,zt,null,Rt),Q()),e[3]?.tokens?D?D.p(e,n):(D=Dt(e),D.c(),D.m(r,a)):D&&(D.d(1),D=null),2&n&&u.value!==e[1]&&S(u,e[1]),e[2]?.run?q?q.p(e,n):(q=qt(e),q.c(),q.m(r,h)):q&&(q.d(1),q=null),e[1]?T?T.p(e,n):(T=Tt(e),T.c(),T.m(r,null)):T&&(T.d(1),T=null),I===(I=E(e))&&U?U.p(e,n):(U&&U.d(1),U=I&&I(e),U&&(U.c(),U.m(p,null))),8&n&&(W=e[3].pages,X(),A=re(A,n,N,1,e,W,M,k,ie,Gt,null,Pt),Q())},i(e){if(!w){for(let e=0;e<R.length;e+=1)Y(P[e]);for(let e=0;e<W.length;e+=1)Y(A[e]);w=!0}},o(e){for(let e=0;e<P.length;e+=1)Z(P[e]);for(let e=0;e<A.length;e+=1)Z(A[e]);w=!1},d(e){e&&v(t);for(let e=0;e<P.length;e+=1)P[e].d();e&&v(n),e&&v(s),D&&D.d(),q&&q.d(),T&&T.d(),U&&U.d();for(let e=0;e<A.length;e+=1)A[e].d();O=!1,i(C)}}}function Vt(e,t,n){let s,i,r;o(e,Ye,(e=>n(1,s=e))),o(e,Qe,(e=>n(2,i=e))),o(e,Ze,(e=>n(3,r=e))),window.clui=ut;let l=0;const c=e=>n(0,l=e);return[l,s,i,r,()=>ut.parse(s),()=>ut.execute(),()=>ut.clear(),c,e=>{"Enter"===e.key?ut.execute(s):"Tab"===e.key?(e.preventDefault(),ut.select(ut.filter(s)[l]?.name)):"ArrowUp"===e.key?(e.preventDefault(),n(0,l--,l)):"ArrowDown"===e.key&&(e.preventDefault(),n(0,l++,l)),i?.commands?n(0,l=l>=Object.keys(ut.filter(s)).length?Object.keys(ut.filter(s)).length-1:l):i?.args&&n(0,l=l>=ut.filter(s).length?ut.filter(s).length-1:l),n(0,l=l<0?0:l)},e=>new ut.Toast(e.message,"red"),function(){s=this.value,Ye.set(s)},e=>ut.select(e.name),e=>c(e),e=>c(e),e=>ut.select(e.name)]}return new class extends ue{constructor(e){super(),ae(this,e,Vt,Lt,l,{})}}({target:document.getElementById("clui")})}();
+
+(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
+var index = (function () {
+    'use strict';
+
+    function noop() { }
+    const identity = x => x;
+    function run(fn) {
+        return fn();
+    }
+    function blank_object() {
+        return Object.create(null);
+    }
+    function run_all(fns) {
+        fns.forEach(run);
+    }
+    function is_function(thing) {
+        return typeof thing === 'function';
+    }
+    function safe_not_equal(a, b) {
+        return a != a ? b == b : a !== b || ((a && typeof a === 'object') || typeof a === 'function');
+    }
+    function is_empty(obj) {
+        return Object.keys(obj).length === 0;
+    }
+    function subscribe(store, ...callbacks) {
+        if (store == null) {
+            return noop;
+        }
+        const unsub = store.subscribe(...callbacks);
+        return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
+    }
+    function component_subscribe(component, store, callback) {
+        component.$$.on_destroy.push(subscribe(store, callback));
+    }
+    function null_to_empty(value) {
+        return value == null ? '' : value;
+    }
+
+    const is_client = typeof window !== 'undefined';
+    let now = is_client
+        ? () => window.performance.now()
+        : () => Date.now();
+    let raf = is_client ? cb => requestAnimationFrame(cb) : noop;
+
+    const tasks = new Set();
+    function run_tasks(now) {
+        tasks.forEach(task => {
+            if (!task.c(now)) {
+                tasks.delete(task);
+                task.f();
+            }
+        });
+        if (tasks.size !== 0)
+            raf(run_tasks);
+    }
+    /**
+     * Creates a new task that runs on each raf frame
+     * until it returns a falsy value or is aborted
+     */
+    function loop(callback) {
+        let task;
+        if (tasks.size === 0)
+            raf(run_tasks);
+        return {
+            promise: new Promise(fulfill => {
+                tasks.add(task = { c: callback, f: fulfill });
+            }),
+            abort() {
+                tasks.delete(task);
+            }
+        };
+    }
+
+    function append(target, node) {
+        target.appendChild(node);
+    }
+    function insert(target, node, anchor) {
+        target.insertBefore(node, anchor || null);
+    }
+    function detach(node) {
+        node.parentNode.removeChild(node);
+    }
+    function destroy_each(iterations, detaching) {
+        for (let i = 0; i < iterations.length; i += 1) {
+            if (iterations[i])
+                iterations[i].d(detaching);
+        }
+    }
+    function element(name) {
+        return document.createElement(name);
+    }
+    function text(data) {
+        return document.createTextNode(data);
+    }
+    function space() {
+        return text(' ');
+    }
+    function empty() {
+        return text('');
+    }
+    function listen(node, event, handler, options) {
+        node.addEventListener(event, handler, options);
+        return () => node.removeEventListener(event, handler, options);
+    }
+    function attr(node, attribute, value) {
+        if (value == null)
+            node.removeAttribute(attribute);
+        else if (node.getAttribute(attribute) !== value)
+            node.setAttribute(attribute, value);
+    }
+    function to_number(value) {
+        return value === '' ? null : +value;
+    }
+    function children(element) {
+        return Array.from(element.childNodes);
+    }
+    function set_data(text, data) {
+        data = '' + data;
+        if (text.wholeText !== data)
+            text.data = data;
+    }
+    function set_input_value(input, value) {
+        input.value = value == null ? '' : value;
+    }
+    function set_style(node, key, value, important) {
+        node.style.setProperty(key, value, important ? 'important' : '');
+    }
+    function custom_event(type, detail) {
+        const e = document.createEvent('CustomEvent');
+        e.initCustomEvent(type, false, false, detail);
+        return e;
+    }
+
+    const active_docs = new Set();
+    let active = 0;
+    // https://github.com/darkskyapp/string-hash/blob/master/index.js
+    function hash(str) {
+        let hash = 5381;
+        let i = str.length;
+        while (i--)
+            hash = ((hash << 5) - hash) ^ str.charCodeAt(i);
+        return hash >>> 0;
+    }
+    function create_rule(node, a, b, duration, delay, ease, fn, uid = 0) {
+        const step = 16.666 / duration;
+        let keyframes = '{\n';
+        for (let p = 0; p <= 1; p += step) {
+            const t = a + (b - a) * ease(p);
+            keyframes += p * 100 + `%{${fn(t, 1 - t)}}\n`;
+        }
+        const rule = keyframes + `100% {${fn(b, 1 - b)}}\n}`;
+        const name = `__svelte_${hash(rule)}_${uid}`;
+        const doc = node.ownerDocument;
+        active_docs.add(doc);
+        const stylesheet = doc.__svelte_stylesheet || (doc.__svelte_stylesheet = doc.head.appendChild(element('style')).sheet);
+        const current_rules = doc.__svelte_rules || (doc.__svelte_rules = {});
+        if (!current_rules[name]) {
+            current_rules[name] = true;
+            stylesheet.insertRule(`@keyframes ${name} ${rule}`, stylesheet.cssRules.length);
+        }
+        const animation = node.style.animation || '';
+        node.style.animation = `${animation ? `${animation}, ` : ''}${name} ${duration}ms linear ${delay}ms 1 both`;
+        active += 1;
+        return name;
+    }
+    function delete_rule(node, name) {
+        const previous = (node.style.animation || '').split(', ');
+        const next = previous.filter(name
+            ? anim => anim.indexOf(name) < 0 // remove specific animation
+            : anim => anim.indexOf('__svelte') === -1 // remove all Svelte animations
+        );
+        const deleted = previous.length - next.length;
+        if (deleted) {
+            node.style.animation = next.join(', ');
+            active -= deleted;
+            if (!active)
+                clear_rules();
+        }
+    }
+    function clear_rules() {
+        raf(() => {
+            if (active)
+                return;
+            active_docs.forEach(doc => {
+                const stylesheet = doc.__svelte_stylesheet;
+                let i = stylesheet.cssRules.length;
+                while (i--)
+                    stylesheet.deleteRule(i);
+                doc.__svelte_rules = {};
+            });
+            active_docs.clear();
+        });
+    }
+
+    let current_component;
+    function set_current_component(component) {
+        current_component = component;
+    }
+
+    const dirty_components = [];
+    const binding_callbacks = [];
+    const render_callbacks = [];
+    const flush_callbacks = [];
+    const resolved_promise = Promise.resolve();
+    let update_scheduled = false;
+    function schedule_update() {
+        if (!update_scheduled) {
+            update_scheduled = true;
+            resolved_promise.then(flush);
+        }
+    }
+    function add_render_callback(fn) {
+        render_callbacks.push(fn);
+    }
+    let flushing = false;
+    const seen_callbacks = new Set();
+    function flush() {
+        if (flushing)
+            return;
+        flushing = true;
+        do {
+            // first, call beforeUpdate functions
+            // and update components
+            for (let i = 0; i < dirty_components.length; i += 1) {
+                const component = dirty_components[i];
+                set_current_component(component);
+                update(component.$$);
+            }
+            set_current_component(null);
+            dirty_components.length = 0;
+            while (binding_callbacks.length)
+                binding_callbacks.pop()();
+            // then, once components are updated, call
+            // afterUpdate functions. This may cause
+            // subsequent updates...
+            for (let i = 0; i < render_callbacks.length; i += 1) {
+                const callback = render_callbacks[i];
+                if (!seen_callbacks.has(callback)) {
+                    // ...so guard against infinite loops
+                    seen_callbacks.add(callback);
+                    callback();
+                }
+            }
+            render_callbacks.length = 0;
+        } while (dirty_components.length);
+        while (flush_callbacks.length) {
+            flush_callbacks.pop()();
+        }
+        update_scheduled = false;
+        flushing = false;
+        seen_callbacks.clear();
+    }
+    function update($$) {
+        if ($$.fragment !== null) {
+            $$.update();
+            run_all($$.before_update);
+            const dirty = $$.dirty;
+            $$.dirty = [-1];
+            $$.fragment && $$.fragment.p($$.ctx, dirty);
+            $$.after_update.forEach(add_render_callback);
+        }
+    }
+
+    let promise;
+    function wait() {
+        if (!promise) {
+            promise = Promise.resolve();
+            promise.then(() => {
+                promise = null;
+            });
+        }
+        return promise;
+    }
+    function dispatch(node, direction, kind) {
+        node.dispatchEvent(custom_event(`${direction ? 'intro' : 'outro'}${kind}`));
+    }
+    const outroing = new Set();
+    let outros;
+    function group_outros() {
+        outros = {
+            r: 0,
+            c: [],
+            p: outros // parent group
+        };
+    }
+    function check_outros() {
+        if (!outros.r) {
+            run_all(outros.c);
+        }
+        outros = outros.p;
+    }
+    function transition_in(block, local) {
+        if (block && block.i) {
+            outroing.delete(block);
+            block.i(local);
+        }
+    }
+    function transition_out(block, local, detach, callback) {
+        if (block && block.o) {
+            if (outroing.has(block))
+                return;
+            outroing.add(block);
+            outros.c.push(() => {
+                outroing.delete(block);
+                if (callback) {
+                    if (detach)
+                        block.d(1);
+                    callback();
+                }
+            });
+            block.o(local);
+        }
+    }
+    const null_transition = { duration: 0 };
+    function create_in_transition(node, fn, params) {
+        let config = fn(node, params);
+        let running = false;
+        let animation_name;
+        let task;
+        let uid = 0;
+        function cleanup() {
+            if (animation_name)
+                delete_rule(node, animation_name);
+        }
+        function go() {
+            const { delay = 0, duration = 300, easing = identity, tick = noop, css } = config || null_transition;
+            if (css)
+                animation_name = create_rule(node, 0, 1, duration, delay, easing, css, uid++);
+            tick(0, 1);
+            const start_time = now() + delay;
+            const end_time = start_time + duration;
+            if (task)
+                task.abort();
+            running = true;
+            add_render_callback(() => dispatch(node, true, 'start'));
+            task = loop(now => {
+                if (running) {
+                    if (now >= end_time) {
+                        tick(1, 0);
+                        dispatch(node, true, 'end');
+                        cleanup();
+                        return running = false;
+                    }
+                    if (now >= start_time) {
+                        const t = easing((now - start_time) / duration);
+                        tick(t, 1 - t);
+                    }
+                }
+                return running;
+            });
+        }
+        let started = false;
+        return {
+            start() {
+                if (started)
+                    return;
+                delete_rule(node);
+                if (is_function(config)) {
+                    config = config();
+                    wait().then(go);
+                }
+                else {
+                    go();
+                }
+            },
+            invalidate() {
+                started = false;
+            },
+            end() {
+                if (running) {
+                    cleanup();
+                    running = false;
+                }
+            }
+        };
+    }
+    function create_out_transition(node, fn, params) {
+        let config = fn(node, params);
+        let running = true;
+        let animation_name;
+        const group = outros;
+        group.r += 1;
+        function go() {
+            const { delay = 0, duration = 300, easing = identity, tick = noop, css } = config || null_transition;
+            if (css)
+                animation_name = create_rule(node, 1, 0, duration, delay, easing, css);
+            const start_time = now() + delay;
+            const end_time = start_time + duration;
+            add_render_callback(() => dispatch(node, false, 'start'));
+            loop(now => {
+                if (running) {
+                    if (now >= end_time) {
+                        tick(0, 1);
+                        dispatch(node, false, 'end');
+                        if (!--group.r) {
+                            // this will result in `end()` being called,
+                            // so we don't need to clean up here
+                            run_all(group.c);
+                        }
+                        return false;
+                    }
+                    if (now >= start_time) {
+                        const t = easing((now - start_time) / duration);
+                        tick(1 - t, t);
+                    }
+                }
+                return running;
+            });
+        }
+        if (is_function(config)) {
+            wait().then(() => {
+                // @ts-ignore
+                config = config();
+                go();
+            });
+        }
+        else {
+            go();
+        }
+        return {
+            end(reset) {
+                if (reset && config.tick) {
+                    config.tick(1, 0);
+                }
+                if (running) {
+                    if (animation_name)
+                        delete_rule(node, animation_name);
+                    running = false;
+                }
+            }
+        };
+    }
+
+    const globals = (typeof window !== 'undefined'
+        ? window
+        : typeof globalThis !== 'undefined'
+            ? globalThis
+            : global);
+    function outro_and_destroy_block(block, lookup) {
+        transition_out(block, 1, 1, () => {
+            lookup.delete(block.key);
+        });
+    }
+    function update_keyed_each(old_blocks, dirty, get_key, dynamic, ctx, list, lookup, node, destroy, create_each_block, next, get_context) {
+        let o = old_blocks.length;
+        let n = list.length;
+        let i = o;
+        const old_indexes = {};
+        while (i--)
+            old_indexes[old_blocks[i].key] = i;
+        const new_blocks = [];
+        const new_lookup = new Map();
+        const deltas = new Map();
+        i = n;
+        while (i--) {
+            const child_ctx = get_context(ctx, list, i);
+            const key = get_key(child_ctx);
+            let block = lookup.get(key);
+            if (!block) {
+                block = create_each_block(key, child_ctx);
+                block.c();
+            }
+            else if (dynamic) {
+                block.p(child_ctx, dirty);
+            }
+            new_lookup.set(key, new_blocks[i] = block);
+            if (key in old_indexes)
+                deltas.set(key, Math.abs(i - old_indexes[key]));
+        }
+        const will_move = new Set();
+        const did_move = new Set();
+        function insert(block) {
+            transition_in(block, 1);
+            block.m(node, next);
+            lookup.set(block.key, block);
+            next = block.first;
+            n--;
+        }
+        while (o && n) {
+            const new_block = new_blocks[n - 1];
+            const old_block = old_blocks[o - 1];
+            const new_key = new_block.key;
+            const old_key = old_block.key;
+            if (new_block === old_block) {
+                // do nothing
+                next = new_block.first;
+                o--;
+                n--;
+            }
+            else if (!new_lookup.has(old_key)) {
+                // remove old block
+                destroy(old_block, lookup);
+                o--;
+            }
+            else if (!lookup.has(new_key) || will_move.has(new_key)) {
+                insert(new_block);
+            }
+            else if (did_move.has(old_key)) {
+                o--;
+            }
+            else if (deltas.get(new_key) > deltas.get(old_key)) {
+                did_move.add(new_key);
+                insert(new_block);
+            }
+            else {
+                will_move.add(old_key);
+                o--;
+            }
+        }
+        while (o--) {
+            const old_block = old_blocks[o];
+            if (!new_lookup.has(old_block.key))
+                destroy(old_block, lookup);
+        }
+        while (n)
+            insert(new_blocks[n - 1]);
+        return new_blocks;
+    }
+    function create_component(block) {
+        block && block.c();
+    }
+    function mount_component(component, target, anchor, customElement) {
+        const { fragment, on_mount, on_destroy, after_update } = component.$$;
+        fragment && fragment.m(target, anchor);
+        if (!customElement) {
+            // onMount happens before the initial afterUpdate
+            add_render_callback(() => {
+                const new_on_destroy = on_mount.map(run).filter(is_function);
+                if (on_destroy) {
+                    on_destroy.push(...new_on_destroy);
+                }
+                else {
+                    // Edge case - component was destroyed immediately,
+                    // most likely as a result of a binding initialising
+                    run_all(new_on_destroy);
+                }
+                component.$$.on_mount = [];
+            });
+        }
+        after_update.forEach(add_render_callback);
+    }
+    function destroy_component(component, detaching) {
+        const $$ = component.$$;
+        if ($$.fragment !== null) {
+            run_all($$.on_destroy);
+            $$.fragment && $$.fragment.d(detaching);
+            // TODO null out other refs, including component.$$ (but need to
+            // preserve final state?)
+            $$.on_destroy = $$.fragment = null;
+            $$.ctx = [];
+        }
+    }
+    function make_dirty(component, i) {
+        if (component.$$.dirty[0] === -1) {
+            dirty_components.push(component);
+            schedule_update();
+            component.$$.dirty.fill(0);
+        }
+        component.$$.dirty[(i / 31) | 0] |= (1 << (i % 31));
+    }
+    function init(component, options, instance, create_fragment, not_equal, props, dirty = [-1]) {
+        const parent_component = current_component;
+        set_current_component(component);
+        const $$ = component.$$ = {
+            fragment: null,
+            ctx: null,
+            // state
+            props,
+            update: noop,
+            not_equal,
+            bound: blank_object(),
+            // lifecycle
+            on_mount: [],
+            on_destroy: [],
+            on_disconnect: [],
+            before_update: [],
+            after_update: [],
+            context: new Map(parent_component ? parent_component.$$.context : []),
+            // everything else
+            callbacks: blank_object(),
+            dirty,
+            skip_bound: false
+        };
+        let ready = false;
+        $$.ctx = instance
+            ? instance(component, options.props || {}, (i, ret, ...rest) => {
+                const value = rest.length ? rest[0] : ret;
+                if ($$.ctx && not_equal($$.ctx[i], $$.ctx[i] = value)) {
+                    if (!$$.skip_bound && $$.bound[i])
+                        $$.bound[i](value);
+                    if (ready)
+                        make_dirty(component, i);
+                }
+                return ret;
+            })
+            : [];
+        $$.update();
+        ready = true;
+        run_all($$.before_update);
+        // `false` as a special case of no DOM component
+        $$.fragment = create_fragment ? create_fragment($$.ctx) : false;
+        if (options.target) {
+            if (options.hydrate) {
+                const nodes = children(options.target);
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                $$.fragment && $$.fragment.l(nodes);
+                nodes.forEach(detach);
+            }
+            else {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                $$.fragment && $$.fragment.c();
+            }
+            if (options.intro)
+                transition_in(component.$$.fragment);
+            mount_component(component, options.target, options.anchor, options.customElement);
+            flush();
+        }
+        set_current_component(parent_component);
+    }
+    /**
+     * Base class for Svelte components. Used when dev=false.
+     */
+    class SvelteComponent {
+        $destroy() {
+            destroy_component(this, 1);
+            this.$destroy = noop;
+        }
+        $on(type, callback) {
+            const callbacks = (this.$$.callbacks[type] || (this.$$.callbacks[type] = []));
+            callbacks.push(callback);
+            return () => {
+                const index = callbacks.indexOf(callback);
+                if (index !== -1)
+                    callbacks.splice(index, 1);
+            };
+        }
+        $set($$props) {
+            if (this.$$set && !is_empty($$props)) {
+                this.$$.skip_bound = true;
+                this.$$set($$props);
+                this.$$.skip_bound = false;
+            }
+        }
+    }
+
+    var constants = {
+    	PATH_SEPARATOR: '.',
+    	TARGET: Symbol('target'),
+    	UNSUBSCRIBE: Symbol('unsubscribe')
+    };
+
+    const isBuiltin = {
+    	withMutableMethods: value => {
+    		return value instanceof Date ||
+    			value instanceof Set ||
+    			value instanceof Map ||
+    			value instanceof WeakSet ||
+    			value instanceof WeakMap;
+    	},
+    	withoutMutableMethods: value => (typeof value === 'object' ? value === null : typeof value !== 'function') || value instanceof RegExp
+    };
+
+    var isBuiltin_1 = isBuiltin;
+
+    var isArray = Array.isArray;
+
+    var isSymbol = value => typeof value === 'symbol';
+
+    const {PATH_SEPARATOR} = constants;
+
+
+
+    var path = {
+    	after: (path, subPath) => {
+    		if (isArray(path)) {
+    			return path.slice(subPath.length);
+    		}
+
+    		if (subPath === '') {
+    			return path;
+    		}
+
+    		return path.slice(subPath.length + 1);
+    	},
+    	concat: (path, key) => {
+    		if (isArray(path)) {
+    			path = path.slice();
+
+    			if (key) {
+    				path.push(key);
+    			}
+
+    			return path;
+    		}
+
+    		if (key && key.toString !== undefined) {
+    			if (path !== '') {
+    				path += PATH_SEPARATOR;
+    			}
+
+    			if (isSymbol(key)) {
+    				return path + key.toString();
+    			}
+
+    			return path + key;
+    		}
+
+    		return path;
+    	},
+    	initial: path => {
+    		if (isArray(path)) {
+    			return path.slice(0, -1);
+    		}
+
+    		if (path === '') {
+    			return path;
+    		}
+
+    		const index = path.lastIndexOf(PATH_SEPARATOR);
+
+    		if (index === -1) {
+    			return '';
+    		}
+
+    		return path.slice(0, index);
+    	},
+    	last: path => {
+    		if (isArray(path)) {
+    			return path[path.length - 1] || '';
+    		}
+
+    		if (path === '') {
+    			return path;
+    		}
+
+    		const index = path.lastIndexOf(PATH_SEPARATOR);
+
+    		if (index === -1) {
+    			return path;
+    		}
+
+    		return path.slice(index + 1);
+    	},
+    	walk: (path, callback) => {
+    		if (isArray(path)) {
+    			path.forEach(key => callback(key));
+    		} else if (path !== '') {
+    			let position = 0;
+    			let index = path.indexOf(PATH_SEPARATOR);
+
+    			if (index === -1) {
+    				callback(path);
+    			} else {
+    				while (position < path.length) {
+    					if (index === -1) {
+    						index = path.length;
+    					}
+
+    					callback(path.slice(position, index));
+
+    					position = index + 1;
+    					index = path.indexOf(PATH_SEPARATOR, position);
+    				}
+    			}
+    		}
+    	}
+    };
+
+    var isIterator = value => typeof value === 'object' && typeof value.next === 'function';
+
+    const {TARGET: TARGET$1} = constants;
+
+    // eslint-disable-next-line max-params
+    var wrapIterator = (iterator, target, thisArg, applyPath, prepareValue) => {
+    	const originalNext = iterator.next;
+
+    	if (target.name === 'entries') {
+    		iterator.next = function () {
+    			const result = originalNext.call(this);
+
+    			if (result.done === false) {
+    				result.value[0] = prepareValue(
+    					result.value[0],
+    					target,
+    					result.value[0],
+    					applyPath
+    				);
+    				result.value[1] = prepareValue(
+    					result.value[1],
+    					target,
+    					result.value[0],
+    					applyPath
+    				);
+    			}
+
+    			return result;
+    		};
+    	} else if (target.name === 'values') {
+    		const keyIterator = thisArg[TARGET$1].keys();
+
+    		iterator.next = function () {
+    			const result = originalNext.call(this);
+
+    			if (result.done === false) {
+    				result.value = prepareValue(
+    					result.value,
+    					target,
+    					keyIterator.next().value,
+    					applyPath
+    				);
+    			}
+
+    			return result;
+    		};
+    	} else {
+    		iterator.next = function () {
+    			const result = originalNext.call(this);
+
+    			if (result.done === false) {
+    				result.value = prepareValue(
+    					result.value,
+    					target,
+    					result.value,
+    					applyPath
+    				);
+    			}
+
+    			return result;
+    		};
+    	}
+
+    	return iterator;
+    };
+
+    var ignoreProperty = (cache, options, property) => {
+    	return cache.isUnsubscribed ||
+    		(options.ignoreSymbols && isSymbol(property)) ||
+    		(options.ignoreUnderscores && property.charAt(0) === '_') ||
+    		('ignoreKeys' in options && options.ignoreKeys.includes(property));
+    };
+
+    /**
+     * @class Cache
+     * @private
+     */
+    class Cache {
+    	constructor(equals) {
+    		this._equals = equals;
+    		this._proxyCache = new WeakMap();
+    		this._pathCache = new WeakMap();
+    		this.isUnsubscribed = false;
+    	}
+
+    	_getDescriptorCache() {
+    		if (this._descriptorCache === undefined) {
+    			this._descriptorCache = new WeakMap();
+    		}
+
+    		return this._descriptorCache;
+    	}
+
+    	_getProperties(target) {
+    		const descriptorCache = this._getDescriptorCache();
+    		let properties = descriptorCache.get(target);
+
+    		if (properties === undefined) {
+    			properties = {};
+    			descriptorCache.set(target, properties);
+    		}
+
+    		return properties;
+    	}
+
+    	_getOwnPropertyDescriptor(target, property) {
+    		if (this.isUnsubscribed) {
+    			return Reflect.getOwnPropertyDescriptor(target, property);
+    		}
+
+    		const properties = this._getProperties(target);
+    		let descriptor = properties[property];
+
+    		if (descriptor === undefined) {
+    			descriptor = Reflect.getOwnPropertyDescriptor(target, property);
+    			properties[property] = descriptor;
+    		}
+
+    		return descriptor;
+    	}
+
+    	getProxy(target, path, handler, proxyTarget) {
+    		if (this.isUnsubscribed) {
+    			return target;
+    		}
+
+    		this._pathCache.set(target, path);
+
+    		let proxy = this._proxyCache.get(target);
+
+    		if (proxy === undefined) {
+    			proxy = target[proxyTarget] === undefined ?
+    				new Proxy(target, handler) :
+    				target;
+
+    			this._proxyCache.set(target, proxy);
+    		}
+
+    		return proxy;
+    	}
+
+    	getPath(target) {
+    		return this.isUnsubscribed ? undefined : this._pathCache.get(target);
+    	}
+
+    	isDetached(target, object) {
+    		path.walk(this.getPath(target), key => {
+    			if (object) {
+    				object = object[key];
+    			}
+    		});
+
+    		return !Object.is(target, object);
+    	}
+
+    	defineProperty(target, property, descriptor) {
+    		if (!Reflect.defineProperty(target, property, descriptor)) {
+    			return false;
+    		}
+
+    		if (!this.isUnsubscribed) {
+    			this._getProperties(target)[property] = descriptor;
+    		}
+
+    		return true;
+    	}
+
+    	setProperty(target, property, value, receiver, previous) { // eslint-disable-line max-params
+    		if (!this._equals(previous, value) || !(property in target)) {
+    			const descriptor = this._getOwnPropertyDescriptor(target, property);
+
+    			if (descriptor !== undefined && 'set' in descriptor) {
+    				return Reflect.set(target, property, value, receiver);
+    			}
+
+    			return Reflect.set(target, property, value);
+    		}
+
+    		return true;
+    	}
+
+    	deleteProperty(target, property, previous) {
+    		if (Reflect.deleteProperty(target, property)) {
+    			if (!this.isUnsubscribed) {
+    				const properties = this._getDescriptorCache().get(target);
+
+    				if (properties) {
+    					delete properties[property];
+    					this._pathCache.delete(previous);
+    				}
+    			}
+
+    			return true;
+    		}
+
+    		return false;
+    	}
+
+    	isSameDescriptor(a, target, property) {
+    		const b = this._getOwnPropertyDescriptor(target, property);
+
+    		return a !== undefined &&
+    			b !== undefined &&
+    			Object.is(a.value, b.value) &&
+    			(a.writable || false) === (b.writable || false) &&
+    			(a.enumerable || false) === (b.enumerable || false) &&
+    			(a.configurable || false) === (b.configurable || false) &&
+    			a.get === b.get &&
+    			a.set === b.set;
+    	}
+
+    	isGetInvariant(target, property) {
+    		const descriptor = this._getOwnPropertyDescriptor(target, property);
+
+    		return descriptor !== undefined &&
+    			descriptor.configurable !== true &&
+    			descriptor.writable !== true;
+    	}
+
+    	unsubscribe() {
+    		this._descriptorCache = null;
+    		this._pathCache = null;
+    		this._proxyCache = null;
+    		this.isUnsubscribed = true;
+    	}
+    }
+
+    var cache = Cache;
+
+    var isObject = value => toString.call(value) === '[object Object]';
+
+    const certainChange = () => true;
+
+    const shallowEqualArrays = (clone, value) => {
+    	return clone.length !== value.length || clone.some((item, index) => value[index] !== item);
+    };
+
+    const shallowEqualSets = (clone, value) => {
+    	if (clone.size !== value.size) {
+    		return true;
+    	}
+
+    	for (const element of clone) {
+    		if (!value.has(element)) {
+    			return true;
+    		}
+    	}
+
+    	return false;
+    };
+
+    const shallowEqualMaps = (clone, value) => {
+    	if (clone.size !== value.size) {
+    		return true;
+    	}
+
+    	let bValue;
+    	for (const [key, aValue] of clone) {
+    		bValue = value.get(key);
+
+    		if (bValue !== aValue || (bValue === undefined && !value.has(key))) {
+    			return true;
+    		}
+    	}
+
+    	return false;
+    };
+
+    const IMMUTABLE_OBJECT_METHODS = new Set([
+    	'hasOwnProperty',
+    	'isPrototypeOf',
+    	'propertyIsEnumerable',
+    	'toLocaleString',
+    	'toString',
+    	'valueOf'
+    ]);
+
+    const IMMUTABLE_ARRAY_METHODS = new Set([
+    	'concat',
+    	'includes',
+    	'indexOf',
+    	'join',
+    	'keys',
+    	'lastIndexOf'
+    ]);
+
+    const IMMUTABLE_SET_METHODS = new Set([
+    	'has',
+    	'toString'
+    ]);
+
+    const IMMUTABLE_MAP_METHODS = new Set([...IMMUTABLE_SET_METHODS].concat(['get']));
+
+    const SHALLOW_MUTABLE_ARRAY_METHODS = {
+    	push: certainChange,
+    	pop: certainChange,
+    	shift: certainChange,
+    	unshift: certainChange,
+    	copyWithin: shallowEqualArrays,
+    	reverse: shallowEqualArrays,
+    	sort: shallowEqualArrays,
+    	splice: shallowEqualArrays,
+    	flat: shallowEqualArrays,
+    	fill: shallowEqualArrays
+    };
+
+    const SHALLOW_MUTABLE_SET_METHODS = {
+    	add: shallowEqualSets,
+    	clear: shallowEqualSets,
+    	delete: shallowEqualSets
+    };
+
+    const COLLECTION_ITERATOR_METHODS = [
+    	'keys',
+    	'values',
+    	'entries'
+    ];
+
+    const SHALLOW_MUTABLE_MAP_METHODS = {
+    	set: shallowEqualMaps,
+    	clear: shallowEqualMaps,
+    	delete: shallowEqualMaps
+    };
+
+    const HANDLED_ARRAY_METHODS = new Set([...IMMUTABLE_OBJECT_METHODS]
+    	.concat([...IMMUTABLE_ARRAY_METHODS])
+    	.concat(Object.keys(SHALLOW_MUTABLE_ARRAY_METHODS)));
+
+    const HANDLED_SET_METHODS = new Set([...IMMUTABLE_SET_METHODS]
+    	.concat(Object.keys(SHALLOW_MUTABLE_SET_METHODS))
+    	.concat(COLLECTION_ITERATOR_METHODS));
+
+    const HANDLED_MAP_METHODS = new Set([...IMMUTABLE_MAP_METHODS]
+    	.concat(Object.keys(SHALLOW_MUTABLE_MAP_METHODS))
+    	.concat(COLLECTION_ITERATOR_METHODS));
+
+    class Clone {
+    	constructor(value, path, argumentsList) {
+    		this._path = path;
+    		this._isChanged = false;
+    		this._clonedCache = new Set();
+
+    		if (value instanceof WeakSet) {
+    			this._weakValue = value.has(argumentsList[0]);
+    		} else if (value instanceof WeakMap) {
+    			this._weakValue = value.get(argumentsList[0]);
+    		} else {
+    			this.clone = path === undefined ? value : this._shallowClone(value);
+    		}
+    	}
+
+    	_shallowClone(value) {
+    		let clone;
+
+    		if (isObject(value)) {
+    			clone = {...value};
+    		} else if (isArray(value)) {
+    			clone = [...value];
+    		} else if (value instanceof Date) {
+    			clone = new Date(value);
+    		} else if (value instanceof Set) {
+    			clone = new Set(value);
+    		} else if (value instanceof Map) {
+    			clone = new Map(value);
+    		}
+
+    		this._clonedCache.add(clone);
+
+    		return clone;
+    	}
+
+    	preferredThisArg(target, thisArg, thisProxyTarget) {
+    		const {name} = target;
+
+    		if (SmartClone.isHandledMethod(thisProxyTarget, name)) {
+    			if (isArray(thisProxyTarget)) {
+    				this._onIsChanged = SHALLOW_MUTABLE_ARRAY_METHODS[name];
+    			} else if (thisProxyTarget instanceof Set) {
+    				this._onIsChanged = SHALLOW_MUTABLE_SET_METHODS[name];
+    			} else if (thisProxyTarget instanceof Map) {
+    				this._onIsChanged = SHALLOW_MUTABLE_MAP_METHODS[name];
+    			}
+
+    			return thisProxyTarget;
+    		}
+
+    		return thisArg;
+    	}
+
+    	update(fullPath, property, value) {
+    		if (value !== undefined && property !== 'length') {
+    			let object = this.clone;
+
+    			path.walk(path.after(fullPath, this._path), key => {
+    				if (!this._clonedCache.has(object[key])) {
+    					object[key] = this._shallowClone(object[key]);
+    				}
+
+    				object = object[key];
+    			});
+
+    			object[property] = value;
+    		}
+
+    		this._isChanged = true;
+    	}
+
+    	isChanged(value, equals, argumentsList) {
+    		if (value instanceof Date) {
+    			return !equals(this.clone.valueOf(), value.valueOf());
+    		}
+
+    		if (value instanceof WeakSet) {
+    			return this._weakValue !== value.has(argumentsList[0]);
+    		}
+
+    		if (value instanceof WeakMap) {
+    			return this._weakValue !== value.get(argumentsList[0]);
+    		}
+
+    		return this._onIsChanged === undefined ?
+    			this._isChanged :
+    			this._onIsChanged(this.clone, value);
+    	}
+    }
+
+    class SmartClone {
+    	constructor() {
+    		this.stack = [];
+    	}
+
+    	static isHandledType(value) {
+    		return isObject(value) ||
+    			isArray(value) ||
+    			isBuiltin_1.withMutableMethods(value);
+    	}
+
+    	static isHandledMethod(target, name) {
+    		if (isObject(target)) {
+    			return IMMUTABLE_OBJECT_METHODS.has(name);
+    		}
+
+    		if (isArray(target)) {
+    			return HANDLED_ARRAY_METHODS.has(name);
+    		}
+
+    		if (target instanceof Set) {
+    			return HANDLED_SET_METHODS.has(name);
+    		}
+
+    		if (target instanceof Map) {
+    			return HANDLED_MAP_METHODS.has(name);
+    		}
+
+    		return isBuiltin_1.withMutableMethods(target);
+    	}
+
+    	get isCloning() {
+    		return this.stack.length !== 0;
+    	}
+
+    	start(value, path, argumentsList) {
+    		this.stack.push(new Clone(value, path, argumentsList));
+    	}
+
+    	update(fullPath, property, value) {
+    		this.stack[this.stack.length - 1].update(fullPath, property, value);
+    	}
+
+    	preferredThisArg(target, thisArg, thisProxyTarget) {
+    		return this.stack[this.stack.length - 1].preferredThisArg(target, thisArg, thisProxyTarget);
+    	}
+
+    	isChanged(isMutable, value, equals, argumentsList) {
+    		return this.stack[this.stack.length - 1].isChanged(isMutable, value, equals, argumentsList);
+    	}
+
+    	stop() {
+    		return this.stack.pop().clone;
+    	}
+    }
+
+    var smartClone = SmartClone;
+
+    const {TARGET, UNSUBSCRIBE} = constants;
+
+
+
+
+
+
+
+
+
+    const defaultOptions = {
+    	equals: Object.is,
+    	isShallow: false,
+    	pathAsArray: false,
+    	ignoreSymbols: false,
+    	ignoreUnderscores: false,
+    	ignoreDetached: false
+    };
+
+    const onChange = (object, onChange, options = {}) => {
+    	options = {
+    		...defaultOptions,
+    		...options
+    	};
+    	const proxyTarget = Symbol('ProxyTarget');
+    	const {equals, isShallow, ignoreDetached} = options;
+    	const cache$1 = new cache(equals);
+    	const smartClone$1 = new smartClone();
+
+    	const handleChangeOnTarget = (target, property, previous, value) => {
+    		if (
+    			!ignoreProperty(cache$1, options, property) &&
+    			!(ignoreDetached && cache$1.isDetached(target, object))
+    		) {
+    			handleChange(cache$1.getPath(target), property, previous, value);
+    		}
+    	};
+
+    	// eslint-disable-next-line max-params
+    	const handleChange = (changePath, property, previous, value, name) => {
+    		if (smartClone$1.isCloning) {
+    			smartClone$1.update(changePath, property, previous);
+    		} else {
+    			onChange(path.concat(changePath, property), value, previous, name);
+    		}
+    	};
+
+    	const getProxyTarget = value => {
+    		if (value) {
+    			return value[proxyTarget] || value;
+    		}
+
+    		return value;
+    	};
+
+    	const prepareValue = (value, target, property, basePath) => {
+    		if (
+    			isBuiltin_1.withoutMutableMethods(value) ||
+    			property === 'constructor' ||
+    			(isShallow && !smartClone.isHandledMethod(target, property)) ||
+    			ignoreProperty(cache$1, options, property) ||
+    			cache$1.isGetInvariant(target, property) ||
+    			(ignoreDetached && cache$1.isDetached(target, object))
+    		) {
+    			return value;
+    		}
+
+    		if (basePath === undefined) {
+    			basePath = cache$1.getPath(target);
+    		}
+
+    		return cache$1.getProxy(value, path.concat(basePath, property), handler, proxyTarget);
+    	};
+
+    	const handler = {
+    		get(target, property, receiver) {
+    			if (isSymbol(property)) {
+    				if (property === proxyTarget || property === TARGET) {
+    					return target;
+    				}
+
+    				if (
+    					property === UNSUBSCRIBE &&
+    					!cache$1.isUnsubscribed &&
+    					cache$1.getPath(target).length === 0
+    				) {
+    					cache$1.unsubscribe();
+    					return target;
+    				}
+    			}
+
+    			const value = isBuiltin_1.withMutableMethods(target) ?
+    				Reflect.get(target, property) :
+    				Reflect.get(target, property, receiver);
+
+    			return prepareValue(value, target, property);
+    		},
+
+    		set(target, property, value, receiver) {
+    			value = getProxyTarget(value);
+
+    			const reflectTarget = target[proxyTarget] || target;
+    			const previous = reflectTarget[property];
+    			const hasProperty = property in target;
+
+    			if (cache$1.setProperty(reflectTarget, property, value, receiver, previous)) {
+    				if (!equals(previous, value) || !hasProperty) {
+    					handleChangeOnTarget(target, property, previous, value);
+    				}
+
+    				return true;
+    			}
+
+    			return false;
+    		},
+
+    		defineProperty(target, property, descriptor) {
+    			if (!cache$1.isSameDescriptor(descriptor, target, property)) {
+    				if (!cache$1.defineProperty(target, property, descriptor)) {
+    					return false;
+    				}
+
+    				handleChangeOnTarget(target, property, undefined, descriptor.value);
+    			}
+
+    			return true;
+    		},
+
+    		deleteProperty(target, property) {
+    			if (!Reflect.has(target, property)) {
+    				return true;
+    			}
+
+    			const previous = Reflect.get(target, property);
+
+    			if (cache$1.deleteProperty(target, property, previous)) {
+    				handleChangeOnTarget(target, property, previous);
+
+    				return true;
+    			}
+
+    			return false;
+    		},
+
+    		apply(target, thisArg, argumentsList) {
+    			const thisProxyTarget = thisArg[proxyTarget] || thisArg;
+
+    			if (cache$1.isUnsubscribed) {
+    				return Reflect.apply(target, thisProxyTarget, argumentsList);
+    			}
+
+    			if (smartClone.isHandledType(thisProxyTarget)) {
+    				const applyPath = path.initial(cache$1.getPath(target));
+    				const isHandledMethod = smartClone.isHandledMethod(thisProxyTarget, target.name);
+
+    				smartClone$1.start(thisProxyTarget, applyPath, argumentsList);
+
+    				const result = Reflect.apply(
+    					target,
+    					smartClone$1.preferredThisArg(target, thisArg, thisProxyTarget),
+    					isHandledMethod ?
+    						argumentsList.map(argument => getProxyTarget(argument)) :
+    						argumentsList
+    				);
+
+    				const isChanged = smartClone$1.isChanged(thisProxyTarget, equals, argumentsList);
+    				const clone = smartClone$1.stop();
+
+    				if (isChanged) {
+    					if (smartClone$1.isCloning) {
+    						handleChange(path.initial(applyPath), path.last(applyPath), clone, thisProxyTarget, target.name);
+    					} else {
+    						handleChange(applyPath, '', clone, thisProxyTarget, target.name);
+    					}
+    				}
+
+    				if (
+    					(thisArg instanceof Map || thisArg instanceof Set) &&
+    					isIterator(result)
+    				) {
+    					return wrapIterator(result, target, thisArg, applyPath, prepareValue);
+    				}
+
+    				return (smartClone.isHandledType(result) && isHandledMethod) ?
+    					cache$1.getProxy(result, applyPath, handler, proxyTarget) :
+    					result;
+    			}
+
+    			return Reflect.apply(target, thisArg, argumentsList);
+    		}
+    	};
+
+    	const proxy = cache$1.getProxy(object, options.pathAsArray ? [] : '', handler);
+    	onChange = onChange.bind(proxy);
+
+    	return proxy;
+    };
+
+    onChange.target = proxy => proxy[TARGET] || proxy;
+    onChange.unsubscribe = proxy => proxy[UNSUBSCRIBE] || proxy;
+
+    var onChange_1 = onChange;
+
+    const subscriber_queue = [];
+    /**
+     * Create a `Writable` store that allows both updating and reading by subscription.
+     * @param {*=}value initial value
+     * @param {StartStopNotifier=}start start and stop notifications for subscriptions
+     */
+    function writable(value, start = noop) {
+        let stop;
+        const subscribers = [];
+        function set(new_value) {
+            if (safe_not_equal(value, new_value)) {
+                value = new_value;
+                if (stop) { // store is ready
+                    const run_queue = !subscriber_queue.length;
+                    for (let i = 0; i < subscribers.length; i += 1) {
+                        const s = subscribers[i];
+                        s[1]();
+                        subscriber_queue.push(s, value);
+                    }
+                    if (run_queue) {
+                        for (let i = 0; i < subscriber_queue.length; i += 2) {
+                            subscriber_queue[i][0](subscriber_queue[i + 1]);
+                        }
+                        subscriber_queue.length = 0;
+                    }
+                }
+            }
+        }
+        function update(fn) {
+            set(fn(value));
+        }
+        function subscribe(run, invalidate = noop) {
+            const subscriber = [run, invalidate];
+            subscribers.push(subscriber);
+            if (subscribers.length === 1) {
+                stop = start(set) || noop;
+            }
+            run(value);
+            return () => {
+                const index = subscribers.indexOf(subscriber);
+                if (index !== -1) {
+                    subscribers.splice(index, 1);
+                }
+                if (subscribers.length === 0) {
+                    stop();
+                    stop = null;
+                }
+            };
+        }
+        return { set, update, subscribe };
+    }
+
+    const current$1 = writable({});
+    const value$1 = writable('');
+    const store$1 = writable({});
+
+    let current = {};
+    current$1.subscribe((val) => current = val);
+    let value = '';
+    value$1.subscribe(val => value = val);
+    let storeMain = {};
+    store$1.subscribe(val => storeMain = val);
+    const upd = (path, val, prevVal, name) => {
+        store$1.set(storeMain);
+    };
+    const store = onChange_1(storeMain, upd);
+    store.depth = 0;
+    store.argDepth = 0;
+    store.divider = 0;
+    store.tokens = [];
+    store.pages = [];
+    store.toasts = [];
+    store.canRun = false;
+    store.commands = {};
+    const copy = (obj) => JSON.parse(JSON.stringify(obj));
+    const uuid = () => (Math.random() * 0xf ** 6 | 0).toString(16);
+    let history = [];
+    class Page {
+        constructor(args, isForm) {
+            this.Toast = Toast;
+            this.reset = () => {
+                this.render(this.command.args.concat({ name: 'submit', value: 'submit', type: 'button', run: () => {
+                        this.items = [];
+                        // @ts-expect-error
+                        this.command.run(this, this.args);
+                    } }));
+            };
+            this.clear = () => {
+                this.render([]);
+            };
+            this.render = (items) => {
+                this.items = items;
+                upd();
+            };
+            this.append = (...items) => {
+                this.items = [...this.items, ...items];
+            };
+            this.prepend = (...items) => {
+                this.items = [...items, ...this.items];
+            };
+            this.list = () => {
+                return this.items.slice();
+            };
+            this.update = () => {
+                upd();
+            };
+            this.close = () => {
+                store.pages.splice(store.pages.indexOf(this), 1);
+            };
+            this.args = args;
+            this.items = [];
+            this.isForm = isForm;
+            this.command = Object.assign({}, current);
+            if (isForm) {
+                this.items = args.concat({ name: 'submit', value: 'submit', type: 'button', run: () => {
+                        this.items = [];
+                        if (this.command.mode === 'toast') {
+                            this.command.run(Toast, this.args);
+                            this.close();
+                        }
+                        else {
+                            // @ts-expect-error
+                            this.command.run(this, this.args);
+                        }
+                    } });
+            }
+            else {
+                // @ts-expect-error
+                this.command.run(this, this.args);
+            }
+            store.pages.push(this);
+        }
+    }
+    class Toast {
+        constructor(msg, color) {
+            this.msg = Array.isArray(msg) ? msg.join(' ') : msg;
+            this.color = color;
+            this.id = uuid();
+            store.toasts.push(this);
+            setTimeout(() => {
+                store.toasts.splice(store.toasts.indexOf(this), 1);
+            }, 3000);
+        }
+    }
+    const clui = {
+        Toast,
+        Page,
+        commands: storeMain.commands,
+        arg: (name, desc, type, options) => {
+            return Object.assign({ name, desc, type }, options);
+        },
+        load: function (commands) {
+            current$1.set({ commands });
+            store.commands = commands;
+            clui.commands = storeMain.commands;
+        },
+        clear: function () {
+            current$1.set({ commands: store.commands });
+            value$1.set('');
+            store.tokens = [];
+            store.depth = 0;
+            store.argDepth = 0;
+        },
+        /** executes the current command */
+        execute: function (command = current) {
+            var _a;
+            if (command === null || command === void 0 ? void 0 : command.run) { // if command has run function
+                let args = copy(clui.getArgs(value, true));
+                if (args.length < ((_a = command.args) === null || _a === void 0 ? void 0 : _a.filter(el => el.required).length)) { // if required args are not complete
+                    new Page([...args, ...copy(command.args.slice(args.length))], true);
+                }
+                else if (command.mode === 'toast') {
+                    command.run(Toast, args);
+                }
+                else {
+                    new Page(args);
+                }
+                history.push(value);
+                history = history.filter((el, i) => history.lastIndexOf(el) === i);
+                clui.clear();
+            }
+            else {
+                new Toast('Command does not have a run function', 'red');
+            }
+        },
+        /** checks if all required args are met */
+        checkRun: function () {
+            var _a;
+            if (current === null || current === void 0 ? void 0 : current.run) { // if command has run function
+                let args = copy(clui.getArgs(value, true));
+                if (args.length < ((_a = current.args) === null || _a === void 0 ? void 0 : _a.filter(el => el.required).length)) { // if required args are not complete
+                    store.canRun = false;
+                }
+                else {
+                    store.canRun = true;
+                }
+            }
+            else {
+                store.canRun = false;
+            }
+        },
+        /** parses CLI and checks for completed commands */
+        parse: function (string) {
+            let raw = string;
+            let tokens = clui.tokenize(string);
+            let command = { commands: store.commands };
+            store.depth = 0;
+            for (let token of tokens) {
+                if ((command === null || command === void 0 ? void 0 : command.commands) && Object.keys(command.commands).includes(token)) { // if command exists
+                    if (raw[raw.lastIndexOf(token) + token.length] === ' ' || Object.keys(command.commands).filter(el => el.indexOf(token) === 0).length === 1) {
+                        // @ts-expect-error
+                        command = command.commands[token];
+                        store.depth++;
+                    }
+                }
+            }
+            store.tokens = tokens;
+            current$1.set(command);
+            clui.checkRun();
+        },
+        /** selects command or argument to be pushed to the CLI */
+        select: function (name) {
+            if (value.startsWith('=')) {
+                value$1.set(history[name]);
+                clui.parse(value);
+            }
+            else {
+                let tokens = clui.tokenize(value);
+                if ((current === null || current === void 0 ? void 0 : current.commands) && Object.keys(current === null || current === void 0 ? void 0 : current.commands).includes(name)) { // if command exists
+                    if (tokens.length > store.depth) { // If half-completed in CLI
+                        value$1.set([...tokens.slice(0, tokens.length - 1), name, ''].join(' '));
+                    }
+                    else {
+                        value$1.set([...tokens, name, ''].join(' '));
+                    }
+                    clui.parse(value);
+                }
+                else if ((current === null || current === void 0 ? void 0 : current.args) && current.args.filter(el => !el.required && !el.isArg).some(el => el.name === name)) {
+                    if (tokens.length > store.depth) { // If half-completed in CLI
+                        value$1.set([...tokens.slice(0, tokens.length - 1), `--${name}`, ''].join(' '));
+                    }
+                    else {
+                        value$1.set([...tokens, `--${name}`, ''].join(' '));
+                    }
+                    clui.parse(value);
+                }
+            }
+        },
+        /** filters commands and arguments for dropdown */
+        filter: function (string) {
+            let tokens = clui.tokenize(string);
+            let name = tokens[tokens.length - 1];
+            if (string.startsWith('=')) {
+                // @ts-expect-error
+                return history.filter(el => el.indexOf(string.slice(1)) !== -1).map((el, i) => { return { name: i, desc: el }; });
+            }
+            else {
+                if (current === null || current === void 0 ? void 0 : current.args) {
+                    return clui.getArgs(string);
+                }
+                else if (current === null || current === void 0 ? void 0 : current.commands) {
+                    let arr = [];
+                    if (tokens.length > store.depth) { // If half-completed in CLI
+                        let commands = Object.keys(current.commands).filter(el => el.indexOf(name) !== -1);
+                        commands.map(el => arr.push(Object.assign({ name: el }, current.commands[el])));
+                    }
+                    else {
+                        Object.keys(current.commands).map(el => arr.push(Object.assign({ name: el }, current.commands[el])));
+                    }
+                    return arr;
+                }
+                else { // TODO: this should probably not need to exist
+                    return [];
+                }
+            }
+        },
+        /** gets and orders arguments for dropdown */
+        getArgs: function (string, inverse = false) {
+            let tokens = clui.tokenize(string);
+            let params = current === null || current === void 0 ? void 0 : current.args.filter(el => el.required);
+            let optional = current === null || current === void 0 ? void 0 : current.args.filter(el => !el.required && el.isArg);
+            let flags = current === null || current === void 0 ? void 0 : current.args.filter(el => !el.required && !el.isArg);
+            if (!inverse) { // filter unused args
+                let separated = clui.separateArgs(tokens.slice(store.depth), string);
+                let param = [...params, ...optional][separated.withSpace.params.length];
+                flags = flags.filter(el => !separated.flags.includes(el.name));
+                return [param, ...flags].filter(el => el !== undefined);
+            }
+            else { // filter used args
+                let separated = copy(clui.separateArgs(tokens.slice(store.depth), string));
+                let param = copy([...params, ...optional].slice(0, separated.params.length));
+                param.forEach((el, i) => {
+                    el.value = separated.params[i];
+                    if (el.type === 'string' && el.value[0].match(/["']/) !== null)
+                        el.value = el.value.slice(1, -1);
+                });
+                separated.flagData.forEach(el => {
+                    if (el.type === 'string')
+                        el.value = el.value.slice(1, -1);
+                });
+                return [...param, ...separated.flagData].filter(el => el !== undefined);
+            }
+        },
+        /** separates arguments from tokens into flags and params */
+        separateArgs: function (tokens, string = '') {
+            var _a;
+            let flags = [];
+            let flagData = [];
+            let params = [];
+            let args = 0;
+            let withSpace = { params: [], flags: [] };
+            for (let i = 0; i < tokens.length; i++) {
+                let token = tokens[i];
+                if (token.startsWith('-')) { // is flag
+                    if (token.match(/^(-)(\w)+/g) !== null) { // short flag "-f"
+                        flags.push(...token.split('').slice(1).map(el => { var _a, _b; return (_b = (_a = current === null || current === void 0 ? void 0 : current.args) === null || _a === void 0 ? void 0 : _a.find(el2 => el2.short === el)) === null || _b === void 0 ? void 0 : _b.name; }));
+                        flagData.push(...token.split('').slice(1).map(el => { var _a; return Object.assign(Object.assign({}, (_a = current === null || current === void 0 ? void 0 : current.args) === null || _a === void 0 ? void 0 : _a.find(el2 => el2.short === el)), { value: true }); }));
+                    }
+                    else if (token.match(/^(--)(.)+/g) !== null) { // long flag "--flag"
+                        let arg = (_a = current === null || current === void 0 ? void 0 : current.args) === null || _a === void 0 ? void 0 : _a.find(el => el.name === token.substr(2));
+                        if (arg === undefined)
+                            continue;
+                        if ((arg === null || arg === void 0 ? void 0 : arg.type) !== 'boolean') { // if not boolean
+                            flags.push(arg.name);
+                            flagData.push(Object.assign(Object.assign({}, arg), { value: tokens[i + 1] }));
+                            args++;
+                            i++;
+                        }
+                        else if ((arg === null || arg === void 0 ? void 0 : arg.type) === 'boolean') { // if boolean flag
+                            flags.push(arg.name);
+                            flagData.push(Object.assign(Object.assign({}, arg), { value: true }));
+                        }
+                        else ;
+                    }
+                }
+                else { // parameter
+                    params.push(token);
+                    if (string[string.lastIndexOf(token) + token.length] === ' ')
+                        withSpace.params.push(token);
+                }
+            }
+            store.argDepth = flags.length + withSpace.params.length + args;
+            return { flags, params, withSpace, flagData };
+        },
+        /** sets the current command */
+        setCurrent: function (name) {
+            if (Object.keys(current.commands).includes(name)) { // if command exists
+                current$1.update(val => current.commands[name]);
+            }
+            else {
+                new Toast('setCurrent: Command has no children', 'red');
+            }
+        },
+        /** tokenizes a cli input string */
+        tokenize: function (input) {
+            let arr = input.split('');
+            let tokens = [];
+            let accumulator = '';
+            let stringType = false;
+            for (let i = 0; i < arr.length; i++) {
+                const char = arr[i];
+                if (char === ' ') {
+                    if (stringType === false) { // Not inside string
+                        tokens.push(accumulator);
+                        accumulator = '';
+                    }
+                    else { // Inside string
+                        accumulator += char;
+                    }
+                }
+                else if (char === '"') {
+                    if (stringType === '"') { // Closing token
+                        stringType = false;
+                        accumulator += char;
+                        tokens.push(accumulator);
+                        accumulator = '';
+                        i++;
+                    }
+                    else if (stringType === "'") { // Ignore
+                        accumulator += char;
+                    }
+                    else { // New string
+                        accumulator += char;
+                        stringType = '"';
+                    }
+                }
+                else if (char === "'") {
+                    if (stringType === "'") { // Closing token
+                        stringType = false;
+                        accumulator += char;
+                        tokens.push(accumulator);
+                        accumulator = '';
+                        i++;
+                    }
+                    else if (stringType === '"') { // Ignore
+                        accumulator += char;
+                    }
+                    else { // New string
+                        accumulator += char;
+                        stringType = "'";
+                    }
+                }
+                else {
+                    accumulator += char;
+                }
+            }
+            if (accumulator !== '')
+                tokens.push(accumulator);
+            return tokens;
+        }
+    };
+
+    /* src/comps/Item.svelte generated by Svelte v3.35.0 */
+
+    function get_each_context$1(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[5] = list[i];
+    	return child_ctx;
+    }
+
+    // (38:36) 
+    function create_if_block_5$1(ctx) {
+    	let div;
+    	let t;
+    	let if_block0 = /*arg*/ ctx[0].name && create_if_block_7$1(ctx);
+    	let if_block1 = /*arg*/ ctx[0].value && create_if_block_6$1(ctx);
+
+    	return {
+    		c() {
+    			div = element("div");
+    			if (if_block0) if_block0.c();
+    			t = space();
+    			if (if_block1) if_block1.c();
+    			attr(div, "class", "ciui-page-item svelte-1kmziob");
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    			if (if_block0) if_block0.m(div, null);
+    			append(div, t);
+    			if (if_block1) if_block1.m(div, null);
+    		},
+    		p(ctx, dirty) {
+    			if (/*arg*/ ctx[0].name) {
+    				if (if_block0) {
+    					if_block0.p(ctx, dirty);
+    				} else {
+    					if_block0 = create_if_block_7$1(ctx);
+    					if_block0.c();
+    					if_block0.m(div, t);
+    				}
+    			} else if (if_block0) {
+    				if_block0.d(1);
+    				if_block0 = null;
+    			}
+
+    			if (/*arg*/ ctx[0].value) {
+    				if (if_block1) {
+    					if_block1.p(ctx, dirty);
+    				} else {
+    					if_block1 = create_if_block_6$1(ctx);
+    					if_block1.c();
+    					if_block1.m(div, null);
+    				}
+    			} else if (if_block1) {
+    				if_block1.d(1);
+    				if_block1 = null;
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div);
+    			if (if_block0) if_block0.d();
+    			if (if_block1) if_block1.d();
+    		}
+    	};
+    }
+
+    // (34:33) 
+    function create_if_block_4$1(ctx) {
+    	let div;
+    	let button;
+    	let t_value = /*arg*/ ctx[0].value + "";
+    	let t;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			div = element("div");
+    			button = element("button");
+    			t = text(t_value);
+    			attr(button, "class", "svelte-1kmziob");
+    			attr(div, "class", "ciui-page-item svelte-1kmziob");
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    			append(div, button);
+    			append(button, t);
+
+    			if (!mounted) {
+    				dispose = listen(button, "click", function () {
+    					if (is_function(/*arg*/ ctx[0].run)) /*arg*/ ctx[0].run.apply(this, arguments);
+    				});
+
+    				mounted = true;
+    			}
+    		},
+    		p(new_ctx, dirty) {
+    			ctx = new_ctx;
+    			if (dirty & /*arg*/ 1 && t_value !== (t_value = /*arg*/ ctx[0].value + "")) set_data(t, t_value);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    // (25:31) 
+    function create_if_block_3$1(ctx) {
+    	let div;
+    	let span1;
+    	let span0;
+    	let t0_value = /*arg*/ ctx[0].name + "";
+    	let t0;
+    	let t1;
+    	let t2;
+    	let t3_value = /*arg*/ ctx[0].type + "";
+    	let t3;
+    	let t4;
+    	let t5_value = (/*arg*/ ctx[0].required ? "*" : "") + "";
+    	let t5;
+    	let t6;
+    	let select;
+    	let each_value = /*arg*/ ctx[0].items;
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$1(get_each_context$1(ctx, each_value, i));
+    	}
+
+    	return {
+    		c() {
+    			div = element("div");
+    			span1 = element("span");
+    			span0 = element("span");
+    			t0 = text(t0_value);
+    			t1 = text(":");
+    			t2 = space();
+    			t3 = text(t3_value);
+    			t4 = space();
+    			t5 = text(t5_value);
+    			t6 = space();
+    			select = element("select");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			attr(span0, "class", "svelte-1kmziob");
+    			attr(span1, "class", "clui-item-label svelte-1kmziob");
+    			attr(select, "class", "svelte-1kmziob");
+    			attr(div, "class", "ciui-page-item svelte-1kmziob");
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    			append(div, span1);
+    			append(span1, span0);
+    			append(span0, t0);
+    			append(span0, t1);
+    			append(span1, t2);
+    			append(span1, t3);
+    			append(span1, t4);
+    			append(span1, t5);
+    			append(div, t6);
+    			append(div, select);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(select, null);
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*arg*/ 1 && t0_value !== (t0_value = /*arg*/ ctx[0].name + "")) set_data(t0, t0_value);
+    			if (dirty & /*arg*/ 1 && t3_value !== (t3_value = /*arg*/ ctx[0].type + "")) set_data(t3, t3_value);
+    			if (dirty & /*arg*/ 1 && t5_value !== (t5_value = (/*arg*/ ctx[0].required ? "*" : "") + "")) set_data(t5, t5_value);
+
+    			if (dirty & /*arg*/ 1) {
+    				each_value = /*arg*/ ctx[0].items;
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$1(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block$1(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(select, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div);
+    			destroy_each(each_blocks, detaching);
+    		}
+    	};
+    }
+
+    // (19:34) 
+    function create_if_block_2$1(ctx) {
+    	let div1;
+    	let div0;
+    	let div0_class_value;
+    	let t0;
+    	let input;
+    	let input_required_value;
+    	let t1;
+    	let span1;
+    	let span0;
+    	let t2_value = /*arg*/ ctx[0].name + "";
+    	let t2;
+    	let t3;
+    	let t4;
+    	let t5_value = /*arg*/ ctx[0].type + "";
+    	let t5;
+    	let t6;
+    	let t7_value = (/*arg*/ ctx[0].required ? "*" : "") + "";
+    	let t7;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			div1 = element("div");
+    			div0 = element("div");
+    			t0 = space();
+    			input = element("input");
+    			t1 = space();
+    			span1 = element("span");
+    			span0 = element("span");
+    			t2 = text(t2_value);
+    			t3 = text(":");
+    			t4 = space();
+    			t5 = text(t5_value);
+    			t6 = space();
+    			t7 = text(t7_value);
+    			attr(div0, "class", div0_class_value = "checkbox " + (/*arg*/ ctx[0].value ? "checked" : "") + " svelte-1kmziob");
+    			attr(input, "type", "checkbox");
+    			input.required = input_required_value = /*arg*/ ctx[0].required;
+    			attr(input, "class", "svelte-1kmziob");
+    			attr(span0, "class", "svelte-1kmziob");
+    			attr(span1, "class", "clui-item-label svelte-1kmziob");
+    			attr(div1, "class", "ciui-page-item svelte-1kmziob");
+    			set_style(div1, "flex-direction", "row");
+    		},
+    		m(target, anchor) {
+    			insert(target, div1, anchor);
+    			append(div1, div0);
+    			append(div1, t0);
+    			append(div1, input);
+    			input.checked = /*arg*/ ctx[0].value;
+    			append(div1, t1);
+    			append(div1, span1);
+    			append(span1, span0);
+    			append(span0, t2);
+    			append(span0, t3);
+    			append(span1, t4);
+    			append(span1, t5);
+    			append(span1, t6);
+    			append(span1, t7);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(div0, "click", /*click_handler*/ ctx[3]),
+    					listen(input, "change", /*input_change_handler*/ ctx[4])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*arg*/ 1 && div0_class_value !== (div0_class_value = "checkbox " + (/*arg*/ ctx[0].value ? "checked" : "") + " svelte-1kmziob")) {
+    				attr(div0, "class", div0_class_value);
+    			}
+
+    			if (dirty & /*arg*/ 1 && input_required_value !== (input_required_value = /*arg*/ ctx[0].required)) {
+    				input.required = input_required_value;
+    			}
+
+    			if (dirty & /*arg*/ 1) {
+    				input.checked = /*arg*/ ctx[0].value;
+    			}
+
+    			if (dirty & /*arg*/ 1 && t2_value !== (t2_value = /*arg*/ ctx[0].name + "")) set_data(t2, t2_value);
+    			if (dirty & /*arg*/ 1 && t5_value !== (t5_value = /*arg*/ ctx[0].type + "")) set_data(t5, t5_value);
+    			if (dirty & /*arg*/ 1 && t7_value !== (t7_value = (/*arg*/ ctx[0].required ? "*" : "") + "")) set_data(t7, t7_value);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div1);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    // (14:33) 
+    function create_if_block_1$1(ctx) {
+    	let div;
+    	let span1;
+    	let span0;
+    	let t0_value = /*arg*/ ctx[0].name + "";
+    	let t0;
+    	let t1;
+    	let t2;
+    	let t3_value = /*arg*/ ctx[0].type + "";
+    	let t3;
+    	let t4;
+    	let t5_value = (/*arg*/ ctx[0].required ? "*" : "") + "";
+    	let t5;
+    	let t6;
+    	let input;
+    	let input_required_value;
+    	let input_class_value;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			div = element("div");
+    			span1 = element("span");
+    			span0 = element("span");
+    			t0 = text(t0_value);
+    			t1 = text(":");
+    			t2 = space();
+    			t3 = text(t3_value);
+    			t4 = space();
+    			t5 = text(t5_value);
+    			t6 = space();
+    			input = element("input");
+    			attr(span0, "class", "svelte-1kmziob");
+    			attr(span1, "class", "clui-item-label svelte-1kmziob");
+    			attr(input, "type", "number");
+    			input.required = input_required_value = /*arg*/ ctx[0].required;
+    			attr(input, "class", input_class_value = "" + (null_to_empty(/*arg*/ ctx[0].value === "" ? "clui-empty" : "") + " svelte-1kmziob"));
+    			attr(div, "class", "ciui-page-item svelte-1kmziob");
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    			append(div, span1);
+    			append(span1, span0);
+    			append(span0, t0);
+    			append(span0, t1);
+    			append(span1, t2);
+    			append(span1, t3);
+    			append(span1, t4);
+    			append(span1, t5);
+    			append(div, t6);
+    			append(div, input);
+    			set_input_value(input, /*arg*/ ctx[0].value);
+
+    			if (!mounted) {
+    				dispose = listen(input, "input", /*input_input_handler_1*/ ctx[2]);
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*arg*/ 1 && t0_value !== (t0_value = /*arg*/ ctx[0].name + "")) set_data(t0, t0_value);
+    			if (dirty & /*arg*/ 1 && t3_value !== (t3_value = /*arg*/ ctx[0].type + "")) set_data(t3, t3_value);
+    			if (dirty & /*arg*/ 1 && t5_value !== (t5_value = (/*arg*/ ctx[0].required ? "*" : "") + "")) set_data(t5, t5_value);
+
+    			if (dirty & /*arg*/ 1 && input_required_value !== (input_required_value = /*arg*/ ctx[0].required)) {
+    				input.required = input_required_value;
+    			}
+
+    			if (dirty & /*arg*/ 1 && input_class_value !== (input_class_value = "" + (null_to_empty(/*arg*/ ctx[0].value === "" ? "clui-empty" : "") + " svelte-1kmziob"))) {
+    				attr(input, "class", input_class_value);
+    			}
+
+    			if (dirty & /*arg*/ 1 && to_number(input.value) !== /*arg*/ ctx[0].value) {
+    				set_input_value(input, /*arg*/ ctx[0].value);
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    // (9:0) {#if arg?.type === 'string'}
+    function create_if_block$1(ctx) {
+    	let div;
+    	let span1;
+    	let span0;
+    	let t0_value = /*arg*/ ctx[0].name + "";
+    	let t0;
+    	let t1;
+    	let t2;
+    	let t3_value = /*arg*/ ctx[0].type + "";
+    	let t3;
+    	let t4;
+    	let t5_value = (/*arg*/ ctx[0].required ? "*" : "") + "";
+    	let t5;
+    	let t6;
+    	let input;
+    	let input_required_value;
+    	let input_class_value;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			div = element("div");
+    			span1 = element("span");
+    			span0 = element("span");
+    			t0 = text(t0_value);
+    			t1 = text(":");
+    			t2 = space();
+    			t3 = text(t3_value);
+    			t4 = space();
+    			t5 = text(t5_value);
+    			t6 = space();
+    			input = element("input");
+    			attr(span0, "class", "svelte-1kmziob");
+    			attr(span1, "class", "clui-item-label svelte-1kmziob");
+    			attr(input, "type", "text");
+    			input.required = input_required_value = /*arg*/ ctx[0].required;
+    			attr(input, "class", input_class_value = "" + (null_to_empty(/*arg*/ ctx[0].value === "" ? "clui-empty" : "") + " svelte-1kmziob"));
+    			attr(div, "class", "ciui-page-item svelte-1kmziob");
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    			append(div, span1);
+    			append(span1, span0);
+    			append(span0, t0);
+    			append(span0, t1);
+    			append(span1, t2);
+    			append(span1, t3);
+    			append(span1, t4);
+    			append(span1, t5);
+    			append(div, t6);
+    			append(div, input);
+    			set_input_value(input, /*arg*/ ctx[0].value);
+
+    			if (!mounted) {
+    				dispose = listen(input, "input", /*input_input_handler*/ ctx[1]);
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*arg*/ 1 && t0_value !== (t0_value = /*arg*/ ctx[0].name + "")) set_data(t0, t0_value);
+    			if (dirty & /*arg*/ 1 && t3_value !== (t3_value = /*arg*/ ctx[0].type + "")) set_data(t3, t3_value);
+    			if (dirty & /*arg*/ 1 && t5_value !== (t5_value = (/*arg*/ ctx[0].required ? "*" : "") + "")) set_data(t5, t5_value);
+
+    			if (dirty & /*arg*/ 1 && input_required_value !== (input_required_value = /*arg*/ ctx[0].required)) {
+    				input.required = input_required_value;
+    			}
+
+    			if (dirty & /*arg*/ 1 && input_class_value !== (input_class_value = "" + (null_to_empty(/*arg*/ ctx[0].value === "" ? "clui-empty" : "") + " svelte-1kmziob"))) {
+    				attr(input, "class", input_class_value);
+    			}
+
+    			if (dirty & /*arg*/ 1 && input.value !== /*arg*/ ctx[0].value) {
+    				set_input_value(input, /*arg*/ ctx[0].value);
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    // (40:2) {#if arg.name}
+    function create_if_block_7$1(ctx) {
+    	let h1;
+    	let t_value = /*arg*/ ctx[0].name + "";
+    	let t;
+
+    	return {
+    		c() {
+    			h1 = element("h1");
+    			t = text(t_value);
+    		},
+    		m(target, anchor) {
+    			insert(target, h1, anchor);
+    			append(h1, t);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*arg*/ 1 && t_value !== (t_value = /*arg*/ ctx[0].name + "")) set_data(t, t_value);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(h1);
+    		}
+    	};
+    }
+
+    // (43:2) {#if arg.value}
+    function create_if_block_6$1(ctx) {
+    	let p;
+    	let raw_value = /*arg*/ ctx[0].value.replace(/\n/g, "<br>") + "";
+
+    	return {
+    		c() {
+    			p = element("p");
+    		},
+    		m(target, anchor) {
+    			insert(target, p, anchor);
+    			p.innerHTML = raw_value;
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*arg*/ 1 && raw_value !== (raw_value = /*arg*/ ctx[0].value.replace(/\n/g, "<br>") + "")) p.innerHTML = raw_value;		},
+    		d(detaching) {
+    			if (detaching) detach(p);
+    		}
+    	};
+    }
+
+    // (29:3) {#each arg.items as item}
+    function create_each_block$1(ctx) {
+    	let option;
+    	let t_value = /*item*/ ctx[5].name + "";
+    	let t;
+    	let option_value_value;
+
+    	return {
+    		c() {
+    			option = element("option");
+    			t = text(t_value);
+    			option.__value = option_value_value = /*item*/ ctx[5].name;
+    			option.value = option.__value;
+    		},
+    		m(target, anchor) {
+    			insert(target, option, anchor);
+    			append(option, t);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*arg*/ 1 && t_value !== (t_value = /*item*/ ctx[5].name + "")) set_data(t, t_value);
+
+    			if (dirty & /*arg*/ 1 && option_value_value !== (option_value_value = /*item*/ ctx[5].name)) {
+    				option.__value = option_value_value;
+    				option.value = option.__value;
+    			}
+    		},
+    		d(detaching) {
+    			if (detaching) detach(option);
+    		}
+    	};
+    }
+
+    function create_fragment$1(ctx) {
+    	let if_block_anchor;
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*arg*/ ctx[0]?.type === "string") return create_if_block$1;
+    		if (/*arg*/ ctx[0]?.type === "number") return create_if_block_1$1;
+    		if (/*arg*/ ctx[0]?.type === "boolean") return create_if_block_2$1;
+    		if (/*arg*/ ctx[0]?.type === "enum") return create_if_block_3$1;
+    		if (/*arg*/ ctx[0]?.type === "button") return create_if_block_4$1;
+    		if (/*arg*/ ctx[0]?.type === "paragraph") return create_if_block_5$1;
+    	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block = current_block_type && current_block_type(ctx);
+
+    	return {
+    		c() {
+    			if (if_block) if_block.c();
+    			if_block_anchor = empty();
+    		},
+    		m(target, anchor) {
+    			if (if_block) if_block.m(target, anchor);
+    			insert(target, if_block_anchor, anchor);
+    		},
+    		p(ctx, [dirty]) {
+    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
+    				if_block.p(ctx, dirty);
+    			} else {
+    				if (if_block) if_block.d(1);
+    				if_block = current_block_type && current_block_type(ctx);
+
+    				if (if_block) {
+    					if_block.c();
+    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				}
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d(detaching) {
+    			if (if_block) {
+    				if_block.d(detaching);
+    			}
+
+    			if (detaching) detach(if_block_anchor);
+    		}
+    	};
+    }
+
+    function instance$1($$self, $$props, $$invalidate) {
+    	
+    	let { arg } = $$props;
+    	if (arg.type === "string") arg.value = arg.value || ""; else if (arg.type === "boolean") arg.value = arg.value || false;
+
+    	function input_input_handler() {
+    		arg.value = this.value;
+    		$$invalidate(0, arg);
+    	}
+
+    	function input_input_handler_1() {
+    		arg.value = to_number(this.value);
+    		$$invalidate(0, arg);
+    	}
+
+    	const click_handler = () => $$invalidate(0, arg.value = !arg.value, arg);
+
+    	function input_change_handler() {
+    		arg.value = this.checked;
+    		$$invalidate(0, arg);
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ("arg" in $$props) $$invalidate(0, arg = $$props.arg);
+    	};
+
+    	return [
+    		arg,
+    		input_input_handler,
+    		input_input_handler_1,
+    		click_handler,
+    		input_change_handler
+    	];
+    }
+
+    class Item extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, { arg: 0 });
+    	}
+    }
+
+    function cubicOut(t) {
+        const f = t - 1.0;
+        return f * f * f + 1.0;
+    }
+
+    function fly(node, { delay = 0, duration = 400, easing = cubicOut, x = 0, y = 0, opacity = 0 } = {}) {
+        const style = getComputedStyle(node);
+        const target_opacity = +style.opacity;
+        const transform = style.transform === 'none' ? '' : style.transform;
+        const od = target_opacity * (1 - opacity);
+        return {
+            delay,
+            duration,
+            easing,
+            css: (t, u) => `
+			transform: ${transform} translate(${(1 - t) * x}px, ${(1 - t) * y}px);
+			opacity: ${target_opacity - (od * u)}`
+        };
+    }
+    function slide(node, { delay = 0, duration = 400, easing = cubicOut } = {}) {
+        const style = getComputedStyle(node);
+        const opacity = +style.opacity;
+        const height = parseFloat(style.height);
+        const padding_top = parseFloat(style.paddingTop);
+        const padding_bottom = parseFloat(style.paddingBottom);
+        const margin_top = parseFloat(style.marginTop);
+        const margin_bottom = parseFloat(style.marginBottom);
+        const border_top_width = parseFloat(style.borderTopWidth);
+        const border_bottom_width = parseFloat(style.borderBottomWidth);
+        return {
+            delay,
+            duration,
+            easing,
+            css: t => 'overflow: hidden;' +
+                `opacity: ${Math.min(t * 20, 1) * opacity};` +
+                `height: ${t * height}px;` +
+                `padding-top: ${t * padding_top}px;` +
+                `padding-bottom: ${t * padding_bottom}px;` +
+                `margin-top: ${t * margin_top}px;` +
+                `margin-bottom: ${t * margin_bottom}px;` +
+                `border-top-width: ${t * border_top_width}px;` +
+                `border-bottom-width: ${t * border_bottom_width}px;`
+        };
+    }
+
+    /* src/Index.svelte generated by Svelte v3.35.0 */
+
+    const { window: window_1 } = globals;
+
+    function get_each_context(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[16] = list[i];
+    	return child_ctx;
+    }
+
+    function get_each_context_1(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[19] = list[i];
+    	return child_ctx;
+    }
+
+    function get_each_context_3(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[25] = list[i];
+    	child_ctx[24] = i;
+    	return child_ctx;
+    }
+
+    function get_each_context_2(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[22] = list[i];
+    	child_ctx[24] = i;
+    	return child_ctx;
+    }
+
+    function get_each_context_4(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[27] = list[i];
+    	return child_ctx;
+    }
+
+    // (50:1) {#each $store.toasts as toast (toast.id)}
+    function create_each_block_4(key_1, ctx) {
+    	let div;
+    	let t_value = /*toast*/ ctx[27].msg + "";
+    	let t;
+    	let div_class_value;
+    	let div_intro;
+    	let div_outro;
+    	let current;
+
+    	return {
+    		key: key_1,
+    		first: null,
+    		c() {
+    			div = element("div");
+    			t = text(t_value);
+    			attr(div, "class", div_class_value = "clui-toast clui-toast-" + /*toast*/ ctx[27].color + " svelte-1yg4ncs");
+    			this.first = div;
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    			append(div, t);
+    			current = true;
+    		},
+    		p(new_ctx, dirty) {
+    			ctx = new_ctx;
+    			if ((!current || dirty & /*$store*/ 1) && t_value !== (t_value = /*toast*/ ctx[27].msg + "")) set_data(t, t_value);
+
+    			if (!current || dirty & /*$store*/ 1 && div_class_value !== (div_class_value = "clui-toast clui-toast-" + /*toast*/ ctx[27].color + " svelte-1yg4ncs")) {
+    				attr(div, "class", div_class_value);
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+
+    			add_render_callback(() => {
+    				if (div_outro) div_outro.end(1);
+    				if (!div_intro) div_intro = create_in_transition(div, fly, { x: 200, duration: 500 });
+    				div_intro.start();
+    			});
+
+    			current = true;
+    		},
+    		o(local) {
+    			if (div_intro) div_intro.invalidate();
+    			div_outro = create_out_transition(div, slide, { duration: 300 });
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div);
+    			if (detaching && div_outro) div_outro.end();
+    		}
+    	};
+    }
+
+    // (58:2) {#if $store?.tokens}
+    function create_if_block_7(ctx) {
+    	let div;
+    	let t0_value = /*$store*/ ctx[0].tokens.slice(0, /*$store*/ ctx[0].depth + /*$store*/ ctx[0].argDepth).join(" ") + "";
+    	let t0;
+    	let t1;
+    	let t2_value = " " + "";
+    	let t2;
+    	let t3;
+
+    	let t4_value = ((/*$current*/ ctx[3]?.commands)
+    	? clui.filter(/*$value*/ ctx[2])[/*selection*/ ctx[1]]?.name ?? ""
+    	: "") + "";
+
+    	let t4;
+
+    	return {
+    		c() {
+    			div = element("div");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			t2 = text(t2_value);
+    			t3 = space();
+    			t4 = text(t4_value);
+    			attr(div, "class", "clui-cli-autocomplete svelte-1yg4ncs");
+    		},
+    		m(target, anchor) {
+    			insert(target, div, anchor);
+    			append(div, t0);
+    			append(div, t1);
+    			append(div, t2);
+    			append(div, t3);
+    			append(div, t4);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*$store*/ 1 && t0_value !== (t0_value = /*$store*/ ctx[0].tokens.slice(0, /*$store*/ ctx[0].depth + /*$store*/ ctx[0].argDepth).join(" ") + "")) set_data(t0, t0_value);
+
+    			if (dirty & /*$current, $value, selection*/ 14 && t4_value !== (t4_value = ((/*$current*/ ctx[3]?.commands)
+    			? clui.filter(/*$value*/ ctx[2])[/*selection*/ ctx[1]]?.name ?? ""
+    			: "") + "")) set_data(t4, t4_value);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div);
+    		}
+    	};
+    }
+
+    // (64:2) {#if $current?.run}
+    function create_if_block_6(ctx) {
+    	let button;
+    	let t_value = (/*$store*/ ctx[0].canRun ? "run" : "form") + "";
+    	let t;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			button = element("button");
+    			t = text(t_value);
+    			attr(button, "class", "clui-cli-run svelte-1yg4ncs");
+    		},
+    		m(target, anchor) {
+    			insert(target, button, anchor);
+    			append(button, t);
+
+    			if (!mounted) {
+    				dispose = listen(button, "click", /*execute*/ ctx[5]);
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*$store*/ 1 && t_value !== (t_value = (/*$store*/ ctx[0].canRun ? "run" : "form") + "")) set_data(t, t_value);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(button);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    // (67:2) {#if $value}
+    function create_if_block_5(ctx) {
+    	let button;
+    	let mounted;
+    	let dispose;
+
+    	return {
+    		c() {
+    			button = element("button");
+    			button.textContent = "x";
+    			attr(button, "class", "clui-cli-run svelte-1yg4ncs");
+    		},
+    		m(target, anchor) {
+    			insert(target, button, anchor);
+
+    			if (!mounted) {
+    				dispose = listen(button, "click", /*clear*/ ctx[6]);
+    				mounted = true;
+    			}
+    		},
+    		p: noop,
+    		d(detaching) {
+    			if (detaching) detach(button);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    // (85:27) 
+    function create_if_block_3(ctx) {
+    	let each_1_anchor;
+    	let each_value_3 = clui.filter(/*$value*/ ctx[2]);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value_3.length; i += 1) {
+    		each_blocks[i] = create_each_block_3(get_each_context_3(ctx, each_value_3, i));
+    	}
+
+    	return {
+    		c() {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			each_1_anchor = empty();
+    		},
+    		m(target, anchor) {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(target, anchor);
+    			}
+
+    			insert(target, each_1_anchor, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*selection, hover, clui, $value, $store*/ 135) {
+    				each_value_3 = clui.filter(/*$value*/ ctx[2]);
+    				let i;
+
+    				for (i = 0; i < each_value_3.length; i += 1) {
+    					const child_ctx = get_each_context_3(ctx, each_value_3, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block_3(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value_3.length;
+    			}
+    		},
+    		d(detaching) {
+    			destroy_each(each_blocks, detaching);
+    			if (detaching) detach(each_1_anchor);
+    		}
+    	};
+    }
+
+    // (73:2) {#if $current?.commands}
+    function create_if_block(ctx) {
+    	let each_1_anchor;
+    	let each_value_2 = clui.filter(/*$value*/ ctx[2]);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value_2.length; i += 1) {
+    		each_blocks[i] = create_each_block_2(get_each_context_2(ctx, each_value_2, i));
+    	}
+
+    	return {
+    		c() {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			each_1_anchor = empty();
+    		},
+    		m(target, anchor) {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(target, anchor);
+    			}
+
+    			insert(target, each_1_anchor, anchor);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*selection, clui, $value, hover, $store*/ 135) {
+    				each_value_2 = clui.filter(/*$value*/ ctx[2]);
+    				let i;
+
+    				for (i = 0; i < each_value_2.length; i += 1) {
+    					const child_ctx = get_each_context_2(ctx, each_value_2, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block_2(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value_2.length;
+    			}
+    		},
+    		d(detaching) {
+    			destroy_each(each_blocks, detaching);
+    			if (detaching) detach(each_1_anchor);
+    		}
+    	};
+    }
+
+    // (87:4) {#if $store.divider > 0 && i === $store.divider}
+    function create_if_block_4(ctx) {
+    	let hr;
+
+    	return {
+    		c() {
+    			hr = element("hr");
+    			attr(hr, "class", "svelte-1yg4ncs");
+    		},
+    		m(target, anchor) {
+    			insert(target, hr, anchor);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(hr);
+    		}
+    	};
+    }
+
+    // (86:3) {#each clui.filter($value) as argument, i}
+    function create_each_block_3(ctx) {
+    	let t0;
+    	let div;
+    	let span0;
+
+    	let t1_value = (/*argument*/ ctx[25].short
+    	? /*argument*/ ctx[25].short + ", "
+    	: "") + /*argument*/ ctx[25].name + "";
+
+    	let t1;
+    	let t2;
+    	let span1;
+    	let t3_value = /*argument*/ ctx[25]?.desc + "";
+    	let t3;
+    	let t4;
+    	let div_class_value;
+    	let mounted;
+    	let dispose;
+    	let if_block = /*$store*/ ctx[0].divider > 0 && /*i*/ ctx[24] === /*$store*/ ctx[0].divider && create_if_block_4();
+
+    	function mouseover_handler_1() {
+    		return /*mouseover_handler_1*/ ctx[13](/*i*/ ctx[24]);
+    	}
+
+    	function click_handler_1() {
+    		return /*click_handler_1*/ ctx[14](/*argument*/ ctx[25]);
+    	}
+
+    	return {
+    		c() {
+    			if (if_block) if_block.c();
+    			t0 = space();
+    			div = element("div");
+    			span0 = element("span");
+    			t1 = text(t1_value);
+    			t2 = space();
+    			span1 = element("span");
+    			t3 = text(t3_value);
+    			t4 = space();
+    			attr(span0, "class", "clui-dropdown-name svelte-1yg4ncs");
+    			attr(span1, "class", "clui-dropdown-description");
+
+    			attr(div, "class", div_class_value = "clui-dropdown-item " + (/*i*/ ctx[24] === /*selection*/ ctx[1]
+    			? "clui-selected"
+    			: "") + " svelte-1yg4ncs");
+    		},
+    		m(target, anchor) {
+    			if (if_block) if_block.m(target, anchor);
+    			insert(target, t0, anchor);
+    			insert(target, div, anchor);
+    			append(div, span0);
+    			append(span0, t1);
+    			append(div, t2);
+    			append(div, span1);
+    			append(span1, t3);
+    			append(div, t4);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(div, "mouseover", mouseover_handler_1),
+    					listen(div, "click", click_handler_1)
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(new_ctx, dirty) {
+    			ctx = new_ctx;
+
+    			if (/*$store*/ ctx[0].divider > 0 && /*i*/ ctx[24] === /*$store*/ ctx[0].divider) {
+    				if (if_block) ; else {
+    					if_block = create_if_block_4();
+    					if_block.c();
+    					if_block.m(t0.parentNode, t0);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
+
+    			if (dirty & /*$value*/ 4 && t1_value !== (t1_value = (/*argument*/ ctx[25].short
+    			? /*argument*/ ctx[25].short + ", "
+    			: "") + /*argument*/ ctx[25].name + "")) set_data(t1, t1_value);
+
+    			if (dirty & /*$value*/ 4 && t3_value !== (t3_value = /*argument*/ ctx[25]?.desc + "")) set_data(t3, t3_value);
+
+    			if (dirty & /*selection*/ 2 && div_class_value !== (div_class_value = "clui-dropdown-item " + (/*i*/ ctx[24] === /*selection*/ ctx[1]
+    			? "clui-selected"
+    			: "") + " svelte-1yg4ncs")) {
+    				attr(div, "class", div_class_value);
+    			}
+    		},
+    		d(detaching) {
+    			if (if_block) if_block.d(detaching);
+    			if (detaching) detach(t0);
+    			if (detaching) detach(div);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    // (75:4) {#if $store.divider > 0 && i === $store.divider}
+    function create_if_block_2(ctx) {
+    	let hr;
+
+    	return {
+    		c() {
+    			hr = element("hr");
+    			attr(hr, "class", "svelte-1yg4ncs");
+    		},
+    		m(target, anchor) {
+    			insert(target, hr, anchor);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(hr);
+    		}
+    	};
+    }
+
+    // (79:5) {#if typeof command.name !== 'number'}
+    function create_if_block_1(ctx) {
+    	let span;
+    	let t_value = /*command*/ ctx[22].name + "";
+    	let t;
+
+    	return {
+    		c() {
+    			span = element("span");
+    			t = text(t_value);
+    			attr(span, "class", "clui-dropdown-name svelte-1yg4ncs");
+    		},
+    		m(target, anchor) {
+    			insert(target, span, anchor);
+    			append(span, t);
+    		},
+    		p(ctx, dirty) {
+    			if (dirty & /*$value*/ 4 && t_value !== (t_value = /*command*/ ctx[22].name + "")) set_data(t, t_value);
+    		},
+    		d(detaching) {
+    			if (detaching) detach(span);
+    		}
+    	};
+    }
+
+    // (74:3) {#each clui.filter($value) as command, i}
+    function create_each_block_2(ctx) {
+    	let t0;
+    	let div;
+    	let t1;
+    	let span;
+    	let t2_value = /*command*/ ctx[22].desc + "";
+    	let t2;
+    	let t3;
+    	let div_class_value;
+    	let mounted;
+    	let dispose;
+    	let if_block0 = /*$store*/ ctx[0].divider > 0 && /*i*/ ctx[24] === /*$store*/ ctx[0].divider && create_if_block_2();
+    	let if_block1 = typeof /*command*/ ctx[22].name !== "number" && create_if_block_1(ctx);
+
+    	function click_handler() {
+    		return /*click_handler*/ ctx[11](/*command*/ ctx[22]);
+    	}
+
+    	function mouseover_handler() {
+    		return /*mouseover_handler*/ ctx[12](/*i*/ ctx[24]);
+    	}
+
+    	return {
+    		c() {
+    			if (if_block0) if_block0.c();
+    			t0 = space();
+    			div = element("div");
+    			if (if_block1) if_block1.c();
+    			t1 = space();
+    			span = element("span");
+    			t2 = text(t2_value);
+    			t3 = space();
+    			attr(span, "class", "clui-dropdown-description");
+
+    			attr(div, "class", div_class_value = "clui-dropdown-item " + (/*i*/ ctx[24] === /*selection*/ ctx[1]
+    			? "clui-selected"
+    			: "") + " svelte-1yg4ncs");
+    		},
+    		m(target, anchor) {
+    			if (if_block0) if_block0.m(target, anchor);
+    			insert(target, t0, anchor);
+    			insert(target, div, anchor);
+    			if (if_block1) if_block1.m(div, null);
+    			append(div, t1);
+    			append(div, span);
+    			append(span, t2);
+    			append(div, t3);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(div, "click", click_handler),
+    					listen(div, "mouseover", mouseover_handler)
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(new_ctx, dirty) {
+    			ctx = new_ctx;
+
+    			if (/*$store*/ ctx[0].divider > 0 && /*i*/ ctx[24] === /*$store*/ ctx[0].divider) {
+    				if (if_block0) ; else {
+    					if_block0 = create_if_block_2();
+    					if_block0.c();
+    					if_block0.m(t0.parentNode, t0);
+    				}
+    			} else if (if_block0) {
+    				if_block0.d(1);
+    				if_block0 = null;
+    			}
+
+    			if (typeof /*command*/ ctx[22].name !== "number") {
+    				if (if_block1) {
+    					if_block1.p(ctx, dirty);
+    				} else {
+    					if_block1 = create_if_block_1(ctx);
+    					if_block1.c();
+    					if_block1.m(div, t1);
+    				}
+    			} else if (if_block1) {
+    				if_block1.d(1);
+    				if_block1 = null;
+    			}
+
+    			if (dirty & /*$value*/ 4 && t2_value !== (t2_value = /*command*/ ctx[22].desc + "")) set_data(t2, t2_value);
+
+    			if (dirty & /*selection*/ 2 && div_class_value !== (div_class_value = "clui-dropdown-item " + (/*i*/ ctx[24] === /*selection*/ ctx[1]
+    			? "clui-selected"
+    			: "") + " svelte-1yg4ncs")) {
+    				attr(div, "class", div_class_value);
+    			}
+    		},
+    		d(detaching) {
+    			if (if_block0) if_block0.d(detaching);
+    			if (detaching) detach(t0);
+    			if (detaching) detach(div);
+    			if (if_block1) if_block1.d();
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    // (105:5) {#each page.items as item (page)}
+    function create_each_block_1(key_1, ctx) {
+    	let first;
+    	let item;
+    	let current;
+    	item = new Item({ props: { arg: /*item*/ ctx[19] } });
+
+    	return {
+    		key: key_1,
+    		first: null,
+    		c() {
+    			first = empty();
+    			create_component(item.$$.fragment);
+    			this.first = first;
+    		},
+    		m(target, anchor) {
+    			insert(target, first, anchor);
+    			mount_component(item, target, anchor);
+    			current = true;
+    		},
+    		p(new_ctx, dirty) {
+    			ctx = new_ctx;
+    			const item_changes = {};
+    			if (dirty & /*$store*/ 1) item_changes.arg = /*item*/ ctx[19];
+    			item.$set(item_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(item.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(item.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(first);
+    			destroy_component(item, detaching);
+    		}
+    	};
+    }
+
+    // (99:2) {#each $store.pages as page (page.items)}
+    function create_each_block(key_1, ctx) {
+    	let div2;
+    	let div0;
+    	let button;
+    	let t1;
+    	let div1;
+    	let each_blocks = [];
+    	let each_1_lookup = new Map();
+    	let t2;
+    	let div2_intro;
+    	let div2_outro;
+    	let current;
+    	let mounted;
+    	let dispose;
+    	let each_value_1 = /*page*/ ctx[16].items;
+    	const get_key = ctx => /*page*/ ctx[16];
+
+    	for (let i = 0; i < each_value_1.length; i += 1) {
+    		let child_ctx = get_each_context_1(ctx, each_value_1, i);
+    		let key = get_key(child_ctx);
+    		each_1_lookup.set(key, each_blocks[i] = create_each_block_1(key, child_ctx));
+    	}
+
+    	return {
+    		key: key_1,
+    		first: null,
+    		c() {
+    			div2 = element("div");
+    			div0 = element("div");
+    			button = element("button");
+    			button.textContent = "X";
+    			t1 = space();
+    			div1 = element("div");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			t2 = space();
+    			attr(button, "class", "svelte-1yg4ncs");
+    			attr(div0, "class", "clui-page-buttons svelte-1yg4ncs");
+    			attr(div1, "class", "clui-page svelte-1yg4ncs");
+    			attr(div2, "class", "clui-page-container svelte-1yg4ncs");
+    			this.first = div2;
+    		},
+    		m(target, anchor) {
+    			insert(target, div2, anchor);
+    			append(div2, div0);
+    			append(div0, button);
+    			append(div2, t1);
+    			append(div2, div1);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(div1, null);
+    			}
+
+    			append(div2, t2);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = listen(button, "click", function () {
+    					if (is_function(/*page*/ ctx[16].close())) /*page*/ ctx[16].close().apply(this, arguments);
+    				});
+
+    				mounted = true;
+    			}
+    		},
+    		p(new_ctx, dirty) {
+    			ctx = new_ctx;
+
+    			if (dirty & /*$store*/ 1) {
+    				each_value_1 = /*page*/ ctx[16].items;
+    				group_outros();
+    				each_blocks = update_keyed_each(each_blocks, dirty, get_key, 1, ctx, each_value_1, each_1_lookup, div1, outro_and_destroy_block, create_each_block_1, null, get_each_context_1);
+    				check_outros();
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+
+    			for (let i = 0; i < each_value_1.length; i += 1) {
+    				transition_in(each_blocks[i]);
+    			}
+
+    			add_render_callback(() => {
+    				if (div2_outro) div2_outro.end(1);
+    				if (!div2_intro) div2_intro = create_in_transition(div2, slide, { duration: 200 });
+    				div2_intro.start();
+    			});
+
+    			current = true;
+    		},
+    		o(local) {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				transition_out(each_blocks[i]);
+    			}
+
+    			if (div2_intro) div2_intro.invalidate();
+    			div2_outro = create_out_transition(div2, slide, { duration: 200 });
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div2);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].d();
+    			}
+
+    			if (detaching && div2_outro) div2_outro.end();
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+    }
+
+    function create_fragment(ctx) {
+    	let div0;
+    	let each_blocks_1 = [];
+    	let each0_lookup = new Map();
+    	let t0;
+    	let div4;
+    	let div1;
+    	let img;
+    	let img_src_value;
+    	let t1;
+    	let t2;
+    	let input;
+    	let t3;
+    	let t4;
+    	let t5;
+    	let div2;
+    	let t6;
+    	let div3;
+    	let each_blocks = [];
+    	let each1_lookup = new Map();
+    	let current;
+    	let mounted;
+    	let dispose;
+    	let each_value_4 = /*$store*/ ctx[0].toasts;
+    	const get_key = ctx => /*toast*/ ctx[27].id;
+
+    	for (let i = 0; i < each_value_4.length; i += 1) {
+    		let child_ctx = get_each_context_4(ctx, each_value_4, i);
+    		let key = get_key(child_ctx);
+    		each0_lookup.set(key, each_blocks_1[i] = create_each_block_4(key, child_ctx));
+    	}
+
+    	let if_block0 = /*$store*/ ctx[0]?.tokens && create_if_block_7(ctx);
+    	let if_block1 = /*$current*/ ctx[3]?.run && create_if_block_6(ctx);
+    	let if_block2 = /*$value*/ ctx[2] && create_if_block_5(ctx);
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*$current*/ ctx[3]?.commands) return create_if_block;
+    		if (/*$current*/ ctx[3]?.args) return create_if_block_3;
+    	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block3 = current_block_type && current_block_type(ctx);
+    	let each_value = /*$store*/ ctx[0].pages;
+    	const get_key_1 = ctx => /*page*/ ctx[16].items;
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		let child_ctx = get_each_context(ctx, each_value, i);
+    		let key = get_key_1(child_ctx);
+    		each1_lookup.set(key, each_blocks[i] = create_each_block(key, child_ctx));
+    	}
+
+    	return {
+    		c() {
+    			div0 = element("div");
+
+    			for (let i = 0; i < each_blocks_1.length; i += 1) {
+    				each_blocks_1[i].c();
+    			}
+
+    			t0 = space();
+    			div4 = element("div");
+    			div1 = element("div");
+    			img = element("img");
+    			t1 = space();
+    			if (if_block0) if_block0.c();
+    			t2 = space();
+    			input = element("input");
+    			t3 = space();
+    			if (if_block1) if_block1.c();
+    			t4 = space();
+    			if (if_block2) if_block2.c();
+    			t5 = space();
+    			div2 = element("div");
+    			if (if_block3) if_block3.c();
+    			t6 = space();
+    			div3 = element("div");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			attr(div0, "class", "clui-toasts svelte-1yg4ncs");
+    			if (img.src !== (img_src_value = "icons/cli.png")) attr(img, "src", img_src_value);
+    			attr(img, "alt", "");
+    			attr(img, "class", "clui-cli-icon svelte-1yg4ncs");
+    			attr(input, "type", "text");
+    			attr(input, "placeholder", "");
+    			attr(input, "class", "svelte-1yg4ncs");
+    			attr(div1, "class", "clui-cli-input svelte-1yg4ncs");
+    			attr(div2, "class", "clui-cli-dropdown svelte-1yg4ncs");
+    			attr(div3, "class", "clui-pages svelte-1yg4ncs");
+    			attr(div4, "class", "clui-cli svelte-1yg4ncs");
+    		},
+    		m(target, anchor) {
+    			insert(target, div0, anchor);
+
+    			for (let i = 0; i < each_blocks_1.length; i += 1) {
+    				each_blocks_1[i].m(div0, null);
+    			}
+
+    			insert(target, t0, anchor);
+    			insert(target, div4, anchor);
+    			append(div4, div1);
+    			append(div1, img);
+    			append(div1, t1);
+    			if (if_block0) if_block0.m(div1, null);
+    			append(div1, t2);
+    			append(div1, input);
+    			set_input_value(input, /*$value*/ ctx[2]);
+    			append(div1, t3);
+    			if (if_block1) if_block1.m(div1, null);
+    			append(div1, t4);
+    			if (if_block2) if_block2.m(div1, null);
+    			append(div4, t5);
+    			append(div4, div2);
+    			if (if_block3) if_block3.m(div2, null);
+    			append(div4, t6);
+    			append(div4, div3);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(div3, null);
+    			}
+
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = [
+    					listen(window_1, "error", /*error_handler*/ ctx[9]),
+    					listen(input, "input", /*input_input_handler*/ ctx[10]),
+    					listen(input, "input", /*parse*/ ctx[4]),
+    					listen(input, "keydown", /*keydown*/ ctx[8])
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p(ctx, [dirty]) {
+    			if (dirty & /*$store*/ 1) {
+    				each_value_4 = /*$store*/ ctx[0].toasts;
+    				group_outros();
+    				each_blocks_1 = update_keyed_each(each_blocks_1, dirty, get_key, 1, ctx, each_value_4, each0_lookup, div0, outro_and_destroy_block, create_each_block_4, null, get_each_context_4);
+    				check_outros();
+    			}
+
+    			if (/*$store*/ ctx[0]?.tokens) {
+    				if (if_block0) {
+    					if_block0.p(ctx, dirty);
+    				} else {
+    					if_block0 = create_if_block_7(ctx);
+    					if_block0.c();
+    					if_block0.m(div1, t2);
+    				}
+    			} else if (if_block0) {
+    				if_block0.d(1);
+    				if_block0 = null;
+    			}
+
+    			if (dirty & /*$value*/ 4 && input.value !== /*$value*/ ctx[2]) {
+    				set_input_value(input, /*$value*/ ctx[2]);
+    			}
+
+    			if (/*$current*/ ctx[3]?.run) {
+    				if (if_block1) {
+    					if_block1.p(ctx, dirty);
+    				} else {
+    					if_block1 = create_if_block_6(ctx);
+    					if_block1.c();
+    					if_block1.m(div1, t4);
+    				}
+    			} else if (if_block1) {
+    				if_block1.d(1);
+    				if_block1 = null;
+    			}
+
+    			if (/*$value*/ ctx[2]) {
+    				if (if_block2) {
+    					if_block2.p(ctx, dirty);
+    				} else {
+    					if_block2 = create_if_block_5(ctx);
+    					if_block2.c();
+    					if_block2.m(div1, null);
+    				}
+    			} else if (if_block2) {
+    				if_block2.d(1);
+    				if_block2 = null;
+    			}
+
+    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block3) {
+    				if_block3.p(ctx, dirty);
+    			} else {
+    				if (if_block3) if_block3.d(1);
+    				if_block3 = current_block_type && current_block_type(ctx);
+
+    				if (if_block3) {
+    					if_block3.c();
+    					if_block3.m(div2, null);
+    				}
+    			}
+
+    			if (dirty & /*$store*/ 1) {
+    				each_value = /*$store*/ ctx[0].pages;
+    				group_outros();
+    				each_blocks = update_keyed_each(each_blocks, dirty, get_key_1, 1, ctx, each_value, each1_lookup, div3, outro_and_destroy_block, create_each_block, null, get_each_context);
+    				check_outros();
+    			}
+    		},
+    		i(local) {
+    			if (current) return;
+
+    			for (let i = 0; i < each_value_4.length; i += 1) {
+    				transition_in(each_blocks_1[i]);
+    			}
+
+    			for (let i = 0; i < each_value.length; i += 1) {
+    				transition_in(each_blocks[i]);
+    			}
+
+    			current = true;
+    		},
+    		o(local) {
+    			for (let i = 0; i < each_blocks_1.length; i += 1) {
+    				transition_out(each_blocks_1[i]);
+    			}
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				transition_out(each_blocks[i]);
+    			}
+
+    			current = false;
+    		},
+    		d(detaching) {
+    			if (detaching) detach(div0);
+
+    			for (let i = 0; i < each_blocks_1.length; i += 1) {
+    				each_blocks_1[i].d();
+    			}
+
+    			if (detaching) detach(t0);
+    			if (detaching) detach(div4);
+    			if (if_block0) if_block0.d();
+    			if (if_block1) if_block1.d();
+    			if (if_block2) if_block2.d();
+
+    			if (if_block3) {
+    				if_block3.d();
+    			}
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].d();
+    			}
+
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+    }
+
+    function instance($$self, $$props, $$invalidate) {
+    	let $value;
+    	let $current;
+    	let $store;
+    	component_subscribe($$self, value$1, $$value => $$invalidate(2, $value = $$value));
+    	component_subscribe($$self, current$1, $$value => $$invalidate(3, $current = $$value));
+    	component_subscribe($$self, store$1, $$value => $$invalidate(0, $store = $$value));
+    	window.clui = clui;
+    	let selection = 0;
+    	const parse = () => clui.parse($value);
+    	const execute = () => clui.execute();
+    	const clear = () => clui.clear();
+    	const hover = index => $$invalidate(1, selection = index);
+
+    	const updSelection = () => {
+    		if ($current?.commands) $$invalidate(1, selection = selection >= Object.keys(clui.filter($value)).length
+    		? Object.keys(clui.filter($value)).length - 1
+    		: selection); else if ($current?.args) $$invalidate(1, selection = selection >= clui.filter($value).length
+    		? clui.filter($value).length - 1
+    		: selection);
+
+    		$$invalidate(1, selection = selection < 0 ? 0 : selection);
+    	};
+
+    	const keydown = e => {
+    		if (e.key === "Enter") {
+    			clui.execute();
+    		} else if (e.key === "Tab") {
+    			e.preventDefault();
+    			clui.select(clui.filter($value)[selection]?.name);
+    		} else if (e.key === "ArrowUp") {
+    			e.preventDefault();
+    			$$invalidate(1, selection--, selection);
+    		} else if (e.key === "ArrowDown") {
+    			e.preventDefault();
+    			$$invalidate(1, selection++, selection);
+    		}
+
+    		updSelection();
+    	};
+
+    	const error_handler = err => new clui.Toast(err.message, "red");
+
+    	function input_input_handler() {
+    		$value = this.value;
+    		value$1.set($value);
+    	}
+
+    	const click_handler = command => clui.select(command.name);
+    	const mouseover_handler = i => hover(i);
+    	const mouseover_handler_1 = i => hover(i);
+    	const click_handler_1 = argument => clui.select(argument.name);
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*$store*/ 1) {
+    			updSelection($store.depth, $store.argDepth);
+    		}
+    	};
+
+    	return [
+    		$store,
+    		selection,
+    		$value,
+    		$current,
+    		parse,
+    		execute,
+    		clear,
+    		hover,
+    		keydown,
+    		error_handler,
+    		input_input_handler,
+    		click_handler,
+    		mouseover_handler,
+    		mouseover_handler_1,
+    		click_handler_1
+    	];
+    }
+
+    class Index extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance, create_fragment, safe_not_equal, {});
+    	}
+    }
+
+    const app = new Index({
+        target: document.getElementById('clui')
+    });
+
+    return app;
+
+}());
