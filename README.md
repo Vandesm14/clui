@@ -12,7 +12,7 @@ Instead of fumbling through CLI documentation, spend more time running commands 
 *Open to contributions, just email me at vandesm14@gmail.com, DM me on [Twitter](https://twitter.com/vandesm14), or find me on [Discord](https://respdev.com/discord)*
 
 # Changelog
-## [5/9/2021](https://github.com/Vandesm14/clui/tree/40aba6e84cc6f4d10bd3f73beb0abd596c71ede1)
+## [5/9/2021]
 - Fully add pages, forms, and run functions
 
 ## [5/8/2021](https://github.com/Vandesm14/clui/tree/ce628ed1ce32745b73952360288bf7968c8378e2)
