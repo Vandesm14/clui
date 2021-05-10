@@ -37,23 +37,23 @@ const uuid = () => (Math.random()*0xf**6|0).toString(16);
 function deepCopyObj(obj) {
 	if (null == obj || "object" != typeof obj) return obj;
 	if (obj instanceof Date) {
-		var copy = new Date();
-		copy.setTime(obj.getTime());
-		return copy;
+		let clone = new Date();
+		clone.setTime(obj.getTime());
+		return clone;
 	}
 	if (obj instanceof Array) {
-		var copy = [];
-		for (var i = 0, len = obj.length; i < len; i++) {
-			copy[i] = deepCopyObj(obj[i]);
+		let clone = [];
+		for (let i = 0, len = obj.length; i < len; i++) {
+			clone[i] = deepCopyObj(obj[i]);
 		}
-		return copy;
+		return clone;
 	}
 	if (obj instanceof Object) {
-		var copy = {};
-		for (var attr in obj) {
-			if (obj.hasOwnProperty(attr)) copy[attr] = deepCopyObj(obj[attr]);
+		let clone = {};
+		for (let attr in obj) {
+			if (obj.hasOwnProperty(attr)) clone[attr] = deepCopyObj(obj[attr]);
 		}
-		return copy;
+		return clone;
 	}
 	throw new Error("Unable to copy obj this object.");
 }
@@ -61,24 +61,31 @@ function deepCopyObj(obj) {
 let history = [];
 
 class Page {
+	id: string;
 	args: types.Arg[];
 	items: types.Arg[];
 	isForm: boolean;
 	command: types.Command;
 	
 	constructor(args: types.Arg[], isForm?: boolean) {
-		this.args = args;
+		this.id = uuid();
+		if (!Array.isArray(args)) {// if args is command
+			this.command = args;
+			// @ts-expect-error
+			args = args.args;
+		}	else this.command = {...current};
 		this.items = [];
 		this.isForm = isForm;
-		this.command = {...current};
+		this.args = args;
 
 		if (isForm) {
 			this.items = args.concat({name: 'submit', value: 'submit', type: 'button', run: () => {
 				this.items = [];
 				if (this.command.mode === 'toast') {
-					this.command.run(Toast, this.args);
 					this.close();
+					this.command.run(Toast, this.args);
 				} else {
+					this.clear();
 					// @ts-expect-error
 					this.command.run(this, this.args);
 				}
@@ -104,14 +111,15 @@ class Page {
 		this.render([]);
 	}
 	render = (items: types.Arg[]) => {
+		items.forEach(el => el.id = uuid());
 		this.items = items;
-		upd();
+		this.update();
 	}
 	append = (...items) => {
-		this.items = [...this.items, ...items];
+		this.render([...this.items, ...items]);
 	}
 	prepend = (...items) => {
-		this.items = [...items, ...this.items];
+		this.render([...items, ...this.items]);
 	}
 	list = () => {
 		return this.items.slice();
@@ -120,7 +128,7 @@ class Page {
 		upd();
 	}
 	close = () => {
-		store.pages.splice(store.pages.indexOf(this), 1);
+		store.pages.splice(store.pages.indexOf(store.pages.find(el => el.id === this.id)), 1);
 	}
 };
 
@@ -136,7 +144,7 @@ class Toast {
 		
 		store.toasts.push(this);
 		setTimeout(() => {
-			store.toasts.splice(store.toasts.indexOf(this), 1);
+			store.toasts.splice(store.toasts.indexOf(store.toasts.find(el => el.id === this.id)), 1);
 		}, 3000);
 	}
 };
@@ -163,18 +171,28 @@ const clui = {
 	/** executes the current command */
 	execute: function(command = current) {
 		if (command?.run) { // if command has run function
-			let args = copy(clui.getArgs(value, true));
+			if (command === current) { // if same as current
+				let args = copy(clui.getArgs(value, true));
+	
+				if (args.length < command.args?.filter(el => el.required).length) { // if required args are not complete
+					new Page([...args, ...copy(command.args.slice(args.length))], true);
+				} else if (command.mode === 'toast') {
+					command.run(Toast, args);
+				} else {
+					new Page(args);
+				}
 
-			if (args.length < command.args?.filter(el => el.required).length) { // if required args are not complete
-				new Page([...args, ...copy(command.args.slice(args.length))], true);
-			} else if (command.mode === 'toast') {
-				command.run(Toast, args);
-			} else {
-				new Page(args);
+				history.push(value);
+				history = history.filter((el, i) => history.lastIndexOf(el) === i);
+			} else { // if command is specified
+				command = deepCopyObj(command);
+				if (command.mode === 'toast') {
+					command.run(Toast, command.args);
+				} else {
+					// @ts-expect-error
+					new Page(command, true);
+				}
 			}
-
-			history.push(value);
-			history = history.filter((el, i) => history.lastIndexOf(el) === i);
 			clui.clear();
 		} else {
 			new Toast('Command does not have a run function', 'red');

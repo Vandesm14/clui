@@ -96,13 +96,13 @@
 	</div>
 
 	<div class="clui-pages">
-		{#each $store.pages as page (page.items)}
+		{#each $store.pages as page, i (page.id)}
 			<div class="clui-page-container" in:slide={{duration: 200}} out:slide={{duration: 200}}>
 				<div class="clui-page-buttons">
 					<button on:click={page.close()}>X</button>
 				</div>
 				<div class="clui-page">
-					{#each page.items as item (page)}
+					{#each $store.pages[i].items as item}
 						<Item arg={item} />
 					{/each}
 				</div>

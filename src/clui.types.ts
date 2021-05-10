@@ -13,6 +13,7 @@ export interface storeMain {
 
 export interface Toast {
 	msg: string,
+	id: string,
 	color: string
 }
 

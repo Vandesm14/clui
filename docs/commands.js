@@ -7,19 +7,19 @@ const commands = {
 			arg('command', 'get help with a specific command', 'string', {isArg: true})
 		],
 		run: (gui, args) => {
-			gui.close();
 			if (args[0]?.value) {
-				// if (clui.commands[args[0].value]) {
-				// 	gui.append({type: 'paragraph', name: args[0].value, value: clui.commands[args[0].value].desc});
-				// 	gui.append({type: 'button', value: 'Run Command', run: () => {
-				// 		clui.clear();
-				// 		clui.execute(clui.commands[args[0].value]);
-				// 		gui.close();
-				// 	}});
-				// } else {
-				// 	gui.append({type: 'paragraph', value: `Command "${args[0].value}" does not exist`});
-				// }
-				new gui.Toast('Not yet implemented', 'yellow');
+				if (clui.commands[args[0].value]) {
+					gui.append({type: 'paragraph', name: args[0].value, value: clui.commands[args[0].value].desc});
+					gui.append({type: 'button', value: 'Run Command', run: () => {
+						clui.clear();
+						clui.execute(clui.commands[args[0].value]);
+						// setTimeout(gui.close, 0);
+						gui.close();
+					}});
+				} else {
+					gui.append({type: 'paragraph', value: `Command "${args[0].value}" does not exist`});
+				}
+				// new gui.Toast('Not yet implemented', 'yellow');
 			} else {
 				gui.append({type: 'paragraph', name: 'About', value: `
 				The CLUI is a unified command system for the web. The CLUI has the speed of a CLI while having the convenience of a UI.

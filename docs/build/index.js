@@ -1530,6 +1530,31 @@ var index = (function () {
     store.commands = {};
     const copy = (obj) => JSON.parse(JSON.stringify(obj));
     const uuid = () => (Math.random() * 0xf ** 6 | 0).toString(16);
+    function deepCopyObj(obj) {
+        if (null == obj || "object" != typeof obj)
+            return obj;
+        if (obj instanceof Date) {
+            let clone = new Date();
+            clone.setTime(obj.getTime());
+            return clone;
+        }
+        if (obj instanceof Array) {
+            let clone = [];
+            for (let i = 0, len = obj.length; i < len; i++) {
+                clone[i] = deepCopyObj(obj[i]);
+            }
+            return clone;
+        }
+        if (obj instanceof Object) {
+            let clone = {};
+            for (let attr in obj) {
+                if (obj.hasOwnProperty(attr))
+                    clone[attr] = deepCopyObj(obj[attr]);
+            }
+            return clone;
+        }
+        throw new Error("Unable to copy obj this object.");
+    }
     let history = [];
     class Page {
         constructor(args, isForm) {
@@ -1545,14 +1570,15 @@ var index = (function () {
                 this.render([]);
             };
             this.render = (items) => {
+                items.forEach(el => el.id = uuid());
                 this.items = items;
-                upd();
+                this.update();
             };
             this.append = (...items) => {
-                this.items = [...this.items, ...items];
+                this.render([...this.items, ...items]);
             };
             this.prepend = (...items) => {
-                this.items = [...items, ...this.items];
+                this.render([...items, ...this.items]);
             };
             this.list = () => {
                 return this.items.slice();
@@ -1561,20 +1587,28 @@ var index = (function () {
                 upd();
             };
             this.close = () => {
-                store.pages.splice(store.pages.indexOf(this), 1);
+                store.pages.splice(store.pages.indexOf(store.pages.find(el => el.id === this.id)), 1);
             };
-            this.args = args;
+            this.id = uuid();
+            if (!Array.isArray(args)) { // if args is command
+                this.command = args;
+                // @ts-expect-error
+                args = args.args;
+            }
+            else
+                this.command = Object.assign({}, current);
             this.items = [];
             this.isForm = isForm;
-            this.command = Object.assign({}, current);
+            this.args = args;
             if (isForm) {
                 this.items = args.concat({ name: 'submit', value: 'submit', type: 'button', run: () => {
                         this.items = [];
                         if (this.command.mode === 'toast') {
-                            this.command.run(Toast, this.args);
                             this.close();
+                            this.command.run(Toast, this.args);
                         }
                         else {
+                            this.clear();
                             // @ts-expect-error
                             this.command.run(this, this.args);
                         }
@@ -1594,7 +1628,7 @@ var index = (function () {
             this.id = uuid();
             store.toasts.push(this);
             setTimeout(() => {
-                store.toasts.splice(store.toasts.indexOf(this), 1);
+                store.toasts.splice(store.toasts.indexOf(store.toasts.find(el => el.id === this.id)), 1);
             }, 3000);
         }
     }
@@ -1621,18 +1655,30 @@ var index = (function () {
         execute: function (command = current) {
             var _a;
             if (command === null || command === void 0 ? void 0 : command.run) { // if command has run function
-                let args = copy(clui.getArgs(value, true));
-                if (args.length < ((_a = command.args) === null || _a === void 0 ? void 0 : _a.filter(el => el.required).length)) { // if required args are not complete
-                    new Page([...args, ...copy(command.args.slice(args.length))], true);
+                if (command === current) { // if same as current
+                    let args = copy(clui.getArgs(value, true));
+                    if (args.length < ((_a = command.args) === null || _a === void 0 ? void 0 : _a.filter(el => el.required).length)) { // if required args are not complete
+                        new Page([...args, ...copy(command.args.slice(args.length))], true);
+                    }
+                    else if (command.mode === 'toast') {
+                        command.run(Toast, args);
+                    }
+                    else {
+                        new Page(args);
+                    }
+                    history.push(value);
+                    history = history.filter((el, i) => history.lastIndexOf(el) === i);
                 }
-                else if (command.mode === 'toast') {
-                    command.run(Toast, args);
+                else { // if command is specified
+                    command = deepCopyObj(command);
+                    if (command.mode === 'toast') {
+                        command.run(Toast, command.args);
+                    }
+                    else {
+                        // @ts-expect-error
+                        new Page(command, true);
+                    }
                 }
-                else {
-                    new Page(args);
-                }
-                history.push(value);
-                history = history.filter((el, i) => history.lastIndexOf(el) === i);
                 clui.clear();
             }
             else {
@@ -2557,6 +2603,7 @@ var index = (function () {
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
     	child_ctx[16] = list[i];
+    	child_ctx[18] = i;
     	return child_ctx;
     }
 
@@ -2568,28 +2615,28 @@ var index = (function () {
 
     function get_each_context_3(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[25] = list[i];
-    	child_ctx[24] = i;
+    	child_ctx[24] = list[i];
+    	child_ctx[18] = i;
     	return child_ctx;
     }
 
     function get_each_context_2(ctx, list, i) {
     	const child_ctx = ctx.slice();
     	child_ctx[22] = list[i];
-    	child_ctx[24] = i;
+    	child_ctx[18] = i;
     	return child_ctx;
     }
 
     function get_each_context_4(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[27] = list[i];
+    	child_ctx[26] = list[i];
     	return child_ctx;
     }
 
     // (50:1) {#each $store.toasts as toast (toast.id)}
     function create_each_block_4(key_1, ctx) {
     	let div;
-    	let t_value = /*toast*/ ctx[27].msg + "";
+    	let t_value = /*toast*/ ctx[26].msg + "";
     	let t;
     	let div_class_value;
     	let div_intro;
@@ -2602,7 +2649,7 @@ var index = (function () {
     		c() {
     			div = element("div");
     			t = text(t_value);
-    			attr(div, "class", div_class_value = "clui-toast clui-toast-" + /*toast*/ ctx[27].color + " svelte-1yg4ncs");
+    			attr(div, "class", div_class_value = "clui-toast clui-toast-" + /*toast*/ ctx[26].color + " svelte-1yg4ncs");
     			this.first = div;
     		},
     		m(target, anchor) {
@@ -2612,9 +2659,9 @@ var index = (function () {
     		},
     		p(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if ((!current || dirty & /*$store*/ 1) && t_value !== (t_value = /*toast*/ ctx[27].msg + "")) set_data(t, t_value);
+    			if ((!current || dirty & /*$store*/ 1) && t_value !== (t_value = /*toast*/ ctx[26].msg + "")) set_data(t, t_value);
 
-    			if (!current || dirty & /*$store*/ 1 && div_class_value !== (div_class_value = "clui-toast clui-toast-" + /*toast*/ ctx[27].color + " svelte-1yg4ncs")) {
+    			if (!current || dirty & /*$store*/ 1 && div_class_value !== (div_class_value = "clui-toast clui-toast-" + /*toast*/ ctx[26].color + " svelte-1yg4ncs")) {
     				attr(div, "class", div_class_value);
     			}
     		},
@@ -2887,27 +2934,27 @@ var index = (function () {
     	let div;
     	let span0;
 
-    	let t1_value = (/*argument*/ ctx[25].short
-    	? /*argument*/ ctx[25].short + ", "
-    	: "") + /*argument*/ ctx[25].name + "";
+    	let t1_value = (/*argument*/ ctx[24].short
+    	? /*argument*/ ctx[24].short + ", "
+    	: "") + /*argument*/ ctx[24].name + "";
 
     	let t1;
     	let t2;
     	let span1;
-    	let t3_value = /*argument*/ ctx[25]?.desc + "";
+    	let t3_value = /*argument*/ ctx[24]?.desc + "";
     	let t3;
     	let t4;
     	let div_class_value;
     	let mounted;
     	let dispose;
-    	let if_block = /*$store*/ ctx[0].divider > 0 && /*i*/ ctx[24] === /*$store*/ ctx[0].divider && create_if_block_4();
+    	let if_block = /*$store*/ ctx[0].divider > 0 && /*i*/ ctx[18] === /*$store*/ ctx[0].divider && create_if_block_4();
 
     	function mouseover_handler_1() {
-    		return /*mouseover_handler_1*/ ctx[13](/*i*/ ctx[24]);
+    		return /*mouseover_handler_1*/ ctx[13](/*i*/ ctx[18]);
     	}
 
     	function click_handler_1() {
-    		return /*click_handler_1*/ ctx[14](/*argument*/ ctx[25]);
+    		return /*click_handler_1*/ ctx[14](/*argument*/ ctx[24]);
     	}
 
     	return {
@@ -2924,7 +2971,7 @@ var index = (function () {
     			attr(span0, "class", "clui-dropdown-name svelte-1yg4ncs");
     			attr(span1, "class", "clui-dropdown-description");
 
-    			attr(div, "class", div_class_value = "clui-dropdown-item " + (/*i*/ ctx[24] === /*selection*/ ctx[1]
+    			attr(div, "class", div_class_value = "clui-dropdown-item " + (/*i*/ ctx[18] === /*selection*/ ctx[1]
     			? "clui-selected"
     			: "") + " svelte-1yg4ncs");
     		},
@@ -2951,7 +2998,7 @@ var index = (function () {
     		p(new_ctx, dirty) {
     			ctx = new_ctx;
 
-    			if (/*$store*/ ctx[0].divider > 0 && /*i*/ ctx[24] === /*$store*/ ctx[0].divider) {
+    			if (/*$store*/ ctx[0].divider > 0 && /*i*/ ctx[18] === /*$store*/ ctx[0].divider) {
     				if (if_block) ; else {
     					if_block = create_if_block_4();
     					if_block.c();
@@ -2962,13 +3009,13 @@ var index = (function () {
     				if_block = null;
     			}
 
-    			if (dirty & /*$value*/ 4 && t1_value !== (t1_value = (/*argument*/ ctx[25].short
-    			? /*argument*/ ctx[25].short + ", "
-    			: "") + /*argument*/ ctx[25].name + "")) set_data(t1, t1_value);
+    			if (dirty & /*$value*/ 4 && t1_value !== (t1_value = (/*argument*/ ctx[24].short
+    			? /*argument*/ ctx[24].short + ", "
+    			: "") + /*argument*/ ctx[24].name + "")) set_data(t1, t1_value);
 
-    			if (dirty & /*$value*/ 4 && t3_value !== (t3_value = /*argument*/ ctx[25]?.desc + "")) set_data(t3, t3_value);
+    			if (dirty & /*$value*/ 4 && t3_value !== (t3_value = /*argument*/ ctx[24]?.desc + "")) set_data(t3, t3_value);
 
-    			if (dirty & /*selection*/ 2 && div_class_value !== (div_class_value = "clui-dropdown-item " + (/*i*/ ctx[24] === /*selection*/ ctx[1]
+    			if (dirty & /*selection*/ 2 && div_class_value !== (div_class_value = "clui-dropdown-item " + (/*i*/ ctx[18] === /*selection*/ ctx[1]
     			? "clui-selected"
     			: "") + " svelte-1yg4ncs")) {
     				attr(div, "class", div_class_value);
@@ -3039,7 +3086,7 @@ var index = (function () {
     	let div_class_value;
     	let mounted;
     	let dispose;
-    	let if_block0 = /*$store*/ ctx[0].divider > 0 && /*i*/ ctx[24] === /*$store*/ ctx[0].divider && create_if_block_2();
+    	let if_block0 = /*$store*/ ctx[0].divider > 0 && /*i*/ ctx[18] === /*$store*/ ctx[0].divider && create_if_block_2();
     	let if_block1 = typeof /*command*/ ctx[22].name !== "number" && create_if_block_1(ctx);
 
     	function click_handler() {
@@ -3047,7 +3094,7 @@ var index = (function () {
     	}
 
     	function mouseover_handler() {
-    		return /*mouseover_handler*/ ctx[12](/*i*/ ctx[24]);
+    		return /*mouseover_handler*/ ctx[12](/*i*/ ctx[18]);
     	}
 
     	return {
@@ -3062,7 +3109,7 @@ var index = (function () {
     			t3 = space();
     			attr(span, "class", "clui-dropdown-description");
 
-    			attr(div, "class", div_class_value = "clui-dropdown-item " + (/*i*/ ctx[24] === /*selection*/ ctx[1]
+    			attr(div, "class", div_class_value = "clui-dropdown-item " + (/*i*/ ctx[18] === /*selection*/ ctx[1]
     			? "clui-selected"
     			: "") + " svelte-1yg4ncs");
     		},
@@ -3088,7 +3135,7 @@ var index = (function () {
     		p(new_ctx, dirty) {
     			ctx = new_ctx;
 
-    			if (/*$store*/ ctx[0].divider > 0 && /*i*/ ctx[24] === /*$store*/ ctx[0].divider) {
+    			if (/*$store*/ ctx[0].divider > 0 && /*i*/ ctx[18] === /*$store*/ ctx[0].divider) {
     				if (if_block0) ; else {
     					if_block0 = create_if_block_2();
     					if_block0.c();
@@ -3114,7 +3161,7 @@ var index = (function () {
 
     			if (dirty & /*$value*/ 4 && t2_value !== (t2_value = /*command*/ ctx[22].desc + "")) set_data(t2, t2_value);
 
-    			if (dirty & /*selection*/ 2 && div_class_value !== (div_class_value = "clui-dropdown-item " + (/*i*/ ctx[24] === /*selection*/ ctx[1]
+    			if (dirty & /*selection*/ 2 && div_class_value !== (div_class_value = "clui-dropdown-item " + (/*i*/ ctx[18] === /*selection*/ ctx[1]
     			? "clui-selected"
     			: "") + " svelte-1yg4ncs")) {
     				attr(div, "class", div_class_value);
@@ -3131,28 +3178,21 @@ var index = (function () {
     	};
     }
 
-    // (105:5) {#each page.items as item (page)}
-    function create_each_block_1(key_1, ctx) {
-    	let first;
+    // (105:5) {#each $store.pages[i].items as item}
+    function create_each_block_1(ctx) {
     	let item;
     	let current;
     	item = new Item({ props: { arg: /*item*/ ctx[19] } });
 
     	return {
-    		key: key_1,
-    		first: null,
     		c() {
-    			first = empty();
     			create_component(item.$$.fragment);
-    			this.first = first;
     		},
     		m(target, anchor) {
-    			insert(target, first, anchor);
     			mount_component(item, target, anchor);
     			current = true;
     		},
-    		p(new_ctx, dirty) {
-    			ctx = new_ctx;
+    		p(ctx, dirty) {
     			const item_changes = {};
     			if (dirty & /*$store*/ 1) item_changes.arg = /*item*/ ctx[19];
     			item.$set(item_changes);
@@ -3167,35 +3207,34 @@ var index = (function () {
     			current = false;
     		},
     		d(detaching) {
-    			if (detaching) detach(first);
     			destroy_component(item, detaching);
     		}
     	};
     }
 
-    // (99:2) {#each $store.pages as page (page.items)}
+    // (99:2) {#each $store.pages as page, i (page.id)}
     function create_each_block(key_1, ctx) {
     	let div2;
     	let div0;
     	let button;
     	let t1;
     	let div1;
-    	let each_blocks = [];
-    	let each_1_lookup = new Map();
     	let t2;
     	let div2_intro;
     	let div2_outro;
     	let current;
     	let mounted;
     	let dispose;
-    	let each_value_1 = /*page*/ ctx[16].items;
-    	const get_key = ctx => /*page*/ ctx[16];
+    	let each_value_1 = /*$store*/ ctx[0].pages[/*i*/ ctx[18]].items;
+    	let each_blocks = [];
 
     	for (let i = 0; i < each_value_1.length; i += 1) {
-    		let child_ctx = get_each_context_1(ctx, each_value_1, i);
-    		let key = get_key(child_ctx);
-    		each_1_lookup.set(key, each_blocks[i] = create_each_block_1(key, child_ctx));
+    		each_blocks[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
     	}
+
+    	const out = i => transition_out(each_blocks[i], 1, 1, () => {
+    		each_blocks[i] = null;
+    	});
 
     	return {
     		key: key_1,
@@ -3245,9 +3284,29 @@ var index = (function () {
     			ctx = new_ctx;
 
     			if (dirty & /*$store*/ 1) {
-    				each_value_1 = /*page*/ ctx[16].items;
+    				each_value_1 = /*$store*/ ctx[0].pages[/*i*/ ctx[18]].items;
+    				let i;
+
+    				for (i = 0; i < each_value_1.length; i += 1) {
+    					const child_ctx = get_each_context_1(ctx, each_value_1, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    						transition_in(each_blocks[i], 1);
+    					} else {
+    						each_blocks[i] = create_each_block_1(child_ctx);
+    						each_blocks[i].c();
+    						transition_in(each_blocks[i], 1);
+    						each_blocks[i].m(div1, null);
+    					}
+    				}
+
     				group_outros();
-    				each_blocks = update_keyed_each(each_blocks, dirty, get_key, 1, ctx, each_value_1, each_1_lookup, div1, outro_and_destroy_block, create_each_block_1, null, get_each_context_1);
+
+    				for (i = each_value_1.length; i < each_blocks.length; i += 1) {
+    					out(i);
+    				}
+
     				check_outros();
     			}
     		},
@@ -3267,6 +3326,8 @@ var index = (function () {
     			current = true;
     		},
     		o(local) {
+    			each_blocks = each_blocks.filter(Boolean);
+
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				transition_out(each_blocks[i]);
     			}
@@ -3277,11 +3338,7 @@ var index = (function () {
     		},
     		d(detaching) {
     			if (detaching) detach(div2);
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].d();
-    			}
-
+    			destroy_each(each_blocks, detaching);
     			if (detaching && div2_outro) div2_outro.end();
     			mounted = false;
     			dispose();
@@ -3313,7 +3370,7 @@ var index = (function () {
     	let mounted;
     	let dispose;
     	let each_value_4 = /*$store*/ ctx[0].toasts;
-    	const get_key = ctx => /*toast*/ ctx[27].id;
+    	const get_key = ctx => /*toast*/ ctx[26].id;
 
     	for (let i = 0; i < each_value_4.length; i += 1) {
     		let child_ctx = get_each_context_4(ctx, each_value_4, i);
@@ -3333,7 +3390,7 @@ var index = (function () {
     	let current_block_type = select_block_type(ctx);
     	let if_block3 = current_block_type && current_block_type(ctx);
     	let each_value = /*$store*/ ctx[0].pages;
-    	const get_key_1 = ctx => /*page*/ ctx[16].items;
+    	const get_key_1 = ctx => /*page*/ ctx[16].id;
 
     	for (let i = 0; i < each_value.length; i += 1) {
     		let child_ctx = get_each_context(ctx, each_value, i);
