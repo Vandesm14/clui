@@ -1,8 +1,9 @@
 # node modules
 node_modules/*
 
-# .vscode
+# Workspace files
 .vscode/*
+.obsidian/*
 
 # build files
 # docs/build/*

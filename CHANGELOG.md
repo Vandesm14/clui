@@ -6,16 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Presets for pages
-- Row item for pages
-
-### Changed
-- Validate page inputs using CSS
+- Add presets for pages
+- Add Row item for pages
+- Add validation for page inputs using CSS
 
 ### Fixed
-- Selecting flags
+- Fix selecting flags
+- Fix flexbox issue
 
-## [0.7.0 MVP] - 2021-05-09
+## [0.7.0 (Alpha)] - 2021-05-09
 ### Added
 - Add history system
 
@@ -46,9 +45,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Squash a few bugs
 
 ## [0.4.0] - 2021-05-03
+### Added
 - Add typescript
 
 ## [0.3.0] - 2021-04-26
+### Added
 - Add toast system
 - Add selection system (dropdown)
 - Add README
