@@ -1,5 +1,6 @@
 'use strict';
 
+// @ts-ignore
 import onChange from 'on-change';
 import type * as types from './clui.types';
 

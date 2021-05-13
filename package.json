@@ -9,9 +9,9 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.0.1",
     "@rollup/plugin-typescript": "^6.0.0",
-		"@rollup/plugin-json": "^4.1.0",
     "@tsconfig/svelte": "^1.0.10",
     "on-change": "^2.2.3",
     "rollup": "^2.35.1",
