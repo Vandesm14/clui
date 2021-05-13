@@ -223,13 +223,16 @@ const clui = {
 
 		for (let token of tokens) {
 			if (command?.commands && Object.keys(command.commands).includes(token)) { // if command exists
-				if (raw[raw.lastIndexOf(token) + token.length] === ' ' || Object.keys(command.commands).filter(el => el.indexOf(token) === 0).length === 1) {
+				if (raw[raw.lastIndexOf(token) + token.length] === ' ' || Object.keys(command.commands).filter(el => el.indexOf(token) === 0).length === 1) { // if ends with space or cmd is only one with pattern
 					// @ts-expect-error
 					command = command.commands[token];
 					store.depth++;
 				}
+			} else if (command?.commands && !Object.keys(command.commands).includes(token)) { // if command not exist
+				break;
 			}
 		}
+		
 		store.tokens = tokens;
 		_current.set(command);
 		clui.checkRun();
@@ -271,14 +274,14 @@ const clui = {
 				return clui.getArgs(string);
 			} else if (current?.commands) {
 				let arr = [];
-				if (tokens.length > store.depth) { // If half-completed in CLI
+				if (tokens.length === store.depth + 1) { // If half-completed in CLI
 					let commands = Object.keys(current.commands).filter(el => el.indexOf(name) !== -1);
 					commands.map(el => arr.push({name: el, ...current.commands[el]}));
-				} else {
+				} else if (tokens.length === store.depth) { // if at current command (list all subcommands)
 					Object.keys(current.commands).map(el => arr.push({name: el, ...current.commands[el]}));
 				}
 				return arr;
-			} else { // TODO: this should probably not need to exist
+			} else {
 				return [];
 			}
 		}
@@ -348,6 +351,7 @@ const clui = {
 			}
 		}
 
+ 		// TODO: Make this smarter and understand if a token is a param or not (based on .args)
 		store.argDepth = flags.length + withSpace.params.length + args;
 
 		return {flags, params, withSpace, flagData};
