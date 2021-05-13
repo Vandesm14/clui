@@ -4,6 +4,7 @@ node_modules/*
 # Workspace files
 .vscode/*
 .obsidian/*
+.trash/*
 
 # build files
 # docs/build/*

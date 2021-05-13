@@ -182,7 +182,7 @@ const clui = {
 					new Page(args);
 				}
 
-				history.push(value);
+				history.push(value.trim());
 				history = history.filter((el, i) => history.lastIndexOf(el) === i);
 			} else { // if command is specified
 				command = deepCopyObj(command);
@@ -203,6 +203,7 @@ const clui = {
 		if (current?.run) { // if command has run function
 			let args = copy(clui.getArgs(value, true));
 
+			// TODO: Actually check if required args are completed
 			if (args.length < current.args?.filter(el => el.required).length) { // if required args are not complete
 				store.canRun = false;
 			} else {
@@ -240,15 +241,15 @@ const clui = {
 			clui.parse(value);
 		} else {
 			let tokens = clui.tokenize(value);
-			if (current?.commands && Object.keys(current?.commands).includes(name)) { // if command exists
+			if (current?.commands && Object.keys(current?.commands).includes(name)) { // if is command
 				if (tokens.length > store.depth) { // If half-completed in CLI
 					_value.set([...tokens.slice(0, tokens.length - 1), name, ''].join(' '));
 				} else {
 					_value.set([...tokens, name, ''].join(' '));
 				}
 				clui.parse(value);
-			} else if (current?.args && current.args.filter(el => !el.required && !el.isArg).some(el => el.name === name)) {
-				if (tokens.length > store.depth) { // If half-completed in CLI
+			} else if (current?.args && current.args.filter(el => !el.required && !el.isArg).some(el => el.name === name)) { // if is arg
+				if (tokens.length > store.depth + store.argDepth) { // If half-completed in CLI
 					_value.set([...tokens.slice(0, tokens.length - 1), `--${name}`, ''].join(' '));
 				} else {
 					_value.set([...tokens, `--${name}`, ''].join(' '));
@@ -304,7 +305,7 @@ const clui = {
 				if (el.type === 'string' && el.value[0].match(/["']/) !== null) el.value = el.value.slice(1, -1);
 			});
 			separated.flagData.forEach(el => {
-				if (el.type === 'string') el.value = el.value.slice(1, -1);
+				if (el.type === 'string') el.value = el.value?.slice(1, -1) || '';
 			});
 
 			return [...param, ...separated.flagData].filter(el => el !== undefined);

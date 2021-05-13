@@ -50,8 +50,8 @@ const commands = {
 				],
 				run: (gui, args) => {
 					gui.render([{name: 'Success!', value: `The CLI works!
-					String: ${args.find(el => el.name === 'string').value}
-					Number: ${args.find(el => el.name === 'number').value}`, type: 'paragraph'}]);
+					String: ${args?.find(el => el.name === 'string')?.value}
+					Number: ${args?.find(el => el.name === 'number')?.value}`, type: 'paragraph'}]);
 					gui.append({type: 'string', name: 'Your Name', required: true});
 					gui.append({type: 'button', value: 'Submit', run: () => {
 						new gui.Toast(`Hello, ${gui.list().find(el => el.name === 'Your Name').value}`);

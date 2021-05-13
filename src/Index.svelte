@@ -261,7 +261,7 @@
 	.clui-page-buttons {
 		display: flex;
 		flex-direction: row;
-		justify-content: right;
+		justify-content: flex-end;
 	}
 
 	.clui-page-buttons > button {
