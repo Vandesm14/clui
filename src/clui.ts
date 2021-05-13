@@ -95,7 +95,7 @@ class Page {
 			this.command.run(this, this.args);
 		}
 		
-		store.pages.push(this);
+		store.pages.unshift(this);
 	}
 
 	Toast = Toast;
@@ -111,7 +111,7 @@ class Page {
 		this.render([]);
 	}
 	render = (items: types.Arg[]) => {
-		items.forEach(el => el.id = uuid());
+		// items.forEach(el => el.id = uuid());
 		this.items = items;
 		this.update();
 	}
@@ -128,6 +128,7 @@ class Page {
 		upd();
 	}
 	close = () => {
+		// @ts-expect-error
 		store.pages.splice(store.pages.indexOf(store.pages.find(el => el.id === this.id)), 1);
 	}
 };
@@ -203,8 +204,7 @@ const clui = {
 		if (current?.run) { // if command has run function
 			let args = copy(clui.getArgs(value, true));
 
-			// TODO: Actually check if required args are completed
-			if (args.length < current.args?.filter(el => el.required).length) { // if required args are not complete
+			if (args.filter(el => el.required).length < current.args?.filter(el => el.required).length) { // if required args are not complete
 				store.canRun = false;
 			} else {
 				store.canRun = true;

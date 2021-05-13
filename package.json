@@ -11,6 +11,7 @@
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.1",
     "@rollup/plugin-typescript": "^6.0.0",
+		"@rollup/plugin-json": "^4.1.0",
     "@tsconfig/svelte": "^1.0.10",
     "on-change": "^2.2.3",
     "rollup": "^2.35.1",
@@ -25,7 +26,6 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "@rollup/plugin-json": "^4.1.0",
     "sirv-cli": "^1.0.0"
   },
   "description": "The CLUI is a unified command system for the web inspired by the project built by [replit](https://docs.replit.com/misc/clui). The CLUI has the speed of a CLI while having the convenience of a UI. Instead of fumbling through CLI documentation, spend more time running commands by using the CLUI's integrated form system to easily understand and fill out parameters and arguments. Adding a reactive command line to your website is as easy as including a plugin and adding commands!",
