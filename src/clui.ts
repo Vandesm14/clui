@@ -72,10 +72,10 @@ class Page {
 		if (!Array.isArray(args)) {// if args is command
 			this.command = args;
 			// @ts-expect-error
-			args = args.args;
+			args = [...args.args];
 		}	else this.command = {...current};
 		this.items = [];
-		this.args = [...args];
+		this.args = deepCopyObj({args}).args;
 
 		if (isForm) {
 			this.items = args.concat({name: 'submit', value: 'submit', type: 'button', run: () => {
@@ -102,8 +102,7 @@ class Page {
 	Toast = Toast;
 
 	reset = () => {
-		console.log('reset');
-		this.args = [...this.command.args];
+		this.args = deepCopyObj({arr: this.command.args}).arr;
 		this.items = this.args.concat({name: 'submit', value: 'submit', type: 'button', run: () => {
 			this.items = [];
 			if (this.command.mode === 'toast') {
