@@ -44,7 +44,7 @@
 	};
 </script>
 
-<svelte:window on:error={(err)=>new clui.Toast(err.message, 'red')} />
+<!-- <svelte:window on:error={(err)=>new clui.Toast(err.message, 'red')} /> -->
 
 <div class="clui-toasts">
 	{#each $store.toasts as toast (toast.id)}
@@ -112,8 +112,38 @@
 	</div>
 </div>
 
-
 <style>
+	:global(#clui, #clui *) {
+		box-sizing: border-box;
+	}
+
+	:global(#clui) {
+	--dark: hsl(225, 32%, 13%);
+	--darker: hsl(225, 35%, 9%);
+	--darkest: hsl(225, 38%, 6%);
+	--light: hsl(225, 35%, 36%);
+	--medium: hsl(225, 31%, 18%);
+	--text-light: hsl(225, 54%, 89%);
+	--text-medium: hsl(225, 33%, 64%);
+
+		background-color: var(--darkest);
+		color: var(--text-medium);
+		font-size: 1.3rem;
+		font-family: Calibri, sans-serif;
+	}
+
+	:global(#clui p, #clui h1) {
+		margin: 0;
+		padding: 0;
+	}
+
+	:global(#clui a, a:visited) {
+		color: var(--text-medium);
+	}
+	:global(#clui a:hover) {
+		color: var(--text-light);
+	}
+
 	.clui-toasts {
 		position: absolute;
 		right: 0;
@@ -126,21 +156,18 @@
 	.clui-toast {
 		margin: 0.6rem 1.2rem;
 		padding: 0.6rem 1.2rem;
+		max-width: 30ch;
 		border-radius: 3px;
 		background-color: hsl(225, 35%, 36%);
 		color: var(--text-light);
-		max-width: 30ch;
 	}
 	.clui-toast-red {
-		/* background-color: hsl(0, 70%, 40%); */
 		background-color: hsl(0, 54%, 40%);
 	}
 	.clui-toast-yellow {
-		/* background-color: hsl(50, 70%, 40%); */
 		background-color: hsl(50, 54%, 40%);
 	}
 	.clui-toast-green {
-		/* background-color: hsl(100, 70%, 40%); */
 		background-color: hsl(100, 54%, 40%);
 	}
 
@@ -155,9 +182,9 @@
 		position: relative;
 		display: flex;
 		align-items: center;
+		border: 2px solid var(--medium);
 		border-radius: 3px 3px 0 0;
 		background-color: var(--dark);
-		border: 2px solid var(--medium);
 	}
 
 	.clui-cli-input > .clui-cli-icon {
@@ -177,7 +204,6 @@
 		position: relative;
 		z-index: 1;
 		flex: 1;
-
 		padding: 0.6rem 0.4rem;
 		outline: none;
 		border: none;
@@ -191,57 +217,58 @@
 	}
 
 	.clui-cli-run {
-		padding: 0 0.2rem;
 		margin: 0 0.4rem;
+		padding: 0 0.2rem;
+		outline: 2px solid var(--light);
 		border: none;
 		border-radius: 2px;
 		background-color: transparent;
-		font: inherit;
 		color: var(--text-medium);
+		font: inherit;
 		cursor: pointer;
-		outline: 2px solid var(--light);
 	}
 	.clui-cli-run:hover {
-		color: var(--text-light);
 		background-color: var(--light);
+		color: var(--text-light);
 	}
 
 	.clui-cli-dropdown {
+		overflow-y: auto;
 		min-width: 40vw;
 		max-width: 60vw;
+		max-height: 40vh;
 		border-radius: 0 0 3px 3px;
 		background-color: var(--darker);
-		max-height: 40vh;
-		overflow-y: auto;
 	}
 
 	.clui-cli-dropdown > hr {
-		color: var(--light);
 		margin: 0.4rem 0.2rem;
+		color: var(--light);
 	}
 
 	.clui-dropdown-item {
+		position: relative;
+		z-index: 1;
 		padding: 0.6rem 1.2rem;
 		padding-left: 2.2rem;
 		border-radius: 3px;
-		z-index: 1;
-		position: relative;
+		background-color: var(--darker);
 	}
 	.clui-dropdown-item.clui-selected {
-		background-color: var(--light);
-		color: var(--text-light);
-		cursor: pointer;
-		background-color: var(--medium);
 		outline: 2px solid var(--light);
 		outline-offset: -2px;
+		background-color: var(--light);
+		background-color: var(--medium);
+		color: var(--text-light);
+		cursor: pointer;
 	}
 
 	.clui-dropdown-name {
 		margin-right: 0.3rem;
 		margin-left: -0.5rem;
 		padding: 0.3rem 0.5rem;
-		border-radius: 3px;
 		border: 2px solid var(--light);
+		border-radius: 3px;
 	}
 	.clui-selected > .clui-dropdown-name {
 		background-color: var(--light);
@@ -267,32 +294,32 @@
 
 	.clui-page-buttons > button {
 		padding: 0.3rem 0.5rem;
+		border: 2px solid var(--medium);
 		border-radius: 3px;
 		background-color: transparent;
-		border: 2px solid var(--medium);
 		color: var(--text-medium);
 		cursor: pointer;
 	}
 	.clui-page-buttons > button:hover {
-		color: var(--text-light);
-		background-color: var(--light);
 		border: 2px solid var(--light);
+		background-color: var(--light);
+		color: var(--text-light);
 	}
 
 	.clui-page {
 		display: flex;
+		overflow-y: auto;
 		flex-direction: column;
-		background-color: var(--darker);
+		margin: 0.2rem 0;
+		padding: 0.6rem 1.2rem;
+		max-height: 70vh;
+		width: 100%;
 		border: 2px solid var(--medium);
 		border-radius: 3px;
-		padding: 0.6rem 1.2rem;
-		width: 100%;
-		margin: 0.2rem 0;
-		max-height: 70vh;
-		overflow-y: auto;
+		background-color: var(--darker);
 	}
 
-	:global(.clui-page > div) {
+	:global(#clui .clui-page > div) {
 		padding: 0.4rem 0;
 	}
 </style>
