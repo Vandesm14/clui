@@ -37,7 +37,7 @@ const commands = {
 			'cli': {
 				desc: 'tests the cli parser and components',
 				args: [
-					arg('string', 'either a single word or a multi-word string using quotes', 'string',	{required: true}),
+					arg('string', 'either a single word or a multi-word string using quotes', 'string',	{required: true, value: 'Hello World'}),
 					arg('number', 'either an integer or a float', 'number',	{required: true}),
 					arg('optional', 'a boolean value: true or false', 'boolean', {isArg: true}),
 					arg('flag', 'a small boolean flag', 'boolean', {short: 'f'}),

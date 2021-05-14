@@ -99,6 +99,7 @@
 		{#each $store.pages as page, i (page.id)}
 			<div class="clui-page-container" in:slide={{duration: 200}} out:slide={{duration: 200}}>
 				<div class="clui-page-buttons">
+					<button on:click={page.reset()}>R</button>
 					<button on:click={page.close()}>X</button>
 				</div>
 				<div class="clui-page">

@@ -16,9 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show run button if required arguments are met
 - Show `*` next to required arguments in Dropdown
 
+### Fixed
+- Fix referencing and mutability for Pages
+
 ## [0.7.1] - 2021-05-13
 ### Added
 - Add presets for pages
+- Add reset button in Page button row
 
 ### Changed
 - Show form button if command has run function & arguments

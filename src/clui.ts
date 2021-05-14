@@ -65,7 +65,6 @@ class Page {
 	id: string;
 	args: types.Arg[];
 	items: types.Arg[];
-	isForm: boolean;
 	command: types.Command;
 	
 	constructor(args: types.Arg[], isForm?: boolean) {
@@ -76,8 +75,7 @@ class Page {
 			args = args.args;
 		}	else this.command = {...current};
 		this.items = [];
-		this.isForm = isForm;
-		this.args = args;
+		this.args = [...args];
 
 		if (isForm) {
 			this.items = args.concat({name: 'submit', value: 'submit', type: 'button', run: () => {
@@ -104,11 +102,22 @@ class Page {
 	Toast = Toast;
 
 	reset = () => {
-		this.render(this.command.args.concat({name: 'submit', value: 'submit', type: 'button', run: () => {
+		console.log('reset');
+		this.args = [...this.command.args];
+		this.items = this.args.concat({name: 'submit', value: 'submit', type: 'button', run: () => {
 			this.items = [];
-			// @ts-expect-error
-			this.command.run(this, this.args);
-		}}));
+			if (this.command.mode === 'toast') {
+				this.close();
+				this.command.run(Toast, this.args);
+			} else {
+				this.clear();
+				// @ts-expect-error
+				this.command.run(this, this.args);
+			}
+		}});
+		// @ts-expect-error
+		this.items = [{name: 'Cmd-Name', type: 'paragraph'}].concat(this.items);
+		this.update();
 	}
 	clear = () => {
 		this.render([]);
@@ -130,11 +139,18 @@ class Page {
 		switch (name) {
 			case 'success':
 				this.render([
-					{type: 'paragraph', name: 'Success', desc: 'The operation was completed successfully'},
+					{type: 'paragraph', name: 'Success', desc: 'The operation completed successfully'},
 					{type: 'button', name: 'Reset', run: this.reset},
 					{type: 'button', name: 'Close', run: this.close}
 				]);
 				break;
+				case 'fail':
+					this.render([
+						{type: 'paragraph', name: 'Failure', desc: 'The operation failed'},
+						{type: 'button', name: 'Reset', run: this.reset},
+						{type: 'button', name: 'Close', run: this.close}
+					]);
+					break;
 			default:
 				new Toast('The command tried to use an invalid preset', 'yellow');
 				this.render([
