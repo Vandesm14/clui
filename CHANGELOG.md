@@ -6,13 +6,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Add presets for pages
 - Add Row item for pages
 - Add validation for page inputs using CSS
+
+### Changed
+- Use `required` instead of `isArg` for all related states
+- Use `name` for button, not `value`
+- Hide flags if parameter is in progress
+- Show run button if required arguments are met
+- Show `*` next to required arguments in Dropdown
+
+## [0.7.1] - 2021-05-13
+### Added
+- Add presets for pages
+
+### Changed
+- Show form button if command has run function & arguments
 
 ### Fixed
 - Fix selecting flags
 - Fix flexbox issue
+- Fix parser not skipping space or invalid tokens
+- Use `.trim()` when storing items to History
 
 ## [0.7.0 (Alpha)] - 2021-05-09
 ### Added

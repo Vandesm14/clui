@@ -32,6 +32,7 @@ export interface Arg {
 
 export interface Command {
 	desc?: string,
+	name?: string,
 	commands?: Record<string, Command>,
 	mode?: 'form' | 'toast',
 	run?: (gui: typeof clui.Page | typeof clui.Toast, args: Arg[]) => void,

@@ -33,7 +33,7 @@
 	</div>
 {:else if arg?.type === 'button'}
 	<div class="ciui-page-item">
-		<button on:click={arg.run}>{arg.value}</button>
+		<button on:click={arg.run}>{arg.name}</button>
 	</div>
 {:else if arg?.type === 'paragraph'}
 	<div class="ciui-page-item">

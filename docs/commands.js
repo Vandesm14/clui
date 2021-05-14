@@ -10,7 +10,7 @@ const commands = {
 			if (args[0]?.value) {
 				if (clui.commands[args[0].value]) {
 					gui.append({type: 'paragraph', name: args[0].value, value: clui.commands[args[0].value].desc});
-					gui.append({type: 'button', value: 'Run Command', run: () => {
+					gui.append({type: 'button', name: 'Run Command', run: () => {
 						clui.clear();
 						clui.execute(clui.commands[args[0].value]);
 						// setTimeout(gui.close, 0);
@@ -53,12 +53,13 @@ const commands = {
 					String: ${args?.find(el => el.name === 'string')?.value}
 					Number: ${args?.find(el => el.name === 'number')?.value}`, type: 'paragraph'}]);
 					gui.append({type: 'string', name: 'Your Name', required: true});
-					gui.append({type: 'button', value: 'Submit', run: () => {
+					gui.append({type: 'button', name: 'Submit', run: () => {
 						new gui.Toast(`Hello, ${gui.list().find(el => el.name === 'Your Name').value}`);
-						gui.render([
-							{type: 'button', value: 'Reset', run: gui.reset},
-							{type: 'button', value: 'Close', run: gui.close}
-						])
+						// gui.render([
+						// 	{type: 'button', name: 'Reset', run: gui.reset},
+						// 	{type: 'button', name: 'Close', run: gui.close}
+						// ]);
+						gui.preset('success');
 					}});
 				}
 			}
@@ -83,11 +84,11 @@ const commands = {
 			String: ${args.find(el => el.name === 'string').value}
 			Number: ${args.find(el => el.name === 'number').value}`, type: 'paragraph'}]);
 			gui.append({type: 'string', name: 'Your Name', required: true});
-			gui.append({type: 'button', value: 'Submit', run: () => {
+			gui.append({type: 'button', name: 'Submit', run: () => {
 				new gui.Toast(`Hello, ${gui.list().find(el => el.name === 'Your Name').value}`);
 				gui.render([
-					{type: 'button', value: 'Reset', run: gui.reset},
-					{type: 'button', value: 'Close', run: gui.close}
+					{type: 'button', name: 'Reset', run: gui.reset},
+					{type: 'button', name: 'Close', run: gui.close}
 				])
 			}});
 		}

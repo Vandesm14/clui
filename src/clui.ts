@@ -91,6 +91,8 @@ class Page {
 					this.command.run(this, this.args);
 				}
 			}});
+			// @ts-expect-error
+			this.items = [{name: 'Cmd-Name', type: 'paragraph'}].concat(this.items);
 		} else {
 			// @ts-expect-error
 			this.command.run(this, this.args);
@@ -112,7 +114,6 @@ class Page {
 		this.render([]);
 	}
 	render = (items: types.Arg[]) => {
-		// items.forEach(el => el.id = uuid());
 		this.items = items;
 		this.update();
 	}
@@ -124,6 +125,24 @@ class Page {
 	}
 	list = () => {
 		return this.items.slice();
+	}
+	preset = (name: string, args?: {}) => {
+		switch (name) {
+			case 'success':
+				this.render([
+					{type: 'paragraph', name: 'Success', desc: 'The operation was completed successfully'},
+					{type: 'button', name: 'Reset', run: this.reset},
+					{type: 'button', name: 'Close', run: this.close}
+				]);
+				break;
+			default:
+				new Toast('The command tried to use an invalid preset', 'yellow');
+				this.render([
+					{type: 'paragraph', name: 'Unknown', desc: 'The command tried to use an invalid preset'}
+				]);
+				break;
+		}
+
 	}
 	update = () => {
 		upd();
