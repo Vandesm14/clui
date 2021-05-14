@@ -1,7 +1,8 @@
 import App from './Index.svelte';
 
 const app = new App({
-	target: document.getElementById('clui')
+	target: document.body,
+	intro: true
 });
 
 export default app;

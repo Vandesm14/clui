@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show form button if command has run function & arguments
 
 ## [0.7.2] - 2021-05-14
+### Added
+- Home & Demo pages
+
 ### Fixed
 - Fix referencing and mutability for Pages
 

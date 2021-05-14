@@ -1,5 +1,5 @@
 <script lang='ts'>
-	import type * as types from "../clui.types";
+	import type * as types from "../lib/clui.types";
 	export let arg: types.Arg;
 	
 	if (arg.type === 'string') arg.value = arg.value || '';

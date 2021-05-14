@@ -1,5 +1,4 @@
 import type clui from './clui';
-
 export interface storeMain {
 	depth?: number,
 	argDepth?:number,

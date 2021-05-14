@@ -1,10 +1,10 @@
 {
-  "name": "cobalt",
+  "name": "clui",
   "version": "0.0.1",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -cw",
-    "start": "sirv docs",
+    "start": "sirv docs --host",
     "validate": "svelte-check"
   },
   "devDependencies": {
