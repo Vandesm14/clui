@@ -1,5 +1,5 @@
 # The CLUI
-## Build: [v0.7.0 (Alpha)](CHANGELOG.md)
+## Build: [v0.7.2](CHANGELOG.md)
 
 ![](clui-cover.png)
 
