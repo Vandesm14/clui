@@ -15,8 +15,9 @@
 		<p in:fade={{duration: 400, delay: 1600}}>
 			A unified command system for the web
 		</p>
-		<a href="demo.html" in:fade={{duration: 400, delay: 1800}}>Demo</a>
-		<img src="clui-image.png" alt="" in:fade={{duration: 400, delay: 2000}}>
+		<!-- <a href="demo.html" in:fade={{duration: 400, delay: 1800}}>Demo</a> -->
+		<!-- <img src="clui-image.png" alt="" in:fade={{duration: 400, delay: 2000}}> -->
+		<div id="clui" in:fade={{duration: 400, delay: 2000}}></div>
 	</section>
 </main>
 

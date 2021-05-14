@@ -496,8 +496,8 @@ var index = (function () {
     	let h2_intro;
     	let t2;
     	let header;
-    	let div;
-    	let div_intro;
+    	let div0;
+    	let div0_intro;
     	let header_intro;
     	let t5;
     	let main;
@@ -505,12 +505,8 @@ var index = (function () {
     	let p;
     	let p_intro;
     	let t7;
-    	let a;
-    	let a_intro;
-    	let t9;
-    	let img1;
-    	let img1_src_value;
-    	let img1_intro;
+    	let div1;
+    	let div1_intro;
     	let section_intro;
     	let main_intro;
 
@@ -522,9 +518,9 @@ var index = (function () {
     			span.textContent = "is the";
     			t2 = space();
     			header = element("header");
-    			div = element("div");
+    			div0 = element("div");
 
-    			div.innerHTML = `<img src="icons/cli.png" alt="" class="svelte-1ndpebl"/> 
+    			div0.innerHTML = `<img src="icons/cli.png" alt="" class="svelte-1ndpebl"/> 
 		<h1 class="svelte-1ndpebl">CLUI</h1>`;
 
     			t5 = space();
@@ -533,19 +529,12 @@ var index = (function () {
     			p = element("p");
     			p.textContent = "A unified command system for the web";
     			t7 = space();
-    			a = element("a");
-    			a.textContent = "Demo";
-    			t9 = space();
-    			img1 = element("img");
+    			div1 = element("div");
     			attr(h2, "class", "svelte-1ndpebl");
-    			attr(div, "class", "svelte-1ndpebl");
+    			attr(div0, "class", "svelte-1ndpebl");
     			attr(header, "class", "svelte-1ndpebl");
     			attr(p, "class", "svelte-1ndpebl");
-    			attr(a, "href", "demo.html");
-    			attr(a, "class", "svelte-1ndpebl");
-    			if (img1.src !== (img1_src_value = "clui-image.png")) attr(img1, "src", img1_src_value);
-    			attr(img1, "alt", "");
-    			attr(img1, "class", "svelte-1ndpebl");
+    			attr(div1, "id", "clui");
     			set_style(section, "flex-direction", "column");
     			attr(section, "class", "svelte-1ndpebl");
     			attr(main, "class", "svelte-1ndpebl");
@@ -556,15 +545,13 @@ var index = (function () {
     			append(h2, span);
     			insert(target, t2, anchor);
     			insert(target, header, anchor);
-    			append(header, div);
+    			append(header, div0);
     			insert(target, t5, anchor);
     			insert(target, main, anchor);
     			append(main, section);
     			append(section, p);
     			append(section, t7);
-    			append(section, a);
-    			append(section, t9);
-    			append(section, img1);
+    			append(section, div1);
     		},
     		p: noop,
     		i(local) {
@@ -582,10 +569,10 @@ var index = (function () {
     				});
     			}
 
-    			if (!div_intro) {
+    			if (!div0_intro) {
     				add_render_callback(() => {
-    					div_intro = create_in_transition(div, slide, { duration: 1000, delay: 1200 });
-    					div_intro.start();
+    					div0_intro = create_in_transition(div0, slide, { duration: 1000, delay: 1200 });
+    					div0_intro.start();
     				});
     			}
 
@@ -603,17 +590,10 @@ var index = (function () {
     				});
     			}
 
-    			if (!a_intro) {
+    			if (!div1_intro) {
     				add_render_callback(() => {
-    					a_intro = create_in_transition(a, fade, { duration: 400, delay: 1800 });
-    					a_intro.start();
-    				});
-    			}
-
-    			if (!img1_intro) {
-    				add_render_callback(() => {
-    					img1_intro = create_in_transition(img1, fade, { duration: 400, delay: 2000 });
-    					img1_intro.start();
+    					div1_intro = create_in_transition(div1, fade, { duration: 400, delay: 2000 });
+    					div1_intro.start();
     				});
     			}
 
