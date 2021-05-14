@@ -3,6 +3,7 @@
 </script>
 
 <h2 in:fade={{duration: 500, delay: 100}}>This <span in:fade={{duration: 500, delay: 600}}>is the</span></h2>
+
 <header in:fade={{duration: 600, delay: 1200}}>
 	<div in:slide={{duration: 1000, delay: 1200}}>
 		<img src="icons/cli.png" alt="">
@@ -27,6 +28,9 @@
 <style>
 h1, h2 {
 	text-align: center;
+}
+
+h2:first-of-type {
 	margin-top: 2rem;
 }
 
