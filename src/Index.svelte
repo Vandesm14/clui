@@ -15,7 +15,10 @@
 		<p in:fade={{duration: 400, delay: 1600}}>
 			A unified command system for the web
 		</p>
-		<!-- <a href="demo.html" in:fade={{duration: 400, delay: 1800}}>Demo</a> -->
+		<div class="row">
+			<a href="demo.html" in:fade={{duration: 400, delay: 1800}}>Demo</a>
+			<a href="https://github.com/Vandesm14/clui" in:fade={{duration: 400, delay: 1800}}>Source</a>
+		</div>
 		<!-- <img src="clui-image.png" alt="" in:fade={{duration: 400, delay: 2000}}> -->
 		<div id="clui" in:fade={{duration: 400, delay: 2000}}></div>
 	</section>
@@ -24,6 +27,15 @@
 <style>
 h1, h2 {
 	text-align: center;
+	margin-top: 2rem;
+}
+
+.row {
+	display: flex;
+}
+
+.row > a {
+	margin: 0 1rem;
 }
 
 header, header > div {
@@ -57,7 +69,7 @@ main img {
 }
 
 main a {
-	font-size: 3rem;
+	font-size: 2rem;
 }
 
 section {
