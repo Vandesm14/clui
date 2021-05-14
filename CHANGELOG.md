@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show run button if required arguments are met
 - Show form button if command has run function & arguments
 
+## [0.7.2] - 2021-05-14
+## Changed
+- Scope all previously global styles
+
 ## [0.7.1] - 2021-05-14
 ### Added
 - Add presets for pages
@@ -29,7 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix flexbox issue
 - Fix parser not skipping space or invalid tokens
 - Use `.trim()` when storing items to History
-- Fix referencing and mutability for Pages
+- Fix mutability of args in Pages
 
 ## [0.7.0 (Alpha)] - 2021-05-09
 ### Added
