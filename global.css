@@ -1,0 +1,48 @@
+:root {
+	/* --darkest:     hsl(225, 38%, 6%);
+	--darker:      hsl(229, 35%, 9%);
+	--dark:        hsl(224, 32%, 13%);
+	--medium:      hsl(223, 31%, 18%);
+	--light:       hsl(225, 35%, 36%);
+	--text-medium: hsl(219, 33%, 64%);
+	--text-light:  hsl(219, 54%, 89%); */
+	--darkest:     hsl(225, 38%, 6%);
+	--darker:      hsl(225, 35%, 9%);
+	--dark:        hsl(225, 32%, 13%);
+	--medium:      hsl(225, 31%, 18%);
+	--light:       hsl(225, 35%, 36%);
+	--text-medium: hsl(225, 33%, 64%);
+	--text-light:  hsl(225, 54%, 89%);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100vh;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	background-color: var(--darkest);
+	color: var(--text-medium);
+	font-family: Calibri, sans-serif;
+	font-size: 1.3rem;
+}
+
+div, h1, p {
+	margin: 0;
+	padding: 0;
+}
+
+a, a:visited {
+	color: var(--text-medium);
+}
+a:hover {
+	color: var(--text-light);
+}
