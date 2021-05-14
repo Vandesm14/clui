@@ -82,17 +82,15 @@ class Page {
 				this.items = [];
 				if (this.command.mode === 'toast') {
 					this.close();
-					this.command.run(Toast, this.args);
+					this.command.run({Toast}, this.args);
 				} else {
 					this.clear();
-					// @ts-expect-error
 					this.command.run(this, this.args);
 				}
 			}});
 			// @ts-expect-error
 			this.items = [{name: 'Cmd-Name', type: 'paragraph'}].concat(this.items);
 		} else {
-			// @ts-expect-error
 			this.command.run(this, this.args);
 		}
 		
@@ -107,10 +105,9 @@ class Page {
 			this.items = [];
 			if (this.command.mode === 'toast') {
 				this.close();
-				this.command.run(Toast, this.args);
+				this.command.run({Toast}, this.args);
 			} else {
 				this.clear();
-				// @ts-expect-error
 				this.command.run(this, this.args);
 			}
 		}});
@@ -213,7 +210,7 @@ const clui = {
 				if (args.length < command.args?.filter(el => el.required).length) { // if required args are not complete
 					new Page([...args, ...copy(command.args.slice(args.length))], true);
 				} else if (command.mode === 'toast') {
-					command.run(Toast, args);
+					command.run({Toast}, args);
 				} else {
 					new Page(args);
 				}
@@ -223,7 +220,7 @@ const clui = {
 			} else { // if command is specified
 				command = deepCopyObj(command);
 				if (command.mode === 'toast') {
-					command.run(Toast, command.args);
+					command.run({Toast}, command.args);
 				} else {
 					// @ts-expect-error
 					new Page(command, true);
@@ -286,7 +283,7 @@ const clui = {
 					_value.set([...tokens, name, ''].join(' '));
 				}
 				clui.parse(value);
-			} else if (current?.args && current.args.filter(el => !el.required && !el.isArg).some(el => el.name === name)) { // if is arg
+			} else if (current?.args && current.args.filter(el => el.required === undefined).some(el => el.name === name)) { // if is arg
 				if (tokens.length > store.depth + store.argDepth) { // If half-completed in CLI
 					_value.set([...tokens.slice(0, tokens.length - 1), `--${name}`, ''].join(' '));
 				} else {
@@ -325,8 +322,8 @@ const clui = {
 	getArgs: function(string: string, inverse = false): types.Arg[] {
 		let tokens = clui.tokenize(string);
 		let params = current?.args.filter(el => el.required);
-		let optional = current?.args.filter(el => !el.required && el.isArg);
-		let flags = current?.args.filter(el => !el.required && !el.isArg);
+		let optional = current?.args.filter(el => el.required === false);
+		let flags = current?.args.filter(el => el.required === undefined);
 
 		if (!inverse) { // filter unused args
 			let separated = clui.separateArgs(tokens.slice(store.depth), string);

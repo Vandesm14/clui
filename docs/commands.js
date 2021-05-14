@@ -39,7 +39,7 @@ const commands = {
 				args: [
 					arg('string', 'either a single word or a multi-word string using quotes', 'string',	{required: true, value: 'Hello World'}),
 					arg('number', 'either an integer or a float', 'number',	{required: true}),
-					arg('optional', 'a boolean value: true or false', 'boolean', {isArg: true}),
+					arg('optional', 'a boolean value: true or false', 'boolean', {required: false}),
 					arg('flag', 'a small boolean flag', 'boolean', {short: 'f'}),
 					arg('flag-string', 'a flag with a single argument', 'string'),
 					arg('flag-enum', 'a flag with a enum argument', 'enum', {items: [
@@ -70,7 +70,7 @@ const commands = {
 		args: [
 			arg('string', 'either a single word or a multi-word string using quotes', 'string',	{required: true}),
 			arg('number', 'either an integer or a float', 'number',	{required: true}),
-			arg('optional', 'a boolean value: true or false', 'boolean', {isArg: true}),
+			arg('optional', 'a boolean value: true or false', 'boolean', {required: false}),
 			arg('flag', 'a small boolean flag', 'boolean', {short: 'f'}),
 			arg('flag-string', 'a flag with a single argument', 'string'),
 			arg('flag-enum', 'a flag with a enum argument', 'enum', {items: [
@@ -79,18 +79,9 @@ const commands = {
 				arg('c', 'the third option')
 			]})
 		],
+		mode: 'toast',
 		run: (gui, args) => {
-			gui.render([{name: 'Success!', value: `The CLI works!
-			String: ${args.find(el => el.name === 'string').value}
-			Number: ${args.find(el => el.name === 'number').value}`, type: 'paragraph'}]);
-			gui.append({type: 'string', name: 'Your Name', required: true});
-			gui.append({type: 'button', name: 'Submit', run: () => {
-				new gui.Toast(`Hello, ${gui.list().find(el => el.name === 'Your Name').value}`);
-				gui.render([
-					{type: 'button', name: 'Reset', run: gui.reset},
-					{type: 'button', name: 'Close', run: gui.close}
-				])
-			}});
+			new gui.Toast('This command is for example only');
 		}
 	},
 	'git': {

@@ -6,10 +6,15 @@
 	else if (arg.type === 'boolean') arg.value = arg.value || false;
 </script>
 
-{#if arg?.type === 'string'}
+{#if arg?.type === 'string' && arg?.variant !== 'long'}
 	<div class="ciui-page-item">
 		<span class="clui-item-label"><span>{arg.name}:</span> {arg.type} {arg.required ? '*' : ''}</span>
 		<input type="text" required={arg.required} bind:value={arg.value} class={arg.value === '' ? 'clui-empty' : ''}>
+	</div>
+{:else if arg?.type === 'string' && arg?.variant === 'long'}
+	<div class="ciui-page-item">
+		<span class="clui-item-label"><span>{arg.name}:</span> {arg.type} {arg.required ? '*' : ''}</span>
+		<textarea required={arg.required} bind:value={arg.value} class={arg.value === '' ? 'clui-empty' : ''}></textarea>
 	</div>
 {:else if arg?.type === 'number'}
 	<div class="ciui-page-item">

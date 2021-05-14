@@ -24,8 +24,8 @@ export interface Arg {
 	// value?: string | boolean | number | string[][],
 	value?: any,
 	short?: string,
-	isArg?: true,
-	required?: true,
+	variant?: string,
+	required?: boolean,
 	items?: Arg[],
 	run?: () => void
 }
@@ -35,6 +35,6 @@ export interface Command {
 	name?: string,
 	commands?: Record<string, Command>,
 	mode?: 'form' | 'toast',
-	run?: (gui: typeof clui.Page | typeof clui.Toast, args: Arg[]) => void,
+	run?: (gui: typeof clui.Page | {Toast}, args: Arg[]) => void,
 	args?: Arg[]
 }

@@ -10,15 +10,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add validation for page inputs using CSS
 
 ### Changed
-- Use `required` instead of `isArg` for all related states
 - Hide flags if parameter is in progress
 - Show `*` next to required arguments in Dropdown
 - Show run button if required arguments are met
 - Show form button if command has run function & arguments
 
 ## [0.7.2] - 2021-05-14
+## Added
+- Long text item for Pages
+
 ## Changed
 - Scope all previously global styles
+- Use `required` instead of `isArg` for all related states
 
 ## [0.7.1] - 2021-05-14
 ### Added
