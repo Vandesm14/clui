@@ -11,11 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Use `required` instead of `isArg` for all related states
-- Use `name` for button, not `value`
 - Hide flags if parameter is in progress
-- Show run button if required arguments are met
 - Show `*` next to required arguments in Dropdown
+- Show run button if required arguments are met
+- Show form button if command has run function & arguments
 
+## [0.7.2] - 2021-05-14
 ### Fixed
 - Fix referencing and mutability for Pages
 
@@ -25,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add reset button in Page button row
 
 ### Changed
-- Show form button if command has run function & arguments
+- Use `name` for button, not `value`
 
 ### Fixed
 - Fix selecting flags
