@@ -88,7 +88,7 @@
 					<hr>
 				{/if}
 				<div class="clui-dropdown-item {i === selection ? 'clui-selected' : ''}" on:mouseover={()=>hover(i)} on:click={()=>clui.select(argument.name)}>
-					<span class="clui-dropdown-name">{(argument.short ? argument.short + ', ' : '') + argument.name}</span>
+					<span class="clui-dropdown-name">{(argument.short ? argument.short + ', ' : '') + argument.name + (argument.required ? '*' : '')}</span>
 					<span class="clui-dropdown-description">{argument?.desc}</span>
 				</div>
 			{/each}

@@ -11,7 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Hide flags if parameter is in progress
-- Show `*` next to required arguments in Dropdown
 - Show run button if required arguments are met
 - Show form button if command has run function & arguments
 
@@ -23,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Changed
 - Scope all previously global styles
 - Use `required` instead of `isArg` for all related states
+- Show `*` next to required arguments in Dropdown
 
 ## [0.7.1] - 2021-05-14
 ### Added
