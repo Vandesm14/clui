@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.7.2] - 2021-05-14
 ## Added
 - Long text item for Pages
+- Rerun button (experimental)
 
 ## Changed
 - Scope all previously global styles

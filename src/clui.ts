@@ -115,6 +115,15 @@ class Page {
 		this.items = [{name: 'Cmd-Name', type: 'paragraph'}].concat(this.items);
 		this.update();
 	}
+	rerun = () => {
+		if (this.command.mode === 'toast') {
+			this.close();
+			this.command.run({Toast}, this.args);
+		} else {
+			this.clear();
+			this.command.run(this, this.args);
+		}
+	}
 	clear = () => {
 		this.render([]);
 	}
