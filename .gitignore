@@ -1,0 +1,7 @@
+# node modules
+node_modules/*
+
+# Workspace files
+.vscode/*
+.obsidian/*
+.trash/*
