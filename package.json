@@ -1,11 +1,16 @@
 {
   "name": "cobalt",
   "version": "0.0.1",
-  "scripts": {},
-  "dependencies": {
-    "mocha": "^9.0.2"
+  "scripts": {
+    "dev": "tsc -w",
+    "test": "jest"
   },
-  "description": "The CLUI is a unified command system for the web inspired by the project built by [replit](https://docs.replit.com/misc/clui). The CLUI has the speed of a CLI while having the convenience of a UI. Instead of fumbling through CLI documentation, spend more time running commands by using the CLUI's integrated form system to easily understand and fill out parameters and arguments. Adding a reactive command line to your website is as easy as including a plugin and adding commands!",
+  "dependencies": {
+    "@types/jest": "^26.0.23",
+    "jest": "^27.0.6",
+    "ts-jest": "^27.0.3"
+  },
+  "description": "The CLUI is a unified command system for the web inspired by the project built by [replit](https://docs.replit.com/misc/clui). The CLUI has the speed of a CLI while having the convenience of a UI. Instead of fumbling through CLI documentation, spend more time running commands by using the CLUI's integrated form system to easily understand and fill out parameters and arguments.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Vandesm14/clui.git"
