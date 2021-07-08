@@ -1,4 +1,4 @@
-import { parse } from '../dist/clui';
+import { parse } from './clui';
 
 describe('clui', () => {
 	describe('cli functions', () => {
@@ -33,13 +33,14 @@ describe('clui', () => {
 			
 			// UNIT TESTS
 			it('should return cmd, opt, and string tokens', () => {
-				let out = parse('git commit -m "message hi" --amend');
+				let out = parse('git commit -m "message hi" --amend 123.4');
 				expect(out).toEqual([​
 					{type: 'cmd', val: 'git'},
 					{type: 'cmd', val: 'commit'},
 					{type: 'opt', val: 'm'},
 					{type: 'string', val: 'message hi'},
-					{type: 'opt', val: 'amend'}
+					{type: 'opt', val: 'amend'},
+					{type: 'number', val: 123.4}
 				]);
 			});
 		});

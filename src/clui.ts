@@ -1,5 +1,6 @@
 export default class CLUI {
 	constructor(selector: string, commands?: []) {
+		
 	}
 
 	load() {

@@ -1,10 +1,8 @@
 <script lang="ts">
 	import CLUI from './clui';
 
-	console.log(CLUI);
-
 	// @ts-expect-error
-	window.clui = CLUI;
+	window.clui = new CLUI();
 </script>
 
 <div class="cli">

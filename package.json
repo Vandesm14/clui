@@ -1,14 +1,17 @@
 {
   "name": "cobalt",
   "version": "0.0.1",
-  "type": "module",
   "scripts": {
     "dev": "vite",
+		"test": "jest",
     "build": "vite build",
     "serve": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "jest": "^27.0.6",
+    "ts-jest": "^27.0.3",
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.11",
     "@tsconfig/svelte": "^2.0.1",
     "svelte": "^3.37.0",
@@ -19,9 +22,6 @@
     "vite": "^2.4.0"
   },
   "dependencies": {
-    "@types/jest": "^26.0.23",
-    "jest": "^27.0.6",
-    "ts-jest": "^27.0.3"
   },
   "description": "The CLUI is a unified command system for the web inspired by the project built by [replit](https://docs.replit.com/misc/clui). The CLUI has the speed of a CLI while having the convenience of a UI. Instead of fumbling through CLI documentation, spend more time running commands by using the CLUI's integrated form system to easily understand and fill out parameters and arguments.",
   "repository": {
