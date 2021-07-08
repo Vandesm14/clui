@@ -1,10 +1,5 @@
-import * as comps from './comps.js';
-
 export default class CLUI {
 	constructor(selector: string, commands?: []) {
-		const element = document.querySelector(selector);
-		if (element) element.innerHTML = comps.main();
-		else throw new Error('Selector does not point to an element');
 	}
 
 	load() {

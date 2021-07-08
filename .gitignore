@@ -1,7 +1,4 @@
-# node modules
-node_modules/*
-
-# Workspace files
-.vscode/*
-.obsidian/*
-.trash/*
+/node_modules/
+/dist/
+/.vscode/
+.DS_Store
