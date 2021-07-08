@@ -5,17 +5,21 @@
 	window.clui = new CLUI();
 </script>
 
-<div class="cli">
-	<div class="input">
-		<input type="text" placeholder="Enter a command">
+<div id="clui-fragment">
+	<div class="cli">
+		<div class="input">
+			<input type="text" placeholder="Enter a command">
+		</div>
+		<div class="dropdown">
+			<div class="item">Command A</div>
+			<div class="item">Command B</div>
+		</div>
+		<div class="form"></div>
 	</div>
-	<div class="dropdown">
-		<div class="item">Command A</div>
-		<div class="item">Command B</div>
-	</div>
-	<div class="form"></div>
 </div>
 
 <style>
-
+	#clui-fragment {
+		color: white;
+	}
 </style>
