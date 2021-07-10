@@ -5,12 +5,13 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 export default defineConfig({
 	base: '',
 	build: {
-		assetsDir: '.',
-		rollupOptions: {
-			output: {
-				manualChunks: ()=>'hello.js'
-			}
-		}
+    lib: {
+      entry: 'src/main.ts',
+      formats: ['cjs', 'iife'],
+      name: 'clui',
+      fileName: 'clui'
+    },
+		assetsDir: '.'
 	},
   plugins: [svelte()]
 })
