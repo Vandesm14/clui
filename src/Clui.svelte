@@ -1,3 +1,6 @@
+<!-- fake warning -->
+<svelte:options tag="clui-main" immutable={true} />
+
 <script lang="ts">
 	import CLUI from './clui';
 

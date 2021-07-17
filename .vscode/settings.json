@@ -1,0 +1,4 @@
+{
+	"jest.jestCommandLine": "npm run test --",
+	"recommendations": ["svelte.svelte-vscode"]
+}
