@@ -18,7 +18,6 @@ interface TokenBoolean {
 export default function(input: string): Token[] {
 	const tokens: Token[] = [];
 
-	// setup reader
 	let i = 0;
 
 	const peek = () => input.charAt(i);
@@ -33,7 +32,6 @@ export default function(input: string): Token[] {
 	const isStr = (ch: string) => `"'`.indexOf(ch) >= 0;
 	const isNum = (ch: string) => /[0-9]/.test(ch);
 
-	// start parsing
 	const take = (fn: (ch: string) => boolean) => {
 		let token = "";
 		while(!eof() && fn(peek())) token += next();
