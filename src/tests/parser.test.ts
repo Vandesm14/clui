@@ -1,36 +1,35 @@
-import  parse from './parser';
+import parse from '../lib/parser';
 
 describe('parser', () => {
-	// MINI-UNIT TESTS
-	it('should return type cmd', () => {
+	// UNIT TESTS
+	it('type cmd', () => {
 		let out = parse('git');
 		expect(out).toEqual([​
 			{type: 'cmd', val: 'git'}
 		]);
 	});
-	it('should return type opt', () => {
+	it('type opt', () => {
 		let out = parse('-f');
 		expect(out).toEqual([​
 			{type: 'opt', val: 'f'}
 		]);
 	});
-	it('should return type string', () => {
+	it('type string', () => {
 		let out = parse(`'hello' "hi"`);
 		expect(out).toEqual([​
 			{type: 'string', val: 'hello'},
 			{type: 'string', val: 'hi'}
 		]);
 	});
-	it('should return type number', () => {
+	it('type number', () => {
 		let out = parse('123.4 123');
 		expect(out).toEqual([​
 			{type: 'number', val: 123.4},
 			{type: 'number', val: 123}
 		]);
 	});
-	
-	// UNIT TESTS
-	it('should return cmd, opt, and string tokens', () => {
+
+	it('all tokens', () => {
 		let out = parse('git commit -m "message hi" --amend 123.4');
 		expect(out).toEqual([​
 			{type: 'cmd', val: 'git'},
