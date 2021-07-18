@@ -21,7 +21,7 @@ interface CommandCmd extends CommandBase {
 export interface Arg {
 	name: string,
 	type: string,
-	mode: 'argument' | 'arg' | 'parameter' | 'param' | 'option' | 'opt',
+	mode?: 'argument' | 'arg' | 'option' | 'opt',
 	required?: boolean,
 	description?: string,
 	default?: any
