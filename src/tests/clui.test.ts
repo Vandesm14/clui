@@ -1,5 +1,10 @@
 import CLUI from '../clui';
 import type * as types from '../command.types';
+import path from 'path';
+import { command } from 'yargs';
+
+import git from './clui_one_command';
+import many from './clui_many_commands';
 
 let clui: CLUI;
 
@@ -7,68 +12,46 @@ beforeEach(() => {
 	clui = new CLUI(); // reset the CLUI instance
 });
 
-const push: types.Command = {
-	name: 'push',
-	description: 'push local changes to remote',
-	type: 'arg',
-	children: [
-		{
-			name: 'remote',
-			description: 'the name of the remote to push changes to',
-			type: 'string',
-			mode: 'arg'
-		},
-		{
-			name: 'branch',
-			description: 'the name of the branch to push changes to',
-			type: 'string',
-			mode: 'arg'
-		},
-		{
-			name: 'force',
-			description: 'forces the push of unrelated histories',
-			type: 'boolean',
-			mode: 'opt'
-		}
-	]
-};
-
-const git: types.Command = {
-	name: 'git',
-	description: 'a simple git cli',
-	type: 'cmd',
-	children: [push]
-};
+// TODO: Make it be a command type WITHOUT erroring out
+const push: any = git.children[0];
 
 // TODO: Refactor tests to use the git object
-
 describe('clui', () => {
 	describe('load', () => {
 		it('load one command', () => {
-			clui.load({name: 'git'});
-			expect(clui.commands.find(el => el.name === 'git')).toEqual({name: 'git'});
+			clui.load(git);
+			expect(clui.commands.find(el => el.name === git.name)).toEqual(git);
+			expect(clui.commands[0]).toEqual(git);
 		});
 		it('load multiple commands', () => {
-			const commands = [{name: 'git'}, {name: 'npm'}, {name: 'bower'}];
-			clui.load(...commands);
+			clui.load(...many);
 			
-			commands.forEach(command => {
+			many.forEach(command => {
 				expect(clui.commands.find(el => el.name === command.name)).toEqual(command);
 			});
-			expect(clui.commands).toEqual(commands);
+			expect(clui.commands).toEqual(many);
 		});
-		it.skip('load commands via URL', () => { // TODO: Figure out how to export commands via file
-			clui.loadURL('../test_commands.js');
-			expect(clui.commands.find(el => el.name === 'git')).toEqual({name: 'git'});
+		it('load a command via URL', async () => { // TODO: Figure out how to export commands via file
+			await clui.loadURL(path.resolve(__dirname, './clui_one_command'));
+			expect(clui.commands.find(el => el.name === git.name)).toEqual(git);
+			expect(clui.commands[0]).toEqual(git);
+		});
+		it('load multiple commands via URL', async () => { // TODO: Figure out how to export commands via file
+			await clui.loadURL(path.resolve(__dirname, './clui_many_commands'));
+
+			many.forEach(command => {
+				expect(clui.commands.find(el => el.name === command.name)).toEqual(command);
+			});
+			expect(clui.commands).toEqual(many);
 		});
 	});
 
+	// TODO: Make the tests use hard-coded tokens instead of relying on the parser?
 	describe('match', () => {
 		it('match command', () => {
-			const commands = [{name: 'git'}, {name: 'npm'}, {name: 'bower'}];
-			clui.load(...commands);
+			clui.load(...many);
 
-			commands.forEach(command => {
+			many.forEach(command => {
 				expect(clui.match(clui, clui.parse(command.name))).toEqual(command);
 			});
 		});

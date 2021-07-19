@@ -15,9 +15,12 @@ interface TokenBoolean {
   val: boolean;
 }
 
-export default function(input: string): Token[] {
-	const tokens: Token[] = [];
+class Tokens extends Array {
+	
+}
 
+function parse(input: string) {
+	const tokens: Token[] = [];
 	let i = 0;
 
 	const peek = () => input.charAt(i);
@@ -42,33 +45,21 @@ export default function(input: string): Token[] {
 		const ch = next();
 		if(ch === " ") continue;
 
-		// ids (git, merge)
-		if(isId(ch)) {
+		if(isId(ch)) { // ids (git, merge)
 			const id = ch + take(isId);
-			
-			// e.g. true, false
-			if(isBool(id)) tokens.push({ type: "boolean", val: Boolean(id) });
-			// e.g. git, merge
-			else tokens.push({ type: "cmd", val: id });
-		}
-		// flags (-f, --flag)
-		else if(isFlag(ch)) {
+
+			if(isBool(id)) tokens.push({ type: "boolean", val: Boolean(id) }); // e.g. true, false
+			else tokens.push({ type: "cmd", val: id }); // e.g. git, merge
+		}	else if(isFlag(ch)) { // flags (-f, --flag)
 			const flag = ch + take(isFlag);
 
-			// e.g. -f
-			if(flag.length === 1) tokens.push({ type: "opt", val: next() });
-			// e.g. --flag
-			else if(flag.length === 2) tokens.push({ type: "opt", val: take(isId) });
-			// error
-			else croak(Error(`too many recurring "-" in flag`));
-		}
-		// str ("hello, world!")
-		else if(isStr(ch)) {
+			if(flag.length === 1) tokens.push({ type: "opt", val: next() }); // e.g. -f
+			else if(flag.length === 2) tokens.push({ type: "opt", val: take(isId) }); // e.g. --flag
+			else croak(Error(`too many recurring "-" in flag`)); // error
+		}	else if(isStr(ch)) { // str ("hello, world!")
 			tokens.push({ type: "string", val: take(val => val !== ch) });
 			next();
-		}
-		// num (1234, 12.34)
-		else if(isNum(ch)) {
+		}	else if(isNum(ch)) { // num (1234, 12.34)
 			let decimal = false;
 			const num = ch + take(val => {
 				if(val === ".") {
@@ -82,5 +73,8 @@ export default function(input: string): Token[] {
 		}
 	}
 
-	return tokens;
+	// @ts-expect-error: Unbeknownst to TS, you CAN create a new array using Array(...[])
+	return new Tokens(...tokens);
 }
+
+export default parse;

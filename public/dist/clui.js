@@ -427,10 +427,118 @@ var clui = (function (exports) {
         }
     }
 
-    class CLUI {
-        constructor(selector, commands) {
+    function parse (input) {
+        const tokens = [];
+        let i = 0;
+        const peek = () => input.charAt(i);
+        const next = () => input.charAt(i++);
+        const eof = () => peek() === "";
+        const croak = (err) => { throw err; };
+        const isId = (ch) => /[a-z_]/i.test(ch);
+        const isFlag = (ch) => "-".indexOf(ch) >= 0;
+        const isBool = (word) => "true false".indexOf(word) >= 0;
+        const isStr = (ch) => `"'`.indexOf(ch) >= 0;
+        const isNum = (ch) => /[0-9]/.test(ch);
+        const take = (fn) => {
+            let token = "";
+            while (!eof() && fn(peek()))
+                token += next();
+            return token;
+        };
+        while (!eof()) {
+            const ch = next();
+            if (ch === " ")
+                continue;
+            if (isId(ch)) {
+                const id = ch + take(isId);
+                if (isBool(id))
+                    tokens.push({ type: "boolean", val: Boolean(id) });
+                else
+                    tokens.push({ type: "cmd", val: id });
+            }
+            else if (isFlag(ch)) {
+                const flag = ch + take(isFlag);
+                if (flag.length === 1)
+                    tokens.push({ type: "opt", val: next() });
+                else if (flag.length === 2)
+                    tokens.push({ type: "opt", val: take(isId) });
+                else
+                    croak(Error(`too many recurring "-" in flag`));
+            }
+            else if (isStr(ch)) {
+                tokens.push({ type: "string", val: take(val => val !== ch) });
+                next();
+            }
+            else if (isNum(ch)) {
+                let decimal = false;
+                const num = ch + take(val => {
+                    if (val === ".") {
+                        if (decimal)
+                            croak(Error(`too many recurring "." in number`));
+                        decimal = true;
+                        return true;
+                    }
+                    return isNum(val);
+                });
+                tokens.push({ type: "number", val: Number(num) });
+            }
         }
-        load() {
+        return tokens;
+    }
+
+    function match (root, tokens, matchAll = false) {
+        var _a, _b, _c;
+        let list = [];
+        if (root instanceof CLUI)
+            root = { name: 'h', type: 'cmd', children: (_a = root.commands) !== null && _a !== void 0 ? _a : [] };
+        if (typeof root.name === 'string' && ((_b = root.children) === null || _b === void 0 ? void 0 : _b.length) > 0) {
+            let cmd = root;
+            let argIndex;
+            for (let i = 0; i < tokens.length; i++) {
+                let token = tokens[i];
+                if (cmd.type && cmd.children) {
+                    if (cmd.type === 'cmd') {
+                        let find = (_c = cmd.children) === null || _c === void 0 ? void 0 : _c.find(el => el.name.indexOf(token.val) !== -1);
+                        if (find) {
+                            cmd = find;
+                            list.push(cmd);
+                        }
+                    }
+                    else if (cmd.type === 'arg') {
+                        if (argIndex === undefined)
+                            argIndex = i;
+                        list.push(cmd.children[i - argIndex]);
+                    }
+                }
+                else {
+                    if (matchAll)
+                        return list;
+                    else
+                        return cmd;
+                }
+            }
+            if (matchAll)
+                return list;
+            else
+                return cmd;
+        }
+        else {
+            throw new Error('Invalid root type');
+        }
+    }
+
+    class CLUI {
+        constructor(commands) {
+            this.parse = parse;
+            this.match = match;
+            this.commands = [];
+        }
+        load(...commands) {
+            for (let command of commands) {
+                this.commands.push(command);
+            }
+        }
+        loadURL(url) {
         }
     }
 
@@ -468,21 +576,21 @@ var clui = (function (exports) {
     			this.c = noop;
     			attr_dev(input, "type", "text");
     			attr_dev(input, "placeholder", "Enter a command");
-    			add_location(input, file, 10, 3, 226);
+    			add_location(input, file, 10, 3, 234);
     			attr_dev(div0, "class", "input");
-    			add_location(div0, file, 9, 2, 203);
+    			add_location(div0, file, 9, 2, 210);
     			attr_dev(div1, "class", "item");
-    			add_location(div1, file, 13, 3, 313);
+    			add_location(div1, file, 13, 3, 324);
     			attr_dev(div2, "class", "item");
-    			add_location(div2, file, 14, 3, 350);
+    			add_location(div2, file, 14, 3, 362);
     			attr_dev(div3, "class", "dropdown");
-    			add_location(div3, file, 12, 2, 287);
+    			add_location(div3, file, 12, 2, 297);
     			attr_dev(div4, "class", "form");
-    			add_location(div4, file, 16, 2, 395);
+    			add_location(div4, file, 16, 2, 409);
     			attr_dev(div5, "class", "cli");
-    			add_location(div5, file, 8, 1, 183);
+    			add_location(div5, file, 8, 1, 189);
     			attr_dev(div6, "id", "clui-fragment");
-    			add_location(div6, file, 7, 0, 157);
+    			add_location(div6, file, 7, 0, 162);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");

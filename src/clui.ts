@@ -1,5 +1,5 @@
 import parse from './lib/parser';
-import match from './lib/match';
+import match from './lib/matcher';
 import type * as types from './command.types';
 
 export default class CLUI {
@@ -16,8 +16,15 @@ export default class CLUI {
 		}
 	}
 
-	loadURL(url: string) {
-
+	async loadURL(url: string) {
+		const result = (await import(url)).default;
+		if (Array.isArray(result)) {
+			for (let command of result) {
+				this.commands.push(command);
+			}
+		} else {
+			this.commands.push(result);
+		}
 	}
 
 	commands: types.Command[] = [];

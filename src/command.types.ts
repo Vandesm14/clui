@@ -1,21 +1,24 @@
-export type Command = CommandBase | CommandArgs | CommandCmd;
+export type Command = CommandEmpty | CommandArgs | CommandCmd;
 
 interface CommandBase {
 	name: string,
 	description?: string,
-	type?: 'arg' | 'cmd',
-	children?: Arg[] | Command[],
 	run?: (ctx: RunCtx, args: Arg[]) => void
+}
+
+interface CommandEmpty extends CommandBase {
+	type?: undefined,
+	children?: undefined
 }
 
 interface CommandArgs extends CommandBase {
 	type: 'arg',
-	children: Arg[];
+	children?: Arg[];
 }
 
 interface CommandCmd extends CommandBase {
 	type: 'cmd',
-	children: Command[];
+	children?: Command[];
 }
 
 export interface Arg {
@@ -29,11 +32,13 @@ export interface Arg {
 
 export interface RunCtx {
 	command: Command,
-	toast: Toast,
 
 	/** returns an instance of the given type */
-	getContext: (type: string) => any,
+	getContext(type: string): any,
+	getContext(type: 'gui'): GUI
 }
+
+HTMLCanvasElement
 
 export interface GUI {
 	/** an array of the items in the GUI */
@@ -68,8 +73,4 @@ export interface GUI_Item {
 	type: 'string' | 'string_long' | 'number' | 'boolean' | 'enum' | 'button' | 'paragraph',
 	name: string,
 	value?: any,
-}
-
-export interface Toast {
-
 }
