@@ -1,4 +1,4 @@
-import type * as types from '../command.types';
+import type * as types from '../clui.types';
 
 const push: types.Command = {
 	name: 'push',
@@ -8,12 +8,14 @@ const push: types.Command = {
 		{
 			name: 'remote',
 			description: 'the name of the remote to push changes to',
+			required: true,
 			type: 'string',
 			mode: 'arg'
 		},
 		{
 			name: 'branch',
 			description: 'the name of the branch to push changes to',
+			required: true,
 			type: 'string',
 			mode: 'arg'
 		},

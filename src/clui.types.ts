@@ -23,8 +23,10 @@ interface CommandCmd extends CommandBase {
 
 export interface Arg {
 	name: string,
-	type: string,
-	mode?: 'argument' | 'arg' | 'option' | 'opt',
+	type: 'string' | 'number' | 'boolean',
+
+	/** arg: a parameter (e.g. `ls __~/Desktop__`), opt: an option (e.g. `-a` or `--flag param`) */
+	mode?: 'arg' | 'opt',
 	required?: boolean,
 	description?: string,
 	default?: any
@@ -32,6 +34,7 @@ export interface Arg {
 
 export interface RunCtx {
 	command: Command,
+	finish: (success: boolean, ...output: any[]) => void,
 
 	/** returns an instance of the given type */
 	output: Output

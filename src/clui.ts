@@ -1,6 +1,6 @@
 import parse from './lib/parser';
 import match from './lib/matcher';
-import type * as types from './command.types';
+import type * as types from './clui.types';
 
 export default class CLUI {
 	constructor(commands?: []) {

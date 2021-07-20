@@ -1,4 +1,4 @@
-import type * as types from '../command.types';
+import type * as types from '../clui.types';
 import type * as parser from './parser';
 import clui from '../clui';
 
