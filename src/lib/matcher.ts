@@ -2,7 +2,9 @@ import type * as types from '../clui.types';
 import type * as parser from './parser';
 import clui from '../clui';
 
-export default function(root: types.Command | clui, tokens: parser.Token[], matchAll = false): types.Command | (types.Command | types.Arg)[] {
+export type matcher = (types.Command | types.Arg)[];
+
+export default function(root: types.Command | clui, tokens: parser.Token[]): matcher {
 	let list = [];
 	if (root instanceof clui) root = {name: 'h', type: 'cmd', children: root.commands ?? []};
 	// @ts-expect-error
@@ -23,12 +25,10 @@ export default function(root: types.Command | clui, tokens: parser.Token[], matc
 					list.push({...cmd.children[i - argIndex], value: token.type === 'opt' || token.val});
 				}
 			} else {
-				if (matchAll) return list;
-				else return cmd;
+				return list;
 			}
 		}
-		if (matchAll) return list;
-		else return cmd;
+		return list;
 	} else {
 		throw new Error('Invalid root type');
 	}

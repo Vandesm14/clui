@@ -49,30 +49,30 @@ describe('clui', () => {
 			clui.load(...many);
 
 			many.forEach(command => {
-				expect(clui.match(clui, clui.parse(command.name))).toEqual(command);
+				expect(clui.match(clui, clui.parse(command.name))).toEqual([command]);
 			});
 		});
 		it('match sub-command', () => {
 			clui.load(git);
 
-			expect(clui.match(clui, clui.parse('git push'))).toEqual(push);
+			expect(clui.match(clui, clui.parse('git push'))).toEqual([git, push]);
 		});
 		it('match all tokens (cmd | arg)', () => {
 			clui.load(git);
 
-			expect(clui.match(clui, clui.parse("git push origin"), true)).toEqual([
+			expect(clui.match(clui, clui.parse("git push origin"))).toEqual([
         git,
         push,
         { ...push.children[0], value: "origin" },
       ]);
-      expect(clui.match(clui, clui.parse("git push origin master"), true)
+      expect(clui.match(clui, clui.parse("git push origin master"))
       ).toEqual([
         git,
         push,
         { ...push.children[0], value: "origin" },
         { ...push.children[1], value: "master" },
       ]);
-      expect(clui.match(clui, clui.parse("git push origin master -f"), true)
+      expect(clui.match(clui, clui.parse("git push origin master -f"))
       ).toEqual([
         git,
         push,
