@@ -1,33 +1,14 @@
 import parse from './lib/parser';
 import match from './lib/matcher';
+import convert from './lib/convert';
 import type * as types from './clui.types';
-import { Command, Arg } from './clui.types';
+import type { Command, Arg } from './clui.types';
 
 export default class CLUI {
 	parse = parse;
 	match = match;
 
 	load(...commands: Command[]) {
-		const convert = (cmd: Command) => {
-			cmd = new Command(cmd);
-
-			if (cmd.children && cmd.type === 'cmd') {
-				let list = [];
-				for (let item of cmd.children) {
-					list.push(convert(item as Command));
-				}
-				cmd.children = list;
-			} else if (cmd.children && cmd.type === 'arg') {
-				let list = [];
-				for (let item of cmd.children) {
-					list.push(new Arg(item as Arg));
-				}
-				cmd.children = list;
-			}
-
-			return cmd;
-		};
-
 		for (let command of commands) {
 			this.commands.push(convert(command));
 		}
