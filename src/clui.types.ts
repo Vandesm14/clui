@@ -63,11 +63,17 @@ export class Arg {
 
 export interface RunCtx {
 	command: Command,
-	finish: (success: boolean, ...output: any[]) => void,
+	done: (success: boolean, ...output: any[]) => void,
 
 	/** returns an instance of the given type */
-	output: Output
+	// output: Output
 }
+
+// export class RunCtx {
+//   constructor(command: Command, done: RunCtx['done']) {
+    
+//   }
+// }
 
 export interface Output {
 	/** an array of the items in the Output */

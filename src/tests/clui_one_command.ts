@@ -25,7 +25,10 @@ const push: Command = {
 			type: 'boolean',
 			mode: 'opt'
 		}
-	]
+	],
+  run: (ctx, args) => {
+    ctx.done(true);
+  }
 };
 
 const git: Command = {
