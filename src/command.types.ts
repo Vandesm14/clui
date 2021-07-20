@@ -34,42 +34,21 @@ export interface RunCtx {
 	command: Command,
 
 	/** returns an instance of the given type */
-	getContext(type: string): any,
-	getContext(type: 'gui'): GUI
+	output: Output
 }
 
-HTMLCanvasElement
+export interface Output {
+	/** an array of the items in the Output */
+	items: OutputItem[],
 
-export interface GUI {
-	/** an array of the items in the GUI */
-	items: GUI_Item[],
-
-	/** initiates the GUI */
+	/** initiates the Output */
 	init: () => void,
 
-	/** appends a new item to the GUI */
-	append: (...items: GUI_Item[]) => void,
-
-	/** prepends a new item to the GUI */
-	prepend: (...items: GUI_Item[]) => void,
-
-	/** removes an item from the GUI */
-	remove: (index: number) => void,
-
-	/** clears all items from the GUI */
-	clear: () => void,
-
-	/** destroys the GUI */
+	/** destroys the Output */
 	destroy: () => void,
-
-	/** selects an item via index and returns it */
-	select: (index: number) => GUI_Item,
-
-	/** used to force-redraw the GUI (example: a TUI or API) */
-	redraw: () => void,
 }
 
-export interface GUI_Item {
+export interface OutputItem {
 	type: 'string' | 'string_long' | 'number' | 'boolean' | 'enum' | 'button' | 'paragraph',
 	name: string,
 	value?: any,

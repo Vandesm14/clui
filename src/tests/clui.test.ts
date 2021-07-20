@@ -1,7 +1,5 @@
 import CLUI from '../clui';
-import type * as types from '../command.types';
 import path from 'path';
-import { command } from 'yargs';
 
 import git from './clui_one_command';
 import many from './clui_many_commands';
@@ -15,7 +13,6 @@ beforeEach(() => {
 // TODO: Make it be a command type WITHOUT erroring out
 const push: any = git.children[0];
 
-// TODO: Refactor tests to use the git object
 describe('clui', () => {
 	describe('load', () => {
 		it('load one command', () => {
@@ -31,12 +28,12 @@ describe('clui', () => {
 			});
 			expect(clui.commands).toEqual(many);
 		});
-		it('load a command via URL', async () => { // TODO: Figure out how to export commands via file
+		it('load a command via URL', async () => {
 			await clui.loadURL(path.resolve(__dirname, './clui_one_command'));
 			expect(clui.commands.find(el => el.name === git.name)).toEqual(git);
 			expect(clui.commands[0]).toEqual(git);
 		});
-		it('load multiple commands via URL', async () => { // TODO: Figure out how to export commands via file
+		it('load multiple commands via URL', async () => {
 			await clui.loadURL(path.resolve(__dirname, './clui_many_commands'));
 
 			many.forEach(command => {
@@ -47,7 +44,7 @@ describe('clui', () => {
 	});
 
 	// TODO: Make the tests use hard-coded tokens instead of relying on the parser?
-	describe('match', () => {
+	describe('matcher', () => {
 		it('match command', () => {
 			clui.load(...many);
 

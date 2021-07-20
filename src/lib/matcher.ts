@@ -13,8 +13,7 @@ export default function(root: types.Command | clui, tokens: parser.Token[], matc
 			let token = tokens[i];
 			if (cmd.type && cmd.children) { // If command has children
 				if (cmd.type === 'cmd') { // Command has commands
-					// TODO: Use fuzzy searching instead of direct matching
-					let find = cmd.children?.find(el => el.name.indexOf((token.val as string)) !== -1);
+					let find = cmd.children?.find(el => el.name === (token.val as string));
 					if (find) {
 						cmd = find;
 						list.push(cmd);
