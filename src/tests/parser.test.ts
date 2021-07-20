@@ -63,16 +63,16 @@ describe('parser', () => {
 				{type: 'number', val: 123.4, cursor: false}
 			]);
 		});
-	});
-	it('cursor.start = 0 and cursor.end', () => {
-		let out = parse('git commit -m "message hi" --amend 123.4', {start: 0, end: 6});
-		expect(out).toEqual([​
-			{type: 'cmd', val: 'git', cursor: true},
-			{type: 'cmd', val: 'commit', cursor: true},
-			{type: 'opt', val: 'm', cursor: false},
-			{type: 'string', val: 'message hi', cursor: false},
-			{type: 'opt', val: 'amend', cursor: false},
-			{type: 'number', val: 123.4, cursor: false}
-		]);
+		it('cursor.start = 0 and cursor.end', () => {
+			let out = parse('git commit -m "message hi" --amend 123.4', {start: 0, end: 6});
+			expect(out).toEqual([​
+				{type: 'cmd', val: 'git', cursor: true},
+				{type: 'cmd', val: 'commit', cursor: true},
+				{type: 'opt', val: 'm', cursor: false},
+				{type: 'string', val: 'message hi', cursor: false},
+				{type: 'opt', val: 'amend', cursor: false},
+				{type: 'number', val: 123.4, cursor: false}
+			]);
+		});
 	});
 });
