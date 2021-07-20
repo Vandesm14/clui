@@ -20,7 +20,7 @@ export default function(root: types.Command | clui, tokens: parser.Token[], matc
 					}
 				} else if (cmd.type === 'arg') { // Command has args
 					if (argIndex === undefined) argIndex = i;
-					list.push(cmd.children[i - argIndex]);
+					list.push({...cmd.children[i - argIndex], value: token.type === 'opt' || token.val});
 				}
 			} else {
 				if (matchAll) return list;
