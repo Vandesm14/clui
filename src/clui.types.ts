@@ -47,7 +47,7 @@ export interface Arg {
 	/** arg: a parameter (e.g. ls __~/Desktop__), opt: an option (e.g. __-a__ or __--flag param__) */
 	mode?: 'arg' | 'opt',
 	required?: boolean,
-	default?: any
+	value?: any
 }
 
 export class Arg {
@@ -57,7 +57,7 @@ export class Arg {
 		this.type = obj.type;
 		this.mode = obj.mode;
 		this.required = obj.required;
-		this.default = obj.default;
+		this.value = obj.value;
 	}
 }
 

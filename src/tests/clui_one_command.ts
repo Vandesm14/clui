@@ -1,6 +1,6 @@
-import type * as types from '../clui.types';
+import type { Command, Arg } from '../clui.types';
 
-const push: types.Command = {
+const push: Command = {
 	name: 'push',
 	description: 'push local changes to remote',
 	type: 'arg',
@@ -28,7 +28,7 @@ const push: types.Command = {
 	]
 };
 
-const git: types.Command = {
+const git: Command = {
 	name: 'git',
 	description: 'a simple git cli',
 	type: 'cmd',

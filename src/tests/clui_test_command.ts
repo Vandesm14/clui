@@ -1,6 +1,6 @@
-import type * as types from '../clui.types';
+import type { Command, Arg } from '../clui.types';
 
-const test: types.Command = {
+const test: Command = {
 	name: 'test',
 	description: 'an internal command to test the clui',
 	type: 'arg',
