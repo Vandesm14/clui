@@ -4,6 +4,8 @@ import path from 'path';
 import git from './clui_one_command';
 import many from './clui_many_commands';
 
+import { Command, Arg } from '../clui.types';
+
 let clui: CLUI;
 
 beforeEach(() => {
@@ -83,5 +85,16 @@ describe('clui', () => {
         { ...push.children[2], value: true },
       ]);
 		});
+    it('unknown tokens', () => {
+			clui.load(git);
+
+      expect(clui.match(clui, clui.parse('git hello origin master -f'))).toEqual([
+        git,
+        { type: 'cmd', val: 'hello', unknown: true },
+        { type: 'cmd', val: "origin", unknown: true },
+        { type: 'cmd', val: "master", unknown: true },
+        { type: 'opt', val: 'f', unknown: true },
+      ]);
+    });
 	});
 });
