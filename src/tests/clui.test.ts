@@ -17,12 +17,13 @@ describe('clui', () => {
 	describe('load', () => {
 		it('load one command', () => {
 			clui.load(git);
+			
 			expect(clui.commands.find(el => el.name === git.name)).toEqual(git);
 			expect(clui.commands[0]).toEqual(git);
 		});
 		it('load multiple commands', () => {
 			clui.load(...many);
-			
+
 			many.forEach(command => {
 				expect(clui.commands.find(el => el.name === command.name)).toEqual(command);
 			});
@@ -30,6 +31,7 @@ describe('clui', () => {
 		});
 		it('load a command via URL', async () => {
 			await clui.loadURL(path.resolve(__dirname, './clui_one_command'));
+
 			expect(clui.commands.find(el => el.name === git.name)).toEqual(git);
 			expect(clui.commands[0]).toEqual(git);
 		});
