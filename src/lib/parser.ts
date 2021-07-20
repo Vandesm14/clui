@@ -1,16 +1,22 @@
 export type Token = TokenOther | TokenNumber | TokenBoolean;
 
-interface TokenOther {
+interface TokenBase {
+	type: any,
+	val: any,
+	cursor?: boolean
+}
+
+interface TokenOther extends TokenBase {
   type: "cmd" | "opt" | "string";
   val: string;
 }
 
-interface TokenNumber {
+interface TokenNumber extends TokenBase {
   type: "number";
   val: number;
 }
 
-interface TokenBoolean {
+interface TokenBoolean extends TokenBase {
   type: "boolean";
   val: boolean;
 }
@@ -19,8 +25,8 @@ class Tokens extends Array {
 	
 }
 
-function parse(input: string) {
-	const tokens: Token[] = [];
+function parse(input: string, cursor?: {start: number, end?: number}) {
+	const tokens: Token[] = new Tokens();
 	let i = 0;
 
 	const peek = () => input.charAt(i);
@@ -35,6 +41,18 @@ function parse(input: string) {
 	const isStr = (ch: string) => `"'`.indexOf(ch) >= 0;
 	const isNum = (ch: string) => /[0-9]/.test(ch);
 
+	const add = (token: Token, i: number) => {
+		const {type, val} = {...token};
+		if (cursor && cursor.start !== undefined) {
+			if (cursor.end === undefined) cursor.end = cursor.start;
+			// @ts-expect-error
+			tokens.push({type, val, cursor: i - val.length <= cursor.end && i >= cursor.start});
+		} else {
+			// @ts-expect-error
+			tokens.push({type, val});
+		}
+	}
+
 	const take = (fn: (ch: string) => boolean) => {
 		let token = "";
 		while(!eof() && fn(peek())) token += next();
@@ -48,16 +66,16 @@ function parse(input: string) {
 		if(isId(ch)) { // ids (git, merge)
 			const id = ch + take(isId);
 
-			if(isBool(id)) tokens.push({ type: "boolean", val: Boolean(id) }); // e.g. true, false
-			else tokens.push({ type: "cmd", val: id }); // e.g. git, merge
+			if(isBool(id)) add({ type: "boolean", val: Boolean(id) }, i); // e.g. true, false
+			else add({ type: "cmd", val: id }, i); // e.g. git, merge
 		}	else if(isFlag(ch)) { // flags (-f, --flag)
 			const flag = ch + take(isFlag);
 
-			if(flag.length === 1) tokens.push({ type: "opt", val: next() }); // e.g. -f
-			else if(flag.length === 2) tokens.push({ type: "opt", val: take(isId) }); // e.g. --flag
+			if(flag.length === 1) add({ type: "opt", val: next() }, i); // e.g. -f
+			else if(flag.length === 2) add({ type: "opt", val: take(isId) }, i); // e.g. --flag
 			else croak(Error(`too many recurring "-" in flag`)); // error
 		}	else if(isStr(ch)) { // str ("hello, world!")
-			tokens.push({ type: "string", val: take(val => val !== ch) });
+			add({ type: "string", val: take(val => val !== ch) }, i);
 			next();
 		}	else if(isNum(ch)) { // num (1234, 12.34)
 			let decimal = false;
@@ -69,12 +87,11 @@ function parse(input: string) {
 				}
 				return isNum(val);
 			});
-			tokens.push({ type: "number", val: Number(num) });
+			add({ type: "number", val: Number(num) }, i);
 		}
 	}
 
-	// @ts-expect-error: Unbeknownst to TS, you CAN create a new array using Array(...[])
-	return new Tokens(...tokens);
+	return tokens;
 }
 
 export default parse;
