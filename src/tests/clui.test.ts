@@ -46,36 +46,37 @@ describe('clui', () => {
 	});
 
 	// TODO: Make the tests use hard-coded tokens instead of relying on the parser?
-	describe('matcher', () => {
-		it('match command', () => {
+	describe('parser & matcher (parseMatch)', () => {
+		it('match a command', () => {
 			clui.load(...many);
 
 			many.forEach(command => {
-				expect(clui.match(clui, clui.parse(command.name))).toEqual([command]);
+				expect(clui.parseMatch(command.name)).toEqual([command]);
 			});
 		});
-		it('match sub-command', () => {
+		it('match a sub-command', () => {
 			clui.load(git);
 
-			expect(clui.match(clui, clui.parse('git push'))).toEqual([git, push]);
+			expect(clui.parseMatch('git push')).toEqual([git, push]);
 		});
 		it('match all tokens (cmd | arg)', () => {
 			clui.load(git);
 
-			expect(clui.match(clui, clui.parse("git push origin"))).toEqual([
+			expect(clui.parseMatch("git push origin"))
+      .toEqual([
         git,
         push,
         { ...push.children[0], value: "origin" },
       ]);
-      expect(clui.match(clui, clui.parse("git push origin master"))
-      ).toEqual([
+      expect(clui.parseMatch("git push origin master"))
+      .toEqual([
         git,
         push,
         { ...push.children[0], value: "origin" },
         { ...push.children[1], value: "master" },
       ]);
-      expect(clui.match(clui, clui.parse("git push origin master -f"))
-      ).toEqual([
+      expect(clui.parseMatch("git push origin master -f"))
+      .toEqual([
         git,
         push,
         { ...push.children[0], value: "origin" },
@@ -83,10 +84,11 @@ describe('clui', () => {
         { ...push.children[2], value: true },
       ]);
 		});
-    it('unknown tokens', () => {
+    it('match & return unknown tokens', () => {
 			clui.load(git);
 
-      expect(clui.match(clui, clui.parse('git hello origin master -f'))).toEqual([
+      expect(clui.parseMatch('git hello origin master -f'))
+      .toEqual([
         git,
         { type: 'cmd', val: 'hello', unknown: true },
         { type: 'cmd', val: "origin", unknown: true },
