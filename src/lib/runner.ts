@@ -1,38 +1,38 @@
 import type * as types from '../clui.types';
-import { Command, Arg } from '../clui';
-import type { matcher } from './matcher';
+import { Command, Arg, default as CLUI } from '../clui';
+import parse from './parser';
+import match from './matcher';
 
-export default function(tokens: matcher) {
-	for (let i = 0; i < tokens.length; i++) {
-		let token = tokens[i];
-		if (token instanceof Command) { // if token is a command
-			let commands = tokens.filter(el => el instanceof Command);
-      const command = commands[commands.length - 1];
-      let args = tokens.filter(el => el instanceof Arg);
+export default function(root: CLUI | Command, tokens: (Command | Arg)[] | string) {
+	if (typeof tokens === 'string') tokens = match(root, parse(tokens));
+	console.log(tokens);
+	if (tokens[0] instanceof Command) { // if token is a command
+		let commands = tokens.filter(el => el instanceof Command);
+		const command = commands[commands.length - 1] as Command;
+		let args = tokens.filter(el => el instanceof Arg) as Arg[];
 
-      if (command) {
-        let allRequired = true;
-        if (command.type === 'arg') {
-          let required = command.children.filter((el: Arg) => el.required).length;
-          allRequired = required === args.filter(el => el.required).length;
-        }
-
-        return new Promise<{success: boolean, output: any}>((resolve, reject) => {
-					if (!allRequired) resolve({success: false, output: 'Error: Missing required arguments'});
-
-          const ctx: types.RunCtx = {
-            command,
-            done: (success, ...output) => {
-              resolve({success, output});
-            }
-          };
-
-          if (command.run) command.run(ctx, args);
-          else resolve({success: false, output: 'Error: Command has no run function'});
-        });
-      } else {
-				// TODO: reject
+		if (command) {
+			let allRequired = true;
+			if (command.type === 'arg' && command.children !== undefined) {
+				let required = (command.children as Arg[]).filter((el: Arg) => el.required).length;
+				allRequired = required === args.filter((el: Arg) => el.required).length;
 			}
+
+			return new Promise<{success: boolean, output: any}>((resolve, reject) => {
+				if (!allRequired) resolve({success: false, output: 'Error: Missing required arguments'});
+
+				const ctx: types.RunCtx = {
+					command,
+					done: (success, ...output) => {
+						resolve({success, output});
+					}
+				};
+
+				if (command.run) command.run(ctx, args);
+				else resolve({success: false, output: 'Error: Command has no run function'});
+			});
+		} else {
+			// TODO: reject
 		}
 	}
 };
