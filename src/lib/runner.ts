@@ -1,5 +1,5 @@
 import type * as types from '../clui.types';
-import { Command, Arg } from '../clui.types';
+import { Command, Arg } from '../clui';
 import type { matcher } from './matcher';
 
 export default function(tokens: matcher) {

@@ -1,7 +1,7 @@
-import { Command, Arg } from "../clui.types";
+import { Command, Arg } from "../clui";
 
 const convert = (cmd: Command) => {
-  cmd = new Command(cmd);
+  cmd = new Command(cmd, false);
 
   if (cmd.children && cmd.type === 'cmd') {
     let list = [];

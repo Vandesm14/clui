@@ -1,7 +1,7 @@
 import convert from '../lib/convert';
 import git from './clui_one_command';
 
-import { Command, Arg } from '../clui.types';
+import { Command, Arg } from '../clui';
 
 describe('converter', () => {
 	it('convert command', () => {

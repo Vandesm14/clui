@@ -1,7 +1,7 @@
 import convert from '../lib/convert';
 import run from '../lib/runner';
 
-import { Command, Arg } from '../clui.types';
+import { Command, Arg } from '../clui';
 
 import _git from './clui_one_command';
 

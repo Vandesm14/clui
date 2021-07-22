@@ -1,4 +1,4 @@
-import type { Command, Arg } from '../clui.types';
+import type { Command, Arg } from '../clui';
 
 const push: Command = {
 	name: 'push',
