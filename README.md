@@ -1,9 +1,9 @@
 # The CLUI
-## Build: [Pre-Alpha](CHANGELOG.md)
+<!-- ## Build: [Pre-Alpha](CHANGELOG.md) -->
 
 ![](clui-cover.png)
 
-### [Demo](https://vandesm14.github.io/clui/)
+<!-- ### [Demo](https://vandesm14.github.io/clui/) -->
 
 The CLUI is a unified command system for the web inspired by the project built by [replit](https://docs.replit.com/misc/clui). The CLUI has the speed of a CLI while having the convenience of a UI.
 
