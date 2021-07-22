@@ -4,14 +4,15 @@ import path from 'path';
 import git from './clui_one_command';
 import many from './clui_many_commands';
 
+import { Command, Arg } from '../clui';
+
 let clui: CLUI;
 
 beforeEach(() => {
 	clui = new CLUI(); // reset the CLUI instance
 });
 
-// TODO: Make it be a command type WITHOUT erroring out
-const push: any = git.children[0];
+const push: Command = (git.children[0] as Command);
 
 describe('clui', () => {
 	describe('load', () => {
@@ -45,7 +46,6 @@ describe('clui', () => {
 		});
 	});
 
-	// TODO: Make the tests use hard-coded tokens instead of relying on the parser?
 	describe('parser & matcher (parseMatch)', () => {
 		it('match a command', () => {
 			clui.load(...many);

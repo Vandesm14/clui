@@ -6,6 +6,14 @@ import clui from '../clui';
 // TODO: create an unknown command and arg type with the unknown property (true)
 export type matcher = (Command | Arg | any)[];
 
+interface UnknownCommand extends Command {
+	unknown: true
+}
+
+interface UnknownArg extends Arg {
+	unknown: true
+}
+
 export default function(root: Command | clui, tokens: parser.Token[]): matcher {
 	let list = [];
 	if (root instanceof clui) root = new Command({name: 'h', type: 'cmd', children: root.commands ?? []});
