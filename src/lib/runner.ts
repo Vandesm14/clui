@@ -17,18 +17,22 @@ export default function(tokens: matcher) {
           allRequired = required === args.filter(el => el.required).length;
         }
 
-        return new Promise((resolve, reject) => {
+        return new Promise<{success: boolean, output: any}>((resolve, reject) => {
+					if (!allRequired) resolve({success: false, output: 'Error: Missing required arguments'});
+
           const ctx: types.RunCtx = {
             command,
             done: (success, ...output) => {
-              resolve(success);
+              resolve({success, output});
             }
           };
 
           if (command.run) command.run(ctx, args);
-          else resolve(false);
+          else resolve({success: false, output: 'Error: Command has no run function'});
         });
-      }
+      } else {
+				// TODO: reject
+			}
 		}
 	}
 };

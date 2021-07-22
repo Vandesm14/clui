@@ -9,16 +9,42 @@ const git = convert(_git);
 const push: any = git.children[0];
 
 describe('runner', () => {
-	it.todo('run a command by itself');
-	it.todo('run a command with one required arg');
-	it.todo('run a command with one required arg and flag');
+	it('run a command by itself', async () => {
+    const result = await run([
+      git,
+      push]);
+    expect(result.success).toBe(false);
+	);
+	it('run a command with one required arg', async () => {
+    const result = await run([
+      git,
+      push,
+      new Arg({...push.children[0], value: 'origin'})]);
+    expect(result.success).toBe(false);
+	});
+	it('run a command with one required arg and flag', async () => {
+    const result = await run([
+      git,
+      push,
+      new Arg({...push.children[0], value: 'origin'}),
+      new Arg({...push.children[2], value: true})]);
+    expect(result.success).toBe(false);
+	});
 	it('run a command with all required args', async () => {
     const result = await run([
       git,
       push,
       new Arg({...push.children[0], value: 'origin'}),
       new Arg({...push.children[1], value: 'master'})]);
-    expect(result).toBe(true);
+    expect(result.success).toBe(true);
   });
-	it.todo('run a command with all required args and flag');
+	it('run a command with all required args and flag', async () => {
+    const result = await run([
+      git,
+      push,
+      new Arg({...push.children[0], value: 'origin'}),
+      new Arg({...push.children[1], value: 'master'}),
+      new Arg({...push.children[2], value: true})]);
+    expect(result.success).toBe(true);
+  });
 });
