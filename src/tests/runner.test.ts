@@ -14,7 +14,7 @@ describe('runner', () => {
       git,
       push]);
     expect(result.success).toBe(false);
-	);
+	});
 	it('run a command with one required arg', async () => {
     const result = await run([
       git,
