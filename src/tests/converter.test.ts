@@ -1,4 +1,4 @@
-import convert from '../lib/convert';
+import convert from '../lib/converter';
 import git from './clui_one_command';
 
 import { Command, Arg } from '../clui';

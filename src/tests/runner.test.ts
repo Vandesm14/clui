@@ -1,4 +1,4 @@
-import convert from '../lib/convert';
+import convert from '../lib/converter';
 import run from '../lib/runner';
 
 import { Command, Arg } from '../clui';

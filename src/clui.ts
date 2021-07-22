@@ -1,6 +1,6 @@
 import parse from './lib/parser';
 import match from './lib/matcher';
-import convert from './lib/convert';
+import convert from './lib/converter';
 import type * as types from './clui.types';
 
 export interface Command {
@@ -14,7 +14,6 @@ export interface Command {
 export class Command {
 	constructor(obj: Command, recursive = true) {
 		if (recursive) obj = convert(obj);
-		// add all of the properties in obj to this
 		Object.keys(obj).forEach(key => {
 			// @ts-expect-error
 			this[key] = obj[key];
