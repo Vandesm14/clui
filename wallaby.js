@@ -10,6 +10,6 @@ module.exports = function(wallaby) {
 			'src/commands.ts',
 			'src/main.ts'
 		],
-		runMode: 'onsave'
+		// runMode: 'onsave'
   };
 };
