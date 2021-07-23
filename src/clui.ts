@@ -46,7 +46,7 @@ export class Arg {
 export default class CLUI {
 	parse = parse;
 	match = match;
-  parseMatch = (str: string) => match(this, parse(str))
+	parseMatch = (str: string) => match(this, parse(str))
 
 	load(...commands: Command[]) {
 		for (let command of commands) {
