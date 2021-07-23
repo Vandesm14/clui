@@ -11,7 +11,7 @@ const push: any = git.children[0];
 const clui = new CLUI();
 clui.load(git);
 
-const commands = new Command({name: 'h', type: 'cmd', children: [git]});
+// const commands = new Command({name: 'h', type: 'cmd', children: [git]});
 
 describe('searcher', () => {
 	it('find a command by name', () => {
@@ -27,11 +27,9 @@ describe('searcher', () => {
 		expect(search(clui, 'local changes')).toEqual([push]);
 	});
 	it('find multiple commands via description', () => {
-		// find multiple commands via description
 		expect(search(clui, '[test]')).toEqual([git, push]);
 	});
 	it('zero matches', () => {
-		// find multiple commands via description
 		expect(search(push, 'local changes')).toEqual([]);
 	});
 });

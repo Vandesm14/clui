@@ -11,18 +11,16 @@ const push: any = git.children[0];
 const clui = new CLUI();
 clui.load(git);
 
-const commands = new Command({name: 'h', type: 'cmd', children: [git]});
-
 describe('runner', () => {
 	it('run a command by itself', async () => {
-    const result = await run(commands, [
+    const result = await run(clui, [
       git,
       push]);
     expect(result.success).toBe(false);
 		expect(result.output).toBe('Error: Missing required arguments');
 	});
 	it('run a command with one required arg', async () => {
-    const result = await run(commands, [
+    const result = await run(clui, [
       git,
       push,
       new Arg({...push.children[0], value: 'origin'})]);
@@ -30,7 +28,7 @@ describe('runner', () => {
 		expect(result.output).toBe('Error: Missing required arguments');
 	});
 	it('run a command with one required arg and flag', async () => {
-    const result = await run(commands, [
+    const result = await run(clui, [
       git,
       push,
       new Arg({...push.children[0], value: 'origin'}),
@@ -39,7 +37,7 @@ describe('runner', () => {
 		expect(result.output).toBe('Error: Missing required arguments');
 	});
 	it('run a command with all required args', async () => {
-    const result = await run(commands, [
+    const result = await run(clui, [
       git,
       push,
       new Arg({...push.children[0], value: 'origin'}),
@@ -47,7 +45,7 @@ describe('runner', () => {
     expect(result.success).toBe(true);
   });
 	it('run a command with all required args and flag', async () => {
-    const result = await run(commands, [
+    const result = await run(clui, [
       git,
       push,
       new Arg({...push.children[0], value: 'origin'}),
@@ -74,7 +72,7 @@ describe('runner', () => {
 			expect(result.output).toBe('Error: Missing required arguments');
 		});
 		it('run a command with by itself', async () => {
-			const result = await run(commands, 'git push');
+			const result = await run(clui, 'git push');
 			expect(result.success).toBe(false);
 			expect(result.output).toBe('Error: Missing required arguments');
 		});
@@ -89,7 +87,7 @@ describe('runner', () => {
 			expect(result.output).toBe('Error: Missing required arguments');
 		});
 		it('run a command with all required args', async () => {
-			const result = await run(commands, 'git push origin master -f');
+			const result = await run(clui, 'git push origin master -f');
 			expect(result.success).toBe(true);
 		});
 		it('run a command with no run function', async () => {

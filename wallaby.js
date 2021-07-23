@@ -3,6 +3,12 @@ module.exports = function(wallaby) {
 		autoDetect: true,
     testFramework: {
       configFile: './jest.config.js'
-    }
+    },
+		filesWithNoCoverageCalculated: [
+			'src/**/*.types.ts',
+			'src/**/*.d.ts',
+			'src/commands.ts',
+			'src/main.ts'
+		]
   };
 };
