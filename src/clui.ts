@@ -2,6 +2,7 @@ import convert from './lib/converter';
 import parse from './lib/parser';
 import match from './lib/matcher';
 import run from './lib/runner';
+import search from './lib/searcher';
 
 import type * as parser from './lib/parser';
 import type * as types from './clui.types';
@@ -74,6 +75,7 @@ export default class CLUI {
 			parse,
 			match: (tokens: parser.Token[]) => match((root as Command), tokens),
 			run: (tokens: (Command | Arg)[]) => run((root as Command), tokens),
+			search: (query: string) => search((root as Command), query)
 		};
 	}
 

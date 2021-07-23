@@ -2,7 +2,7 @@ import type { Command, Arg } from '../clui';
 
 const push: Command = {
 	name: 'push',
-	description: 'push local changes to remote',
+	description: 'push local changes to git remote [test]',
 	type: 'arg',
 	children: [
 		{
@@ -33,7 +33,7 @@ const push: Command = {
 
 const git: Command = {
 	name: 'git',
-	description: 'a simple git cli',
+	description: 'a simple git cli [test]',
 	type: 'cmd',
 	children: [push]
 };
