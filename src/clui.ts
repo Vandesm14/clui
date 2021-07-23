@@ -14,6 +14,7 @@ export interface Command {
 	description?: string,
 	type?: 'cmd' | 'arg',
 	children?: Command[] | Arg[],
+	unknown?: boolean,
 	run?: (ctx: types.RunCtx, args: Arg[]) => void,
 	path?: Command[]
 }
@@ -36,6 +37,7 @@ export interface Arg {
 	/** arg: a parameter (e.g. ls __~/Desktop__), opt: an option (e.g. __-a__ or __--flag param__) */
 	mode?: 'arg' | 'opt',
 	required?: boolean,
+	unknown?: boolean,
 	value?: any
 }
 
@@ -46,6 +48,7 @@ export class Arg {
 		this.type = obj.type;
 		this.mode = obj.mode;
 		this.required = obj.required;
+		this.unknown = obj.unknown;
 		this.value = obj.value;
 	}
 }

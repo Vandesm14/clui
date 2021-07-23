@@ -2,7 +2,7 @@
 <svelte:options tag="clui-main" immutable={true} />
 
 <script lang="ts">
-	import commands from './tests/clui_many_commands';
+	import commands from './commands';
 	import { Command, Arg } from './clui';
 	import CLUI from './clui';
 	const clui = new CLUI();
@@ -17,14 +17,14 @@
 
 	let selection = 0;
 	let focus = false;
+	let value = '';
 
 	$: updateCorrect(current);
 	
 	// @ts-expect-error
-	const updateCorrect = (current) => correct = current.filter(el => el.unknown === undefined || el.unknown === false);
+	const updateCorrect = (current) => correct = current.filter(el => !el.unknown);
 
-	const search = (e: Event) => {
-		const value: string | null = (e.target as HTMLInputElement)?.value;
+	const search = () => {
 		if (value) {
 			current = clui.parseMatch(value);
 			updateCorrect(current);
@@ -32,8 +32,41 @@
 		} else if (focus) {
 			list = clui.commands;
 		} else {
-			list = [];
+			// list = [];
 		}
+	};
+
+	const keyHandler = (e: KeyboardEvent) => {
+		switch (e.key) {
+			case 'ArrowDown':
+				selection = Math.min(selection + 1, list.length - 1);
+				break;
+			case 'ArrowUp':
+				selection = Math.max(selection - 1, 0);
+				break;
+			case 'Tab':
+				e.preventDefault();
+				resolve(current, list[selection].path || list[selection]);
+		}
+	};
+
+	const resolve = (tokens: (Command | Arg)[], token: (Command | Arg) | (Command | Arg)[]) => {
+		if (!Array.isArray(token)) token = [token];
+		const index = tokens.findIndex(el => el.unknown);
+		if (index !== -1) tokens.splice(index, 1, ...token);
+		else tokens.push(...token);
+		value = toString(tokens) + ' ';
+		search();
+	};
+
+	const toString = (tokens: (Command | Arg)[]) => {
+		return tokens.map(el => {
+			if (el instanceof Command) {
+				return el.name;
+			} else {
+				return el.value;
+			}
+		}).join(' ');
 	};
 </script>
 
@@ -41,11 +74,12 @@
 	<div class="cli">
 		<div class="input">
 			<img src="fav.png" alt="icon" class="icon" style="width: 1.6rem;">
-			<input type="text" placeholder="Enter a command" on:keyup={search} on:focus={()=>focus=true} on:blur={()=>focus=false}>
+			<input type="text" placeholder="Enter a command" bind:value={value} on:keydown={keyHandler} on:keyup={search} on:focus={(e)=>{focus=true; search()}} on:blur={(e)=>{focus=false; search()}}>
 		</div>
 		<div class="dropdown">
 			{#each list as item, i}
-				<div class="dropdown-item {i === selection ? 'selected' : ''}" on:mouseover={()=>selection = i}>
+				<div class="dropdown-item {i === selection ? 'selected' : ''}" on:mouseover={()=>selection = i}
+					on:click={()=>resolve(current, item.path || item)}>
 					{#if item.path && item.path.length > 0}
 						{#each item.path as p}
 							<span class="item-name">{p.name}</span>
