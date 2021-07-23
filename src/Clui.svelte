@@ -28,7 +28,7 @@
 		if (value) {
 			current = clui.parseMatch(value);
 			updateCorrect(current);
-			list = clui.search((correct[0] && correct[0] instanceof Command ? correct[0] : clui), value, true);
+			list = clui.search((correct[0] && correct[0] instanceof Command ? correct[0] : clui), value, {withPath: true});
 		} else if (focus) {
 			list = clui.commands;
 		} else {

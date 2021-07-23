@@ -7,6 +7,7 @@ import search from './lib/searcher';
 import Fuse from 'fuse.js';
 
 import type * as parser from './lib/parser';
+import type * as searcher from './lib/searcher';
 import type * as types from './clui.types';
 
 export interface Command {
@@ -115,7 +116,7 @@ export default class CLUI {
 			parse,
 			match: (tokens: parser.Token[]) => match((root as Command), tokens),
 			run: (tokens: (Command | Arg)[]) => run((root as Command), tokens),
-			search: (query: string, pathMode?: boolean) => search((root as Command), query, pathMode)
+			search: (query: string, opts?: searcher.options) => search((root as Command), query, opts)
 		};
 	}
 };
