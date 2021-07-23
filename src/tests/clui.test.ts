@@ -43,6 +43,27 @@ describe('clui', () => {
 		});
 	});
 
+	describe('getLastCommand', () => {
+		it('get last command', () => {
+			clui.load(git);
+
+			expect(clui.getLastCommand([clui.commands[0]])).toEqual(git);
+		});
+		it('get last sub-command', () => {
+			clui.load(git);
+			let push = clui.commands[0].children[0];
+
+			expect(clui.getLastCommand([clui.commands[0], push])).toEqual(push);
+		});
+		it('get last sub-command with commands and args as input', () => {
+			clui.load(git);
+			let push = clui.commands[0].children[0] as Command;
+			let args = push.children as Arg[];
+
+			expect(clui.getLastCommand([clui.commands[0], push, ...args])).toEqual(push);
+		});
+	});
+
 	describe('stateful', () => {
 		let stateful;
 

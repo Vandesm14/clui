@@ -78,6 +78,13 @@ export default class CLUI {
 		this.updateFuse();
 	}
 
+	getLastCommand(tokens: (Command | Arg)[]): Command | undefined {
+		for (let i = tokens.length - 1; i >= 0; i--) {
+			if (tokens[i] instanceof Command) return tokens[i] as Command;
+		}
+		return undefined;
+	}
+
 	updateFuse = () => {
 		const flatten = (commands: Command[]): Command[] => {
 			let result: Command[] = [];
