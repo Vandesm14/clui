@@ -42,4 +42,30 @@ describe('clui', () => {
 			expect(clui.commands).toEqual(many);
 		});
 	});
+
+	describe('stateful', () => {
+		let stateful;
+
+		beforeEach(() => {
+			clui.load(git);
+			stateful = clui.stateful();
+		});
+
+		it('parse', () => {
+			expect(stateful.parse('git')).toEqual([{type: 'cmd', val: 'git'}]);
+		});
+		it('match', () => {
+			expect(stateful.match(stateful.parse('git'))).toEqual([git]);
+		});
+		it('run', async () => {
+			const result = await stateful.run([
+				new Command(git),
+				new Command(git.children[0] as Command)]);
+			expect(result.success).toBe(false);
+			expect(result.output).toBe('Error: Missing required arguments');
+		});
+		it('search', () => {
+			expect(stateful.search('a simple git')).toEqual([git]);
+		});
+	});
 });
