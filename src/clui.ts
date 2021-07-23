@@ -1,6 +1,9 @@
+import convert from './lib/converter';
 import parse from './lib/parser';
 import match from './lib/matcher';
-import convert from './lib/converter';
+import run from './lib/runner';
+
+import type * as parser from './lib/parser';
 import type * as types from './clui.types';
 
 export interface Command {
@@ -46,7 +49,7 @@ export class Arg {
 export default class CLUI {
 	parse = parse;
 	match = match;
-	parseMatch = (str: string) => match(this, parse(str))
+	parseMatch = (str: string, root?: Command | CLUI) => match(root ?? this, parse(str))
 
 	load(...commands: Command[]) {
 		for (let command of commands) {
@@ -63,6 +66,15 @@ export default class CLUI {
 		} else {
 			this.commands.push(result);
 		}
+	}
+
+	stateful(root?: Command) {
+		if (root === undefined) root = new Command({name: 'h', type: 'cmd', children: this.commands ?? []});
+		return {
+			parse,
+			match: (tokens: parser.Token[]) => match((root as Command), tokens),
+			run: (tokens: (Command | Arg)[]) => run((root as Command), tokens),
+		};
 	}
 
 	commands: Command[] = [];
