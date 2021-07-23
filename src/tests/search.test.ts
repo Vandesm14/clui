@@ -18,7 +18,7 @@ describe('searcher', () => {
     expect(search(clui, 'git')).toEqual([git, push]);
 	});
 	it('find a sub-command by name', () => {
-    expect(search(clui, 'push')).toEqual([push]);
+    expect(search(git, 'push')).toEqual([push]);
 	});
 	it('find a command by description', () => {
     expect(search(clui, 'a simple git cli')).toEqual([git]);
@@ -29,5 +29,9 @@ describe('searcher', () => {
 	it('find multiple commands via description', () => {
 		// find multiple commands via description
 		expect(search(clui, '[test]')).toEqual([git, push]);
+	});
+	it('zero matches', () => {
+		// find multiple commands via description
+		expect(search(push, 'local changes')).toEqual([]);
 	});
 });
