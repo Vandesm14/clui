@@ -5,33 +5,51 @@ import { Command, Arg, default as CLUI } from '../clui';
 let clui: CLUI;
 const push: Command = (git.children[0] as Command);
 
-describe('parser & matcher (parseMatch)', () => {
-	beforeEach(() => {
-		clui = new CLUI(); // reset the CLUI instance
-		clui.load(git);
-	});
+beforeEach(() => {
+	clui = new CLUI(); // reset the CLUI instance
+	clui.load(git);
+});
+
+describe('matcher', () => {
 	it('match a command', () => {
-		expect(clui.parseMatch('git')).toEqual([git]);
+		expect(clui.match(clui, [
+			{type: 'cmd', val: 'git'}
+		])).toEqual([git]);
 	});
 	it('match a sub-command', () => {
-		expect(clui.parseMatch('git push')).toEqual([git, push]);
+		expect(clui.match(clui, [
+			{type: 'cmd', val: 'git'},
+			{type: 'cmd', val: 'push'}
+		])).toEqual([git, push]);
 	});
 	it('match all tokens (cmd | arg)', () => {
-		expect(clui.parseMatch('git push origin'))
-		.toEqual([
+		expect(clui.match(clui, [
+			{type: 'cmd', val: 'git'},
+			{type: 'cmd', val: 'push'},
+			{type: 'cmd', val: 'origin'}
+		])).toEqual([
 			git,
 			push,
 			{ ...push.children[0], value: 'origin' },
 		]);
-		expect(clui.parseMatch('git push origin master'))
-		.toEqual([
+		expect(clui.match(clui, [
+			{type: 'cmd', val: 'git'},
+			{type: 'cmd', val: 'push'},
+			{type: 'cmd', val: 'origin'},
+			{type: 'cmd', val: 'master'}
+		])).toEqual([
 			git,
 			push,
 			{ ...push.children[0], value: 'origin' },
 			{ ...push.children[1], value: 'master' },
 		]);
-		expect(clui.parseMatch('git push origin master -f'))
-		.toEqual([
+		expect(clui.match(clui, [
+			{type: 'cmd', val: 'git'},
+			{type: 'cmd', val: 'push'},
+			{type: 'cmd', val: 'origin'},
+			{type: 'cmd', val: 'master'},
+			{type: 'opt', val: 'f'},
+		])).toEqual([
 			git,
 			push,
 			{ ...push.children[0], value: 'origin' },
@@ -40,8 +58,13 @@ describe('parser & matcher (parseMatch)', () => {
 		]);
 	});
 	it('match & return unknown tokens', () => {
-		expect(clui.parseMatch('git hello origin master -f'))
-		.toEqual([
+		expect(clui.match(clui, [
+			{type: 'cmd', val: 'git'},
+			{type: 'cmd', val: 'hello'},
+			{type: 'cmd', val: 'origin'},
+			{type: 'cmd', val: 'master'},
+			{type: 'opt', val: 'f'},
+		])).toEqual([
 			git,
 			{ type: 'cmd', val: 'hello', unknown: true },
 			{ type: 'cmd', val: 'origin', unknown: true },
@@ -50,13 +73,17 @@ describe('parser & matcher (parseMatch)', () => {
 		]);
 	});
 	it('match tokens with custom root element', () => {
-		expect(clui.parseMatch('push origin', new Command(git)))
-		.toEqual([
+		expect(clui.match(new Command(git), [
+			{type: 'cmd', val: 'push'},
+			{type: 'cmd', val: 'origin'}
+		])).toEqual([
 			push,
 			{ ...push.children[0], value: 'origin' },
 		]);
-		expect(clui.parseMatch('origin master', new Command(push)))
-		.toEqual([
+		expect(clui.match(new Command(push), [
+			{type: 'cmd', val: 'origin'},
+			{type: 'cmd', val: 'master'}
+		])).toEqual([
 			{ ...push.children[0], value: 'origin' },
 			{ ...push.children[1], value: 'master' },
 		]);
