@@ -1,3 +1,5 @@
+import type { Command, Arg } from "./clui";
+
 export interface RunCtx {
 	command: Command,
 	done: (success: boolean, ...output: any[]) => void,

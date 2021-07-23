@@ -21,7 +21,7 @@ export class Command {
 	constructor(obj: Command, recursive = true) {
 		if (recursive) obj = convert(obj);
 		Object.keys(obj).forEach(key => {
-			// @ts-expect-error
+			// @ts-ignore
 			this[key] = obj[key];
 		});
 	}
