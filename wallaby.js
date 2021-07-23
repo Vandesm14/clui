@@ -3,9 +3,6 @@ module.exports = function(wallaby) {
 		autoDetect: true,
     testFramework: {
       configFile: './jest.config.js'
-    },
-    files: [
-      'src/**/*.ts'
-    ]
+    }
   };
 };

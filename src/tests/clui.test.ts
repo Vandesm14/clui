@@ -96,5 +96,13 @@ describe('clui', () => {
         { type: 'opt', val: 'f', unknown: true },
       ]);
     });
+		it('invalid root type', () => {
+			// @ts-expect-error
+      expect(() => clui.match({}, clui.parse(''))).toThrow('Invalid root type (root has to be a Command)');
+		});
+		it('command.children is undefined', () => {
+			// @ts-expect-error
+      expect(clui.match(new Command({}), clui.parse('git push origin master'))).toEqual([]);
+		});
 	});
 });

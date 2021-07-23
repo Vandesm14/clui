@@ -32,8 +32,6 @@ export default function(root: CLUI | Command, tokens: (Command | Arg)[] | string
 				if (command.run) command.run(ctx, args);
 				else resolve({success: false, output: 'Error: Command has no run function'});
 			});
-		} else {
-			// TODO: reject
-		}
-	}
+		} else;
+	} else return new Promise<{success: boolean, output: any}>((resolve, reject) => resolve({success: false, output: 'Error: Command not found'}));
 };
