@@ -3,25 +3,32 @@
 
 <script lang="ts">
 	import commands from './tests/clui_many_commands';
-	import type { Command, Arg } from './clui';
+	import { Command, Arg } from './clui';
 	import CLUI from './clui';
 	const clui = new CLUI();
 
 	// @ts-expect-error
 	window.clui = clui;
 	clui.load(...commands);
-	const stateful = clui.stateful();
 
-	let current = [];
+	let current: (Command | Arg)[] = [];
+	let correct: (Command | Arg)[] = [];
 	let list: Command[] = [];
-	let selection = 0;
 
+	let selection = 0;
 	let focus = false;
+
+	$: updateCorrect(current);
+	
+	// @ts-expect-error
+	const updateCorrect = (current) => correct = current.filter(el => el.unknown === undefined || el.unknown === false);
 
 	const search = (e: Event) => {
 		const value: string | null = (e.target as HTMLInputElement)?.value;
 		if (value) {
-			list = stateful.search(value);
+			current = clui.parseMatch(value);
+			updateCorrect(current);
+			list = clui.search((correct[0] && correct[0] instanceof Command ? correct[0] : clui), value, true);
 		} else if (focus) {
 			list = clui.commands;
 		} else {
@@ -33,12 +40,19 @@
 <div id="clui-fragment">
 	<div class="cli">
 		<div class="input">
+			<img src="fav.png" alt="icon" class="icon" style="width: 1.6rem;">
 			<input type="text" placeholder="Enter a command" on:keyup={search} on:focus={()=>focus=true} on:blur={()=>focus=false}>
 		</div>
 		<div class="dropdown">
 			{#each list as item, i}
 				<div class="dropdown-item {i === selection ? 'selected' : ''}" on:mouseover={()=>selection = i}>
-					<span class="item-name">{item.name}</span>
+					{#if item.path && item.path.length > 0}
+						{#each item.path as p}
+							<span class="item-name">{p.name}</span>
+						{/each}
+					{:else}
+						<span class="item-name">{item.name}</span>
+					{/if}
 					<span class="item-description">{item.description ?? ''}</span>
 				</div>
 			{/each}
@@ -105,8 +119,8 @@
 	.dropdown-item {
 		position: relative;
 		z-index: 1;
-		padding: 0.6rem 1.2rem;
-		padding-left: 2.2rem;
+		padding: 0.3rem 0.6rem;
+		padding-left: 1.6rem;
 		border-radius: 3px;
 		background-color: var(--darker);
 	}
@@ -120,10 +134,10 @@
 	}
 	.item-name {
 		margin-right: 0.3rem;
-		margin-left: -0.5rem;
 		padding: 0.3rem 0.5rem;
 		border: 2px solid var(--light);
 		border-radius: 3px;
+		display: inline-block;
 	}
 	.selected > .item-name {
 		background-color: var(--light);

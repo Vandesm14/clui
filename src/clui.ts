@@ -14,7 +14,8 @@ export interface Command {
 	description?: string,
 	type?: 'cmd' | 'arg',
 	children?: Command[] | Arg[],
-	run?: (ctx: types.RunCtx, args: Arg[]) => void
+	run?: (ctx: types.RunCtx, args: Arg[]) => void,
+	path?: Command[]
 }
 
 export class Command {
@@ -111,7 +112,7 @@ export default class CLUI {
 			parse,
 			match: (tokens: parser.Token[]) => match((root as Command), tokens),
 			run: (tokens: (Command | Arg)[]) => run((root as Command), tokens),
-			search: (query: string) => search((root as Command), query)
+			search: (query: string, pathMode?: boolean) => search((root as Command), query, pathMode)
 		};
 	}
 };
