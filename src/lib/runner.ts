@@ -5,10 +5,11 @@ import match from './matcher';
 
 export default function(root: CLUI | Command, tokens: (Command | Arg)[] | string) {
 	if (typeof tokens === 'string') tokens = match(root, parse(tokens));
-	console.log(tokens);
-	if (tokens[0] instanceof Command) { // if token is a command
+	if (root instanceof CLUI) root = new Command({name: 'h', type: 'cmd', children: root.commands ?? []});
+
+	if (tokens[0] instanceof Command || root instanceof Command) { // if token is a command
 		let commands = tokens.filter(el => el instanceof Command);
-		const command = commands[commands.length - 1] as Command;
+		const command = commands.length > 0  ? commands[commands.length - 1] as Command : root;
 		let args = tokens.filter(el => el instanceof Arg) as Arg[];
 
 		if (command) {

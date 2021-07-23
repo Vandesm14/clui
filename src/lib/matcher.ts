@@ -17,7 +17,6 @@ interface UnknownArg extends Arg {
 export default function(root: Command | clui, tokens: parser.Token[]): matcher {
 	let list = [];
 	if (root instanceof clui) root = new Command({name: 'h', type: 'cmd', children: root.commands ?? []});
-	else if (root instanceof Command) root = new Command({name: 'h', type: 'cmd', children: [root]});
 	if (root instanceof Command) { // Is a command
 		let cmd = root as Command;
 		let argIndex;

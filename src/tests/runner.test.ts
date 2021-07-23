@@ -8,22 +8,24 @@ import _git from './clui_one_command';
 const git = convert(_git);
 const push: any = git.children[0];
 
+const commands = new Command({name: 'h', type: 'cmd', children: [git]});
+
 describe('runner', () => {
 	it('run a command by itself', async () => {
-    const result = await run(git, [
+    const result = await run(commands, [
       git,
       push]);
     expect(result.success).toBe(false);
 	});
 	it('run a command with one required arg', async () => {
-    const result = await run(git, [
+    const result = await run(commands, [
       git,
       push,
       new Arg({...push.children[0], value: 'origin'})]);
     expect(result.success).toBe(false);
 	});
 	it('run a command with one required arg and flag', async () => {
-    const result = await run(git, [
+    const result = await run(commands, [
       git,
       push,
       new Arg({...push.children[0], value: 'origin'}),
@@ -31,7 +33,7 @@ describe('runner', () => {
     expect(result.success).toBe(false);
 	});
 	it('run a command with all required args', async () => {
-    const result = await run(git, [
+    const result = await run(commands, [
       git,
       push,
       new Arg({...push.children[0], value: 'origin'}),
@@ -39,7 +41,7 @@ describe('runner', () => {
     expect(result.success).toBe(true);
   });
 	it('run a command with all required args and flag', async () => {
-    const result = await run(git, [
+    const result = await run(commands, [
       git,
       push,
       new Arg({...push.children[0], value: 'origin'}),
@@ -50,15 +52,19 @@ describe('runner', () => {
 
 	describe('string as input', () => {
 		it('run a command with by itself', async () => {
-			const result = await run(git, 'git push');
+			const result = await run(commands, 'git push');
 			expect(result.success).toBe(false);
 		});
-		it('run a command with one required arg', async () => {
-			const result = await run(git, 'git push origin');
+		it('run a command with the command as the root', async () => {
+			const result = await run(git, 'push origin');
 			expect(result.success).toBe(false);
+		});
+		it('run a command with the sub-command as the root', async () => {
+			const result = await run(push, 'push origin');
+			expect(result.success).toBe(true);
 		});
 		it('run a command with all required args', async () => {
-			const result = await run(git, 'git push origin master -f');
+			const result = await run(commands, 'git push origin master -f');
 			expect(result.success).toBe(true);
 		});
 	});
