@@ -4,6 +4,8 @@ import match from './lib/matcher';
 import run from './lib/runner';
 import search from './lib/searcher';
 
+import Fuse from 'fuse.js';
+
 import type * as parser from './lib/parser';
 import type * as types from './clui.types';
 
@@ -50,12 +52,18 @@ export class Arg {
 export default class CLUI {
 	parse = parse;
 	match = match;
-	parseMatch = (str: string, root?: Command | CLUI) => match(root ?? this, parse(str))
+	run = run;
+	search = search;
+	parseMatch = (str: string, root?: Command | CLUI) => match(root ?? this, parse(str));
+
+	commands: Command[] = [];
+	fuse = new Fuse(this.commands);
 
 	load(...commands: Command[]) {
 		for (let command of commands) {
 			this.commands.push(new Command(command));
 		}
+		this.updateFuse();
 	}
 
 	async loadURL(url: string) {
@@ -67,6 +75,27 @@ export default class CLUI {
 		} else {
 			this.commands.push(result);
 		}
+		this.updateFuse();
+	}
+
+	updateFuse = () => {
+		const flatten = (commands: Command[]): Command[] => {
+			let result: Command[] = [];
+			for (let command of commands) {
+				result.push(command);
+				if (command.type === 'cmd' && command.children) result = result.concat(flatten(command.children as Command[]));
+			}
+			return result;
+		};
+	
+		let list = flatten(this.commands);
+		const options = {
+			keys: [
+				'name',
+				'description'
+			]
+		};
+		this.fuse = new Fuse(list, options);
 	}
 
 	stateful(root?: Command) {
@@ -78,6 +107,4 @@ export default class CLUI {
 			search: (query: string) => search((root as Command), query)
 		};
 	}
-
-	commands: Command[] = [];
 };

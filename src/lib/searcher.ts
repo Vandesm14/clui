@@ -3,7 +3,7 @@ import Fuse from "fuse.js";
 
 export default function(root: Command | clui, query: string) {
 	let cmd: Command[] | [];
-	if (root instanceof clui) cmd = root.commands ?? [];
+	if (root instanceof clui) return root.fuse.search(query).map(el => el.item);
 	else cmd = root.type === 'cmd' && root.children ? root.children as Command[] : [];
 
 	const flatten = (commands: Command[]): Command[] => {
