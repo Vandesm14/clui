@@ -3,6 +3,8 @@ import { Command, Arg, default as CLUI } from '../clui';
 import parse from './parser';
 import match from './matcher';
 
+// TODO: split the check and run functions
+
 export default function(root: CLUI | Command, tokens: (Command | Arg)[] | string) {
 	if (typeof tokens === 'string') tokens = match(root, parse(tokens));
 	if (root instanceof CLUI) root = new Command({name: 'h', type: 'cmd', children: root.commands ?? []});

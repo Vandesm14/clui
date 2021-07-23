@@ -72,7 +72,7 @@ describe('runner', () => {
 			expect(result.output).toBe('Error: Missing required arguments');
 		});
 		it('run a command with by itself', async () => {
-			const result = await run(clui, 'git push');
+			const result = await run(git, 'push');
 			expect(result.success).toBe(false);
 			expect(result.output).toBe('Error: Missing required arguments');
 		});
