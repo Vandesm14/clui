@@ -9,6 +9,7 @@ module.exports = function(wallaby) {
 			'src/**/*.d.ts',
 			'src/commands.ts',
 			'src/main.ts'
-		]
+		],
+		runMode: 'onsave'
   };
 };
