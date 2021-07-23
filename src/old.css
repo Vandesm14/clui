@@ -1,29 +1,4 @@
-#clui, #clui * {
-	box-sizing: border-box;
-}
-#clui {
---dark: hsl(225, 32%, 13%);
---darker: hsl(225, 35%, 9%);
---darkest: hsl(225, 38%, 6%);
---light: hsl(225, 35%, 36%);
---medium: hsl(225, 31%, 18%);
---text-light: hsl(225, 54%, 89%);
---text-medium: hsl(225, 33%, 64%);
-	background-color: var(--darkest);
-	color: var(--text-medium);
-	font-size: 1.3rem;
-	font-family: Calibri, sans-serif;
-}
-#clui p, #clui h1 {
-	margin: 0;
-	padding: 0;
-}
-#clui a, a:visited {
-	color: var(--text-medium);
-}
-#clui a:hover {
-	color: var(--text-light);
-}
+
 .clui-toasts {
 	position: absolute;
 	right: 0;
