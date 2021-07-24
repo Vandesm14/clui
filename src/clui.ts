@@ -8,6 +8,7 @@ import Fuse from 'fuse.js';
 
 import type * as parser from './lib/parser';
 import type * as searcher from './lib/searcher';
+import type * as matcher from './lib/matcher';
 import type * as types from './clui.types';
 
 export interface Command {
@@ -52,6 +53,13 @@ export class Arg {
 		this.unknown = obj.unknown;
 		this.value = obj.value;
 	}
+}
+
+export interface stateful {
+  parse: typeof parse,
+  match: (tokens: parser.Token[]) => matcher.matcher,
+  run: (tokens: (Command | Arg)[]) => any,
+  search: (query: string, opts?: searcher.options) => any
 }
 
 export default class CLUI {
@@ -110,7 +118,7 @@ export default class CLUI {
 		this.fuse = new Fuse(list, options);
 	}
 
-	stateful(root?: Command) {
+	stateful(root?: Command): stateful {
 		if (root === undefined) root = new Command({name: 'h', type: 'cmd', children: this.commands ?? []});
 		return {
 			parse,

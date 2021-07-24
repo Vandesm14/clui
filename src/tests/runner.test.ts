@@ -5,7 +5,12 @@ import _git from './clui_one_command';
 import { Command, Arg, default as CLUI } from '../clui';
 
 const git = convert(_git);
-const push: any = git.children[0];
+const push: Push = git.children[0] as Push;
+
+interface Push extends Command {
+  type: 'arg',
+  children: Arg[];
+}
 
 const clui = new CLUI();
 clui.load(git);
@@ -53,6 +58,7 @@ describe('runner', () => {
     expect(result.success).toBe(true);
   });
 	it('run with an array of arguments', async () => {
+    // @ts-expect-error
 		const result = await run(push.children, []);
 		expect(result.success).toBe(false);
 		expect(result.output).toBe('Error: Command not found');
