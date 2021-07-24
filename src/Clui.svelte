@@ -28,7 +28,9 @@
 		if (value) {
 			current = clui.parseMatch(value);
 			updateCorrect(current);
-			list = clui.search((correct[0] && correct[0] instanceof Command ? correct[0] : clui), value, {withPath: true});
+			const last = correct[correct.length - 1];
+			list = clui.search((last && last instanceof Command ? last : clui), value, {withPath: true});
+			selection = list.length ? Math.min(selection, list.length - 1) : 0;
 		} else if (focus) {
 			list = clui.commands;
 		} else {
@@ -47,6 +49,10 @@
 			case 'Tab':
 				e.preventDefault();
 				resolve(current, list[selection].path || list[selection]);
+				break;
+			case 'Enter':
+				e.preventDefault();
+				// clui.checkRun(current[current.length - 1]);
 		}
 	};
 
