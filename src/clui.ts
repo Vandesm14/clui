@@ -90,7 +90,7 @@ export default class CLUI {
 		return undefined;
 	}
 
-	updateFuse = () => {
+	updateFuse() {
 		const flatten = (commands: Command[]): Command[] => {
 			let result: Command[] = [];
 			for (let command of commands) {
