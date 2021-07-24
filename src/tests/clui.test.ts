@@ -1,8 +1,13 @@
 import path from 'path';
+import convert from '../lib/converter';
 
-import git from './clui_one_command';
-import many from './clui_many_commands';
+import _git from './clui_one_command';
+import _many from './clui_many_commands';
 import { Command, Arg, default as CLUI } from '../clui';
+import type * as types from '../clui';
+
+const git = convert(_git);
+const many = _many.map(el => convert(el));
 
 let clui: CLUI;
 
@@ -64,7 +69,7 @@ describe('clui', () => {
 	});
 
 	describe('stateful', () => {
-		let stateful;
+    let stateful: types.stateful;
 
 		beforeEach(() => {
 			clui.load(git);

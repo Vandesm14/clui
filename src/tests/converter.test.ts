@@ -5,7 +5,7 @@ import { Command, Arg } from '../clui';
 
 
 const git = convert(_git);
-const push: any = git.children[0];
+const push: Command = git.children[0] as Command;
 
 describe('converter', () => {
 	it('convert command', () => {

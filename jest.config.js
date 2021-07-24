@@ -10,4 +10,7 @@ module.exports = {
 	// 	'src/global.d.ts',
 	// 	'main.ts'
 	// ]
+  globals: {
+    'ts-jest': {tsconfig: './tsconfig.json'}
+  }
 };

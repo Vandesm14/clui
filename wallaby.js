@@ -8,6 +8,8 @@ module.exports = function(wallaby) {
 			'src/**/*.types.ts',
 			'src/**/*.d.ts',
 			'src/commands.ts',
+			'src/tests/**/*_commands.ts',
+			'src/tests/**/*_command.ts',
 			'src/main.ts'
 		],
 		// runMode: 'onsave'
