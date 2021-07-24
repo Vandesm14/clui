@@ -1,14 +1,13 @@
-import git from './clui_one_command';
+import convert from '../lib/converter';
 
+import _git from './clui_one_command';
 import { Command, Arg, default as CLUI } from '../clui';
 
-let clui: CLUI;
-const push: Command = (git.children[0] as Command);
+const git = convert(_git);
+const push: any = git.children[0];
 
-beforeEach(() => {
-	clui = new CLUI(); // reset the CLUI instance
-	clui.load(git);
-});
+const clui = new CLUI();
+clui.load(git);
 
 describe('matcher', () => {
 	it('match a command', () => {

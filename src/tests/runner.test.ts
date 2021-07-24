@@ -1,9 +1,8 @@
 import convert from '../lib/converter';
 import run from '../lib/runner';
 
-import { Command, Arg, default as CLUI } from '../clui';
-
 import _git from './clui_one_command';
+import { Command, Arg, default as CLUI } from '../clui';
 
 const git = convert(_git);
 const push: any = git.children[0];

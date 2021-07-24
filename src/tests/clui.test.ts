@@ -2,7 +2,6 @@ import path from 'path';
 
 import git from './clui_one_command';
 import many from './clui_many_commands';
-
 import { Command, Arg, default as CLUI } from '../clui';
 
 let clui: CLUI;
