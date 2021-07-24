@@ -35,7 +35,7 @@ export default {
 		sourcemap: true,
 		format: 'iife',
 		name: 'clui',
-		file: 'public/dist/clui.js'
+		file: 'public/dist/web/clui.js'
 	},
 	plugins: [
 		svelte({
