@@ -14,10 +14,16 @@ import type * as types from './clui.types';
 export interface Command {
 	name: string,
 	description?: string,
+
 	type?: 'cmd' | 'arg',
 	children?: Command[] | Arg[],
+
+	/** set by the matcher to define unknown tokens */
 	unknown?: boolean,
+
 	run?: (ctx: types.RunCtx, args: Arg[]) => void,
+
+	/** set by the searcher to define the path to the command */
 	path?: Command[]
 }
 
@@ -36,10 +42,14 @@ export interface Arg {
 	description?: string,
 	type: 'string' | 'number' | 'boolean',
 
-	/** arg: a parameter (e.g. ls __~/Desktop__), opt: an option (e.g. __-a__ or __--flag param__) */
+	/** arg: a parameter (ls __~/Desktop__), opt: an option (__-a__ or __--flag param__) */
 	mode?: 'arg' | 'opt',
 	required?: boolean,
+
+	/** set by the matcher to define unknown tokens */
 	unknown?: boolean,
+
+	/** used by the runner to define the value of the arg */
 	value?: any
 }
 

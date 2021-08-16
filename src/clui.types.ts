@@ -1,4 +1,4 @@
-import type { Command, Arg } from "./clui";
+import type { Command } from "./clui";
 
 export interface RunCtx {
 	command: Command,
@@ -7,12 +7,6 @@ export interface RunCtx {
 	/** returns an instance of the given type */
 	// output: Output
 }
-
-// export class RunCtx {
-//   constructor(command: Command, done: RunCtx['done']) {
-    
-//   }
-// }
 
 export interface Output {
 	/** an array of the items in the Output */
