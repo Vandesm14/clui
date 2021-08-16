@@ -1,7 +1,7 @@
 import convert from './lib/converter';
 import parse from './lib/parser';
 import match from './lib/matcher';
-import run from './lib/runner';
+import { default as run, checkRun } from './lib/runner';
 import search from './lib/searcher';
 
 import Fuse from 'fuse.js';
@@ -66,6 +66,7 @@ export default class CLUI {
 	parse = parse;
 	match = match;
 	run = run;
+	checkRun = checkRun;
 	search = search;
 	parseMatch = (str: string, root?: Command | CLUI) => match(root ?? this, parse(str));
 

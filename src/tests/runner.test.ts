@@ -1,5 +1,5 @@
 import convert from '../lib/converter';
-import run from '../lib/runner';
+import { default as run, checkRun } from '../lib/runner';
 
 import _git from './clui_one_command';
 import { Command, Arg, default as CLUI } from '../clui';
@@ -15,11 +15,26 @@ interface Push extends Command {
 const clui = new CLUI();
 clui.load(git);
 
+describe('checkRun', () => {
+	it('valid command and args', () => {
+		expect(checkRun(clui, [
+      git,
+      push,
+      new Arg({...push.children[0], value: 'origin'}),
+      new Arg({...push.children[1], value: 'master'})
+		])).toBe(true);
+	});
+	it('valid command', () => {
+		expect(checkRun(clui, [git, push])).toBe(false);
+	});
+	it('no run function', () => {
+		expect(checkRun(clui, [git])).toBe(false);
+	});
+});
+
 describe('runner', () => {
 	it('run a command by itself', async () => {
-    const result = await run(clui, [
-      git,
-      push]);
+    const result = await run(clui, [git, push]);
     expect(result.success).toBe(false);
 		expect(result.output).toBe('Error: Missing required arguments');
 	});
@@ -27,7 +42,8 @@ describe('runner', () => {
     const result = await run(clui, [
       git,
       push,
-      new Arg({...push.children[0], value: 'origin'})]);
+      new Arg({...push.children[0], value: 'origin'})
+		]);
     expect(result.success).toBe(false);
 		expect(result.output).toBe('Error: Missing required arguments');
 	});
@@ -61,13 +77,13 @@ describe('runner', () => {
     // @ts-expect-error
 		const result = await run(push.children, []);
 		expect(result.success).toBe(false);
-		expect(result.output).toBe('Error: Command not found');
+		expect(result.output).toBe('Error: Missing command');
 	});
 	it('run with an object', async () => {
 		// @ts-expect-error
 		const result = await run({}, []);
 		expect(result.success).toBe(false);
-		expect(result.output).toBe('Error: Command not found');
+		expect(result.output).toBe('Error: Missing command');
 	});
 
 	describe('string as input', () => {

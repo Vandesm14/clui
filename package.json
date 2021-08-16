@@ -1,7 +1,18 @@
 {
-  "name": "svelte-app",
+  "name": "clui",
   "version": "1.0.0",
-  "private": true,
+  "description": "<!-- ## Build: [Pre-Alpha](CHANGELOG.md) -->",
+  "homepage": "https://github.com/Vandesm14/clui#readme",
+  "bugs": {
+    "url": "https://github.com/Vandesm14/clui/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vandesm14/clui.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "main": "clui.ts",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
@@ -9,6 +20,9 @@
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "test": "jest",
     "test:watch": "npm test -- --watch"
+  },
+  "dependencies": {
+    "sirv-cli": "^1.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
@@ -32,8 +46,5 @@
     "ts-jest": "^26.5.6",
     "tslib": "^2.0.0",
     "typescript": "^4.0.0"
-  },
-  "dependencies": {
-    "sirv-cli": "^1.0.0"
   }
 }
