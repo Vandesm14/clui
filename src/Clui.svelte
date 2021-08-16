@@ -14,6 +14,7 @@
 	let current: (Command | Arg)[] = [];
 	let correct: (Command | Arg)[] = [];
 	let list: Command[] = [];
+	let canRun = false;
 
 	let selection = 0;
 	let focus = false;
@@ -33,9 +34,13 @@
 			selection = list.length ? Math.min(selection, list.length - 1) : 0;
 		} else if (focus) {
 			list = clui.commands;
+			current = [];
+			correct = [];
 		} else {
-			// list = [];
+			list = [];
 		}
+		
+		canRun = clui.checkRun(clui, current);
 	};
 
 	const keyHandler = (e: KeyboardEvent) => {
@@ -52,7 +57,8 @@
 				break;
 			case 'Enter':
 				e.preventDefault();
-				// clui.checkRun(current[current.length - 1]);
+				resolve(current, list[selection].path || list[selection]);
+				break;
 		}
 	};
 
@@ -67,25 +73,29 @@
 
 	const toString = (tokens: (Command | Arg)[]) => {
 		return tokens.map(el => {
-			if (el instanceof Command) {
-				return el.name;
-			} else {
-				return el.value;
-			}
+			if (el instanceof Command) return el.name;
+			else return el.value;
 		}).join(' ');
+	};
+
+	const run = () => {
+		if (canRun) clui.run(clui, current);
 	};
 </script>
 
 <div id="clui-fragment">
 	<div class="cli">
 		<div class="input">
-			<img src="fav.png" alt="icon" class="icon" style="width: 1.6rem;">
+			<img src="fav.png" alt="icon" class="icon" style="width: 1.6rem; padding-left: 0.4rem">
 			<input type="text" placeholder="Enter a command" bind:value={value} on:keydown={keyHandler} on:keyup={search} on:focus={(e)=>{focus=true; search()}} on:blur={(e)=>{focus=false; search()}}>
+			<span class="input-button {value === '' ? '' : 'show'}">
+				{canRun ? 'run' : 'form'}
+			</span>
 		</div>
 		<div class="dropdown">
 			{#each list as item, i}
 				<div class="dropdown-item {i === selection ? 'selected' : ''}" on:mouseover={()=>selection = i}
-					on:click={()=>resolve(current, item.path || item)}>
+					on:click={()=>resolve(current, list[selection].path || list[selection])}>
 					{#if item.path && item.path.length > 0}
 						{#each item.path as p}
 							<span class="item-name">{p.name}</span>
@@ -131,7 +141,7 @@
 		display: flex;
 		align-items: center;
 		border: 2px solid var(--medium);
-		border-radius: 3px 3px 0 0;
+		border-radius: 3px;
 		background-color: var(--dark);
 	}
 
@@ -146,6 +156,23 @@
 		color: var(--text-light);
 		font-size: inherit;
 		font-family: Calibri, sans-serif;
+	}
+
+	.input > .input-button {
+		margin-right: 0.3rem;
+		padding: 0.3rem 0.5rem;
+		border: 2px solid var(--light);
+		border-radius: 3px;
+		display: none;
+		user-select: none;
+	}
+	.input > .input-button.show {
+		display: inline-block;
+	}
+	.input > .input-button:hover {
+		background-color: var(--light);
+		color: var(--text-light);
+		cursor: pointer;
 	}
 
 	.dropdown {
@@ -167,7 +194,6 @@
 	.dropdown-item.selected {
 		outline: 2px solid var(--light);
 		outline-offset: -2px;
-		background-color: var(--light);
 		background-color: var(--medium);
 		color: var(--text-light);
 		cursor: pointer;

@@ -3,7 +3,7 @@ import { Command, Arg, default as CLUI } from '../clui';
 import parse from './parser';
 import match from './matcher';
 
-export function checkRun(root: CLUI | Command, tokens: (Command | Arg)[] | string, internal = false): boolean | [boolean, Command?, Arg[]?] {
+export function checkRun(root: CLUI | Command, tokens: (Command | Arg)[] | string, internal = false): boolean {
 	if (typeof tokens === 'string') tokens = match(root, parse(tokens));
 	if (root instanceof CLUI) root = new Command({name: 'h', type: 'cmd', children: root.commands ?? []});
 
@@ -17,20 +17,21 @@ export function checkRun(root: CLUI | Command, tokens: (Command | Arg)[] | strin
 		args = tokens.filter(el => el instanceof Arg) as Arg[];
 
 		if (command) {
-			allRequired = true;
+			allRequired = 'run' in command;
 			if (command.type === 'arg' && command.children !== undefined) {
 				let required = (command.children as Arg[]).filter((el: Arg) => el.required).length;
 				allRequired = required === args.filter((el: Arg) => el.required).length;
 			}
-			if (!('run' in command)) allRequired = false;
 		}
 	}
 
 	if (!internal) return allRequired;
+	// @ts-expect-error
 	else return [allRequired, command, args];
 };
 
 export default function(root: CLUI | Command, tokens: (Command | Arg)[] | string) {
+	// @ts-expect-error
 	const [canRun, command, args] = checkRun(root, tokens, true) as [boolean, Command?, Arg[]?];
 
 	return new Promise<{success: boolean, output: any}>((resolve, reject) => {
