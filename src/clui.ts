@@ -78,7 +78,7 @@ export default class CLUI {
 	run = run;
 	checkRun = checkRun;
 	search = search;
-	parseMatch = (str: string, root?: Command | CLUI) => match(root ?? this, parse(str));
+	parseMatch = (str: string, root?: Command | CLUI, cursor?: {start: number, end?: number}) => match(root ?? this, parse(str, cursor));
 
 	commands: Command[] = [];
 	fuse = new Fuse(this.commands);

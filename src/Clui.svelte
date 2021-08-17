@@ -31,7 +31,7 @@
 
 	const search = () => {
 		if (value) {
-			current = clui.parseMatch(value);
+			current = clui.parseMatch(value, clui, {start: cursor[0], end: cursor[1]});
 			updateCorrect(current);
 			const last = correct[correct.length - 1];
 
