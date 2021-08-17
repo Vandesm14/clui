@@ -65,10 +65,10 @@ describe('matcher', () => {
 			{type: 'opt', val: 'f'},
 		])).toEqual([
 			git,
-			{ type: 'cmd', val: 'hello', unknown: true },
-			{ type: 'cmd', val: 'origin', unknown: true },
-			{ type: 'cmd', val: 'master', unknown: true },
-			{ type: 'opt', val: 'f', unknown: true },
+			{ name: 'hello', unknown: true },
+			{ name: 'origin', unknown: true },
+			{ name: 'master', unknown: true },
+			{ name: 'f', unknown: true },
 		]);
 	});
 	it('match tokens with custom root element', () => {

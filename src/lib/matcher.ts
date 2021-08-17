@@ -30,7 +30,7 @@ export default function(root: Command | clui, tokens: parser.Token[]): matcher {
 						cmd = find;
 						list.push(cmd);
 					} else { // unknown token
-            list.push(...tokens.slice(i).map(el => {return {...el, unknown: true}}));
+            list.push(...tokens.slice(i).map(el => {return {name: el.val, unknown: true}}));
             return list;
           }
 				} else if (cmd.type === 'arg') { // Command has args

@@ -37,7 +37,7 @@ function parse(input: string, cursor?: {start: number, end?: number}) {
 	const isId = (ch: string) => /[a-z_]/i.test(ch);
 	const isFlag = (ch: string) => "-".indexOf(ch) >= 0;
 
-	const isBool = (word: string) => "true false".indexOf(word) >= 0;
+	const isBool = (word: string) => ['true', 'false'].includes(word);
 	const isStr = (ch: string) => `"'`.indexOf(ch) >= 0;
 	const isNum = (ch: string) => /[0-9]/.test(ch);
 
