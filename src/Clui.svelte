@@ -26,8 +26,7 @@
 
 	$: updateCorrect(current);
 	
-	// @ts-expect-error
-	const updateCorrect = (current) => correct = current.filter(el => el.unknown !== true);
+	const updateCorrect = (current: (Command | Arg)[]) => correct = current.filter(el => el.unknown !== true);
 
 	const search = () => {
 		if (value) {
@@ -51,6 +50,8 @@
 	};
 
 	const keyHandler = (e: KeyboardEvent) => {
+		const target = e.target as HTMLInputElement;
+
 		switch (e.key) {
 			case 'ArrowDown':
 				e.preventDefault();
@@ -70,8 +71,7 @@
 				break;
 		}
 
-		// @ts-expect-error
-		cursor = [e.target.selectionStart, e.target.selectionEnd];
+		cursor = [target.selectionStart, target.selectionEnd];
 	};
 
 	const resolve = (tokens: (Command | Arg)[], token: (Command | Arg) | (Command | Arg)[]) => {
@@ -97,7 +97,6 @@
 	const currentWithoutUnknown = (current: (Command | Arg)[]) => {
 		if (current[current.length - 1]?.unknown) return current.slice(0, current.length - 1);
 		else return current;
-		// return current;
 	}
 </script>
 

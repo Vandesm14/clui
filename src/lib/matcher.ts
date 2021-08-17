@@ -21,10 +21,10 @@ export default function(root: Command | clui, tokens: parser.Token[]): matcher {
 		let argIndex;
 		for (let i = 0; i < tokens.length; i++) {
 			let token = tokens[i];
-			if (cmd instanceof Command && cmd.type && cmd.children !== undefined) { // If command has children
+			if (cmd instanceof Command && cmd.type && 'children' in cmd) { // If command has children
 				if (cmd.type === 'cmd') { // Command has commands
-					// @ts-expect-error TODO: Fix this if possible?
-					let find = cmd.children.find((el: Command | Arg) => el.name === (token.val as string));
+					const children = cmd.children as Command[];
+					let find = children.find((el: Command | Arg) => el.name === (token.val as string));
 					if (find) {
 						cmd = find;
 						list.push(cmd);

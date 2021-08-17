@@ -1,7 +1,7 @@
 {
   "name": "clui",
   "version": "1.0.0",
-  "description": "<!-- ## Build: [Pre-Alpha](CHANGELOG.md) -->",
+  "description": "The CLUI is a unified command system for the web",
   "homepage": "https://github.com/Vandesm14/clui#readme",
   "bugs": {
     "url": "https://github.com/Vandesm14/clui/issues"
@@ -11,7 +11,7 @@
     "url": "git+https://github.com/Vandesm14/clui.git"
   },
   "license": "ISC",
-  "author": "",
+  "author": "Vandesm14",
   "main": "clui.ts",
   "scripts": {
     "build": "rollup -c",
