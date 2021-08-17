@@ -1,4 +1,3 @@
-import type * as types from '../clui.types';
 import { Command, Arg } from '../clui';
 import type * as parser from './parser';
 import clui from '../clui';

@@ -3,7 +3,10 @@ import { Command, Arg, default as CLUI } from '../clui';
 import parse from './parser';
 import match from './matcher';
 
-export function checkRun(root: CLUI | Command, tokens: (Command | Arg)[] | string, internal = false): boolean {
+export function checkRun(root: CLUI | Command, tokens: (Command | Arg)[] | string, internal?: boolean): boolean;
+export function checkRun(root: CLUI | Command, tokens: (Command | Arg)[] | string, internal: true): [boolean, Command | undefined, Arg[] | undefined];
+
+export function checkRun(root: CLUI | Command, tokens: (Command | Arg)[] | string, internal = false): any {
 	if (typeof tokens === 'string') tokens = match(root, parse(tokens));
 	if (root instanceof CLUI) root = new Command({name: 'h', type: 'cmd', children: root.commands ?? []});
 
@@ -26,13 +29,11 @@ export function checkRun(root: CLUI | Command, tokens: (Command | Arg)[] | strin
 	}
 
 	if (!internal) return allRequired;
-	// @ts-expect-error
 	else return [allRequired, command, args];
 };
 
 export default function(root: CLUI | Command, tokens: (Command | Arg)[] | string) {
-	// @ts-expect-error
-	const [canRun, command, args] = checkRun(root, tokens, true) as [boolean, Command?, Arg[]?];
+	const [canRun, command, args] = checkRun(root, tokens, true);
 
 	return new Promise<{success: boolean, output: any}>((resolve, reject) => {
 		if (!command) resolve({success: false, output: 'Error: Missing command'});
