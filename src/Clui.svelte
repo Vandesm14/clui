@@ -2,6 +2,8 @@
 <svelte:options tag="clui-main" immutable={true} />
 
 <script lang="ts">
+	import { onMount } from 'svelte';
+
 	import commands from './commands';
 	import { Command, Arg } from './clui';
 	import CLUI from './clui';
@@ -20,24 +22,29 @@
 	let focus = false;
 	let value = '';
 
+	let cursor = [0, 0];
+
 	$: updateCorrect(current);
 	
 	// @ts-expect-error
-	const updateCorrect = (current) => correct = current.filter(el => !el.unknown);
+	const updateCorrect = (current) => correct = current.filter(el => el.unknown !== true);
 
 	const search = () => {
 		if (value) {
 			current = clui.parseMatch(value);
 			updateCorrect(current);
 			const last = correct[correct.length - 1];
-			list = clui.search((last && last instanceof Command ? last : clui), value, {withPath: true});
+
+			if (value.endsWith(' ') && last instanceof Command && last.type === 'cmd') list = last.children as Command[];
+			else list = clui.search((last && last instanceof Command ? last : clui), current[current.length - 1]?.name || '', {withPath: true});
+			
 			selection = list.length ? Math.min(selection, list.length - 1) : 0;
 		} else if (focus) {
 			list = clui.commands;
 			current = [];
 			correct = [];
 		} else {
-			list = [];
+			// list = [];
 		}
 		
 		canRun = clui.checkRun(clui, current);
@@ -46,9 +53,11 @@
 	const keyHandler = (e: KeyboardEvent) => {
 		switch (e.key) {
 			case 'ArrowDown':
+				e.preventDefault();
 				selection = Math.min(selection + 1, list.length - 1);
 				break;
 			case 'ArrowUp':
+				e.preventDefault();
 				selection = Math.max(selection - 1, 0);
 				break;
 			case 'Tab':
@@ -60,6 +69,9 @@
 				resolve(current, list[selection].path || list[selection]);
 				break;
 		}
+
+		// @ts-expect-error
+		cursor = [e.target.selectionStart, e.target.selectionEnd];
 	};
 
 	const resolve = (tokens: (Command | Arg)[], token: (Command | Arg) | (Command | Arg)[]) => {
@@ -81,13 +93,27 @@
 	const run = () => {
 		if (canRun) clui.run(clui, current);
 	};
+
+	const currentWithoutUnknown = (current: (Command | Arg)[]) => {
+		if (current[current.length - 1]?.unknown) return current.slice(0, current.length - 1);
+		else return current;
+		// return current;
+	}
 </script>
 
 <div id="clui-fragment">
 	<div class="cli">
 		<div class="input">
+			<div class="tokens">
+				{#each currentWithoutUnknown(current) as token, i}
+					<span class="token {token.unknown ? 'unknown' : ''}">{token.name}{@html i === currentWithoutUnknown(current).length - 1 ? '' : '&nbsp;'}</span>
+				{/each}
+				{#if focus}
+					<span class="token unknown">{list[selection]?.path?.map(el => el.name).join(' ') || list[selection]?.name || ''}</span>
+				{/if}
+			</div>
 			<img src="fav.png" alt="icon" class="icon" style="width: 1.6rem; padding-left: 0.4rem">
-			<input type="text" placeholder="Enter a command" bind:value={value} on:keydown={keyHandler} on:keyup={search} on:focus={(e)=>{focus=true; search()}} on:blur={(e)=>{focus=false; search()}}>
+			<input type="text" placeholder={focus ? '' : 'Enter a command'} bind:value={value} on:keydown={keyHandler} on:input={search} on:focus={(e)=>{focus=true;search()}} on:blur={(e)=>{focus=false;search()}}>
 			<span class="input-button {value === '' ? '' : 'show'}">
 				{canRun ? 'run' : 'form'}
 			</span>
@@ -143,6 +169,14 @@
 		border: 2px solid var(--medium);
 		border-radius: 3px;
 		background-color: var(--dark);
+	}
+
+	.input > .tokens {
+		left: 2rem;
+		position: absolute;
+	}
+	.input > .tokens > span:not(.unknown) {
+		background-color: var(--light);
 	}
 
 	.input > input {

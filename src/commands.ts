@@ -1,10 +1,21 @@
 import type { Command, Arg } from './clui';
 
-const clui: Command = 	{
+const clui: Command = {
 	name: 'clui',
 	description: 'the main system (so meta)',
 	type: 'cmd',
 	children: [
+		{
+			name: 'debug',
+			description: 'debugging',
+			type: 'cmd',
+			children: [
+				{
+					name: 'log',
+					description: 'logging',
+				}
+			]
+		},
 		{
 			name: 'help',
 			description: 'get help with the CLUI',
@@ -51,7 +62,7 @@ const help = (clui.children as Command[]).find((el: Command) => el.name === 'hel
 
 const commands: Command[] = [
 	clui,
-	help,
-]
+	// help
+];
 
 export default commands;
