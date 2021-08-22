@@ -32,7 +32,7 @@
 	const updateCorrect = (current: (Command | Arg)[]) => correct = current.filter(el => el.unknown !== true);
 
 	const search = () => {
-		if (value) {
+		if (value && (clui.getLastCommand(current)?.type === 'cmd' || clui.getLastCommand(current) === undefined)) {
 			current = clui.parseMatch(value, clui, {start: cursor[0], end: cursor[1]});
 			updateCorrect(current);
 			const last = correct[correct.length - 1];
@@ -41,6 +41,10 @@
 			else list = clui.search((last && last instanceof Command ? last : clui), current[current.length - 1]?.name || '', {withPath: true});
 			
 			selection = list.length ? Math.min(selection, list.length - 1) : 0;
+		} else if (clui.getLastCommand(current)?.type === 'arg') {
+			current = clui.parseMatch(value, clui, {start: cursor[0], end: cursor[1]});
+			updateCorrect(current);
+			list = [];
 		} else if (focus) {
 			list = clui.commands;
 			current = [];
@@ -69,8 +73,10 @@
 				resolve(current, list[selection].path || list[selection]);
 				break;
 			case 'Enter':
+				const last = clui.getLastCommand(current);
 				e.preventDefault();
-				resolve(current, list[selection].path || list[selection]);
+				if (last.hasOwnProperty('run')) run();
+				else resolve(current, list[selection].path || list[selection]);
 				break;
 		}
 
@@ -94,13 +100,24 @@
 	};
 
 	const run = () => {
-		if (canRun) clui.run(clui, current);
+		if (canRun) {
+			clui.run(clui, current);
+			clear();
+		}
 		else console.log('cannot run');
 	};
 
 	const currentWithoutUnknown = (current: (Command | Arg)[]) => {
+		current = current.filter(el => el instanceof Command);
 		if (current[current.length - 1]?.unknown) return current.slice(0, current.length - 1);
 		else return current;
+	};
+
+	const clear = () => {
+		value = '';
+		list = clui.commands;
+		current = [];
+		correct = [];
 	};
 </script>
 
@@ -109,7 +126,7 @@
 		<div class="input">
 			<div class="tokens">
 				{#each currentWithoutUnknown(current) as token, i}
-					<span class="token {token.unknown ? 'unknown' : ''}">{token.name}{@html i === currentWithoutUnknown(current).length - 1 ? '' : '&nbsp;'}</span>
+					<span class="token transparent {token.unknown ? 'unknown' : ''}">{token.name}{@html i === currentWithoutUnknown(current).length - 1 ? '' : '&nbsp;'}</span>
 				{/each}
 				<!-- {#if focus}
 					<span class="token unknown">{list[selection]?.path?.map(el => el.name).join(' ') || list[selection]?.name || ''}</span>
@@ -183,7 +200,10 @@
 
 	.input > .tokens > span {
 		display: inline-block;
-		/* position: relative; */
+		border-radius: 3px;
+	}
+	.input > .tokens > span.transparent {
+		color: transparent;
 	}
 	.input > .tokens > span:not(.unknown) {
 		background-color: var(--light);
