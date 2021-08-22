@@ -1,4 +1,5 @@
 import type { Command, Arg } from '../clui';
+import type { Request, Response } from '../lib/runner';
 
 const push: Command = {
 	name: 'push',
@@ -26,8 +27,8 @@ const push: Command = {
 			mode: 'opt'
 		}
 	],
-  run: (ctx, args) => {
-    ctx.done(true);
+  run: (req: Request, res: Response) => {
+    res.status('ok');
   }
 };
 

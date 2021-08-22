@@ -9,7 +9,7 @@ import Fuse from 'fuse.js';
 import type * as parser from './lib/parser';
 import type * as searcher from './lib/searcher';
 import type * as matcher from './lib/matcher';
-import type * as types from './clui.types';
+import type * as runner from './lib/runner';
 
 export interface Command {
 	name: string,
@@ -18,11 +18,13 @@ export interface Command {
 	type?: 'cmd' | 'arg',
 	children?: Command[] | Arg[],
 
+	/** tells the runner if a command is interactive (ie: will use the res to output multiple times) */
+	interactive?: boolean,
+	run?: (req: runner.Request, res: runner.Response) => void,
+
 	/** set by the matcher to define unknown tokens */
 	unknown?: boolean,
-
-	run?: (ctx: types.RunCtx, args: Arg[]) => void,
-
+	
 	/** set by the searcher to define the path to the command */
 	path?: Command[]
 }
@@ -75,13 +77,16 @@ export interface stateful {
 export default class CLUI {
 	parse = parse;
 	match = match;
-	run = run;
-	checkRun = checkRun;
 	search = search;
+	checkRun = checkRun;
+	run = (root: CLUI | Command, tokens: (Command | Arg)[] | string) => run(this, root, tokens);
 	parseMatch = (str: string, root?: Command | CLUI, cursor?: {start: number, end?: number}) => match(root ?? this, parse(str, cursor));
 
 	commands: Command[] = [];
 	fuse = new Fuse(this.commands);
+
+	// version = require('../package.json').version; 
+	version = '0.0.1'; // TODO: figure out a way to get the version from the package.json
 
 	load(...commands: Command[]) {
 		for (let command of commands) {
@@ -134,7 +139,7 @@ export default class CLUI {
 		return {
 			parse,
 			match: (tokens: parser.Token[]) => match((root as Command), tokens),
-			run: (tokens: (Command | Arg)[]) => run((root as Command), tokens),
+			run: (tokens: (Command | Arg)[] | string) => run(this, (root as Command), tokens),
 			search: (query: string, opts?: searcher.options) => search((root as Command), query, opts)
 		};
 	}

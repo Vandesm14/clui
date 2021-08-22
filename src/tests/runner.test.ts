@@ -1,8 +1,9 @@
 import convert from '../lib/converter';
-import { default as run, checkRun } from '../lib/runner';
+// import { default as run, checkRun } from '../lib/runner';
 
 import _git from './clui_one_command';
 import { Command, Arg, default as CLUI } from '../clui';
+import { checkRun } from '../lib/runner';
 
 const git = convert(_git);
 const push: Push = git.children[0] as Push;
@@ -14,6 +15,8 @@ interface Push extends Command {
 
 const clui = new CLUI();
 clui.load(git);
+
+const run = clui.run;
 
 describe('checkRun', () => {
 	it('valid command and args', () => {

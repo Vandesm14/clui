@@ -1,10 +1,25 @@
 import type { Command, Arg } from './clui';
+import type { Request, Response } from './lib/runner';
 
-const clui: Command = {
+const system: Command = {
 	name: 'clui',
 	description: 'the main system (so meta)',
 	type: 'cmd',
 	children: [
+		{
+			name: 'version',
+			description: 'show the version',
+			run: (req: Request, res: Response) => {
+				res.out([
+					{
+						name: 'Version',
+						type: 'string',
+						value: `CLUI version ${req.clui.version}`,
+					},
+				]);
+				res.status('ok');
+			}
+		},
 		{
 			name: 'debug',
 			description: 'debugging',
@@ -27,8 +42,8 @@ const clui: Command = {
 					type: 'string'
 				}
 			],
-			run: (ctx, args: Arg[]) => {
-				const command = args[0];
+			run: (req: Request, res: Response) => {
+				const command = req.args[0];
 				if (command) {
 					// show help for the command
 				} else {
@@ -58,11 +73,10 @@ const clui: Command = {
 	]
 };
 
-const help = (clui.children as Command[]).find((el: Command) => el.name === 'help');
+const help = (system.children as Command[]).find((el: Command) => el.name === 'help');
 
 const commands: Command[] = [
-	clui,
-	// help
+	system
 ];
 
 export default commands;

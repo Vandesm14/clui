@@ -2,9 +2,8 @@
 <svelte:options tag="clui-main" immutable={true} />
 
 <script lang="ts">
-	import { onMount } from 'svelte';
-
 	import commands from './commands';
+	import type { Request, Response } from './lib/runner';
 	import { Command, Arg } from './clui';
 	import CLUI from './clui';
 	const clui = new CLUI();
@@ -17,6 +16,9 @@
 	let correct: (Command | Arg)[] = [];
 	let list: Command[] = [];
 	let canRun = false;
+
+	let pages = [];
+	let form = {};
 
 	let selection = 0;
 	let focus = false;
@@ -92,12 +94,13 @@
 
 	const run = () => {
 		if (canRun) clui.run(clui, current);
+		else console.log('cannot run');
 	};
 
 	const currentWithoutUnknown = (current: (Command | Arg)[]) => {
 		if (current[current.length - 1]?.unknown) return current.slice(0, current.length - 1);
 		else return current;
-	}
+	};
 </script>
 
 <div id="clui-fragment">
