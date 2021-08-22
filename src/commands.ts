@@ -47,7 +47,12 @@ const system: Command = {
 				if (command) {
 					// show help for the command
 				} else {
-					// show help for the system
+					res.out([{
+						name: 'CLUI',
+						type: 'string',
+						value: 'The CLUI is a unified command system for the web',
+					}]);
+					res.status('ok');
 				}
 			}
 		},
@@ -72,8 +77,6 @@ const system: Command = {
 		}
 	]
 };
-
-const help = (system.children as Command[]).find((el: Command) => el.name === 'help');
 
 const commands: Command[] = [
 	system

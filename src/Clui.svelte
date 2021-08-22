@@ -19,6 +19,7 @@
 
 	let pages = [];
 	let form = {};
+	let showForm = false;
 
 	let selection = 0;
 	let focus = false;
@@ -110,15 +111,15 @@
 				{#each currentWithoutUnknown(current) as token, i}
 					<span class="token {token.unknown ? 'unknown' : ''}">{token.name}{@html i === currentWithoutUnknown(current).length - 1 ? '' : '&nbsp;'}</span>
 				{/each}
-				{#if focus}
+				<!-- {#if focus}
 					<span class="token unknown">{list[selection]?.path?.map(el => el.name).join(' ') || list[selection]?.name || ''}</span>
-				{/if}
+				{/if} -->
 			</div>
 			<img src="fav.png" alt="icon" class="icon" style="width: 1.6rem; padding-left: 0.4rem">
 			<input type="text" placeholder={focus ? '' : 'Enter a command'} bind:value={value} on:keydown={keyHandler} on:input={search} on:focus={(e)=>{focus=true;search()}} on:blur={(e)=>{focus=false;search()}}>
-			<span class="input-button {value === '' ? '' : 'show'}">
+			<button class="input-button {value !== '' && clui.getLastCommand(current)?.hasOwnProperty('run') ? 'show' : ''}" on:click={run}>
 				{canRun ? 'run' : 'form'}
-			</span>
+			</button>
 		</div>
 		<div class="dropdown">
 			{#each list as item, i}
@@ -135,7 +136,9 @@
 				</div>
 			{/each}
 		</div>
-		<div class="form"></div>
+		<div class="form" class:hide={!showForm}>
+
+		</div>
 	</div>
 </div>
 
@@ -177,8 +180,16 @@
 		left: 2rem;
 		position: absolute;
 	}
+
+	.input > .tokens > span {
+		display: inline-block;
+		/* position: relative; */
+	}
 	.input > .tokens > span:not(.unknown) {
 		background-color: var(--light);
+		padding: 0.1rem 0.2rem;
+		margin-left: -0.2rem;
+		margin-right: -0.2rem;
 	}
 
 	.input > input {
@@ -201,6 +212,9 @@
 		border-radius: 3px;
 		display: none;
 		user-select: none;
+		font: inherit;
+		color: inherit;
+		background-color: transparent;
 	}
 	.input > .input-button.show {
 		display: inline-block;
@@ -211,7 +225,7 @@
 		cursor: pointer;
 	}
 
-	.dropdown {
+	.dropdown, .form {
 		overflow-y: auto;
 		min-width: 40vw;
 		max-width: 60vw;

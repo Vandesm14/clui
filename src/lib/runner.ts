@@ -59,11 +59,6 @@ export class Response {
 	}
 }
 
-/*
-	const git = clui.search('git')[0];
-	clui.run(git, 'push origin master', handler);
-*/
-
 export default function run(clui: CLUI, root: CLUI | Command, tokens: (Command | Arg)[] | string) {
 	const [canRun, command, args] = checkRun(root, tokens, true);
 
@@ -72,7 +67,7 @@ export default function run(clui: CLUI, root: CLUI | Command, tokens: (Command |
 		if (!canRun) resolve({success: false, output: 'Error: Missing required arguments'});
 
 		const req = new Request(args, clui, command);
-		const res = new Response(() => console.log, () => console.log);
+		const res = new Response(console.log, console.log);
 
 		if (command.run) {
 			command.run(req, res);
