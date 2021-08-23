@@ -1,10 +1,10 @@
-<!-- fake warning -->
 <svelte:options tag="clui-main" immutable={true} />
 
 <script lang="ts">
 	import commands from './commands';
-	import type { Request, Response } from './lib/runner';
+	import Item from './comps/Item.svelte';
 	import { Command, Arg } from './clui';
+	import type { OutputItem } from './lib/runner';
 	import CLUI from './clui';
 	const clui = new CLUI();
 
@@ -17,8 +17,18 @@
 	let list: Command[] = [];
 	let canRun = false;
 
-	let pages = [];
-	let form = {};
+	interface Page {
+		title: string;
+		items: (OutputItem | Arg)[];
+		command: Command;
+	}
+
+	let pages: Page[] = [];
+	let form: Page = {
+		title: '',
+		items: [],
+		command: null
+	};
 	let showForm = false;
 
 	let selection = 0;
@@ -75,7 +85,7 @@
 			case 'Enter':
 				const last = clui.getLastCommand(current);
 				e.preventDefault();
-				if (last.hasOwnProperty('run')) run();
+				if (last?.hasOwnProperty('run')) run();
 				else resolve(current, list[selection].path || list[selection]);
 				break;
 		}
@@ -103,8 +113,23 @@
 		if (canRun) {
 			clui.run(clui, current);
 			clear();
+		}	else {
+			if (clui.getLastCommand(current)?.type !== 'arg') return;
+			const title = clui.getLastCommand(current)?.name || 'Form';
+			const items: (OutputItem | Arg)[] = clui.getLastCommand(current)?.children as Arg[] || [];
+			items.push({
+				type: 'button',
+				name: 'Submit',
+				run: () => {
+					clui.run(clui, current);
+					clear();
+				}
+			});
+			const command = clui.getLastCommand(current);
+			form = {items, title, command};
+			console.log(form);
+			showForm = true;
 		}
-		else console.log('cannot run');
 	};
 
 	const currentWithoutUnknown = (current: (Command | Arg)[]) => {
@@ -116,6 +141,7 @@
 	const clear = () => {
 		value = '';
 		list = clui.commands;
+		showForm = false;
 		current = [];
 		correct = [];
 	};
@@ -138,7 +164,7 @@
 				{canRun ? 'run' : 'form'}
 			</button>
 		</div>
-		<div class="dropdown">
+		<div class="dropdown" class:hide={showForm}>
 			{#each list as item, i}
 				<div class="dropdown-item {i === selection ? 'selected' : ''}" on:mouseover={()=>selection = i}
 					on:click={()=>resolve(current, list[selection].path || list[selection])}>
@@ -154,7 +180,13 @@
 			{/each}
 		</div>
 		<div class="form" class:hide={!showForm}>
-
+			{#each form.items as item}
+				{#if item}
+					<div class="form-item">
+						<Item item={item} />
+					</div>
+				{/if}
+			{/each}
 		</div>
 	</div>
 </div>
@@ -182,6 +214,10 @@
 		flex-direction: column;
 		align-items: center;
 		margin: 0 auto;
+	}
+
+	.hide {
+		display: none;
 	}
 	
 	.input {
@@ -253,6 +289,7 @@
 		border-radius: 0 0 3px 3px;
 		background-color: var(--darker);
 	}
+
 	.dropdown-item {
 		position: relative;
 		z-index: 1;

@@ -34,6 +34,7 @@ export function checkRun(root: CLUI | Command, tokens: (Command | Arg)[] | strin
 export interface OutputItem {
 	type: 'string' | 'string_long' | 'number' | 'boolean' | 'enum' | 'button' | 'paragraph' | 'table',
 	name: string,
+	required?: boolean,
 	description?: string,
 	value?: any,
 	run?: () => void,

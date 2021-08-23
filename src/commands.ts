@@ -40,7 +40,8 @@ const system: Command = {
 				{
 					name: 'command',
 					description: 'the command to get help with',
-					type: 'string'
+					type: 'string',
+					required: true
 				}
 			],
 			run: (req: Request, res: Response) => {

@@ -1,3 +1,7 @@
 import Clui from './Clui.svelte';
 
-export { Clui };
+const app = new Clui({
+	target: document.getElementById('clui')
+});
+
+export default app;
