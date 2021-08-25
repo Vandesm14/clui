@@ -38,6 +38,29 @@
 			{/each}
 		</select>
 	</div> -->
+{:else if item?.type === 'table'}
+	<div class="ciui-page-item">
+		<table>
+			<thead>
+				<tr>
+					{#each item.columns as column}
+						<th>{column}</th>
+					{/each}
+				</tr>
+			</thead>
+			<tbody>
+				{#each item.rows as row}
+					<tr>
+						{#each Object.keys(row) as cell}
+							{#if item.columns.indexOf(cell) !== -1}
+								<td>{row[cell]}</td>
+							{/if}
+						{/each}
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 {:else if item?.type === 'button'}
 	<div class="ciui-page-item">
 		<button on:click={item.run}>{item.name}</button>
@@ -57,6 +80,10 @@
 	p, h1 {
 		margin: 0;
 		padding: 0;
+	}
+
+	h1 {
+		color: var(--text-light);
 	}
 
 	div.ciui-page-item {
@@ -110,6 +137,11 @@
 	select {
 		width: max-content;
 	}
+
+	td {
+		padding: 0.4rem 0.6rem;
+	}
+
 	button {
 		font: inherit;
 		color: var(--text-light);

@@ -114,6 +114,11 @@ export default class CLUI {
 		return undefined;
 	}
 
+	toCLINotation(command: Command): string {
+		// TODO: implement this
+		return command.name;
+	}
+
 	updateFuse() {
 		const flatten = (commands: Command[]): Command[] => {
 			let result: Command[] = [];

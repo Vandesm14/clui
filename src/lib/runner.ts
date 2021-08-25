@@ -40,6 +40,11 @@ export interface OutputItem {
 	/** used by the runner to reference the arg */
 	arg?: Arg,
 
+	/** defines the keys to use for the table */
+	columns?: (string | number)[],
+	/** defines the values to use for the table */
+	rows?: Record<string | number, string | number>[],
+
 	value?: any,
 	run?: () => void,
 }
