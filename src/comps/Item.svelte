@@ -2,8 +2,7 @@
 	import type { Arg } from '../clui';
 	import type { OutputItem } from "../lib/runner";
 
-	// @ts-expect-error
-	export let item: OutputItem | Arg = {};
+	export let item: OutputItem | Arg;
 
 	if (item?.type === 'string') item.value = item.value || '';
 	else if (item?.type === 'boolean') item.value = item.value || false;
