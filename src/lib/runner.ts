@@ -73,7 +73,6 @@ export default async function run(clui: CLUI, root: CLUI | Command, tokens: (Com
 	if (!canRun) return {success: false, output: 'Error: Missing required arguments'};
 
 	const req = new Request(args, clui, command);
-	console.log('has response', !!response);
 	const res = response ?? new Response(console.log, console.log);
 
 	if (command.run) {

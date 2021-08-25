@@ -135,7 +135,10 @@
 
 	const run = () => {
 		if (canRun) {
-			clui.run(clui, current);
+			const command = clui.getLastCommand(current);
+			const page = new Page([], current, command);
+			clui.run(clui, current, new Handler(page));
+			pages = [page, ...pages];
 			clear();
 		}	else {
 			if (clui.getLastCommand(current)?.type !== 'arg') return;
