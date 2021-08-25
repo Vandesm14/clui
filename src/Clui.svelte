@@ -1,4 +1,4 @@
-<svelte:options tag="clui-main" immutable={true} />
+<!-- <svelte:options tag="clui-main" immutable={true} /> -->
 
 <script lang="ts">
 	import commands from './commands';
@@ -183,7 +183,7 @@
 			{#each form.items as item}
 				{#if item}
 					<div class="form-item">
-						<Item item={item} />
+						<Item {item} />
 					</div>
 				{/if}
 			{/each}

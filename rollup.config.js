@@ -42,18 +42,18 @@ export default {
 			preprocess: sveltePreprocess({ sourceMap: !production }),
 			compilerOptions: { // enable run-time checks when not in production
 				dev: !production,
-				customElement: true,
+				// customElement: true,
 			},
-			include: 'src/Clui.svelte'
+			// include: 'src/Clui.svelte'
 		}),
-		svelte({
-			preprocess: sveltePreprocess({ sourceMap: !production }),
-			compilerOptions: { // enable run-time checks when not in production
-				dev: !production,
-				customElement: false,
-			},
-			exclude: 'src/Clui.svelte'
-		}),
+		// svelte({
+		// 	preprocess: sveltePreprocess({ sourceMap: !production }),
+		// 	compilerOptions: { // enable run-time checks when not in production
+		// 		dev: !production,
+		// 		customElement: false,
+		// 	},
+		// 	exclude: 'src/Clui.svelte'
+		// }),
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
 		css({ output: 'clui.css' }),
