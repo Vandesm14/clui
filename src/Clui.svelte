@@ -4,7 +4,7 @@
 	import commands from './commands';
 	import Item from './comps/Item.svelte';
 	import { Command, Arg } from './clui';
-	import type { OutputItem } from './lib/runner';
+	import type { OutputItem, Response } from './lib/runner';
 	import CLUI from './clui';
 	const clui = new CLUI();
 
@@ -17,18 +17,40 @@
 	let list: Command[] = [];
 	let canRun = false;
 
-	interface Page {
-		title: string;
-		items: (OutputItem | Arg)[];
+	class Page {
+		items: OutputItem[];
 		command: Command;
+		path: (Command | Arg)[];
+		title: string;
+		id: string;
+
+		constructor(items: OutputItem[], path: (Command | Arg)[], command: Command) {
+			this.items = items ?? [];
+			this.path = path;
+			this.command = clui.getLastCommand(path);
+			this.title = command?.name ?? '';
+			this.id = Math.random().toString(36).substr(2, 9);
+		}
+	}
+
+	class Handler implements Response {
+		private page: Page;
+		constructor(page: Page) {
+			this.page = page;
+		}
+
+		out(items: OutputItem[]) {
+			console.log('hey', items);
+			this.page.items = items;
+		}
+
+		status(status: 'ok' | 'err' | string) {
+			// do nothing
+		}
 	}
 
 	let pages: Page[] = [];
-	let form: Page = {
-		title: '',
-		items: [],
-		command: null
-	};
+	let form: Page
 	let showForm = false;
 
 	let selection = 0;
@@ -62,6 +84,8 @@
 		} else {
 			// list = [];
 		}
+
+		if (clui.getLastCommand(current)?.name !== form?.command?.name) showForm = false;
 		
 		canRun = clui.checkRun(clui, current);
 	};
@@ -115,19 +139,38 @@
 			clear();
 		}	else {
 			if (clui.getLastCommand(current)?.type !== 'arg') return;
-			const title = clui.getLastCommand(current)?.name || 'Form';
-			const items: (OutputItem | Arg)[] = clui.getLastCommand(current)?.children as Arg[] || [];
-			items.push({
-				type: 'button',
-				name: 'Submit',
-				run: () => {
-					clui.run(clui, current);
-					clear();
-				}
-			});
 			const command = clui.getLastCommand(current);
-			form = {items, title, command};
-			console.log(form);
+
+			const args: Arg[] = command.children as Arg[];
+			for (let item of current) {
+				if (item instanceof Arg) {
+					const index = args.findIndex(el => el.name === item.name);
+					args[index].value = item.value;
+				}
+			}
+			
+			form = new Page(
+				[...args,	{
+					name: 'Run',
+					type: 'button',
+					run: () => {
+						form.items.pop();
+						const params = [...current.filter(el => el instanceof Command), ...form.items as Arg[]];
+						const page = new Page([], params, command);
+						const res = clui.checkRun(clui, params);
+						if (res) {
+							clui.run(clui, params, new Handler(page));
+							pages = [page, ...pages];
+							clear();
+						} else {
+							console.log('Cannot run');
+						}
+					}
+				}],
+				current,
+				command
+			);
+
 			showForm = true;
 		}
 	};
@@ -180,14 +223,23 @@
 			{/each}
 		</div>
 		<div class="form" class:hide={!showForm}>
-			{#each form.items as item}
+			{#each form?.items ?? [] as item}
 				{#if item}
-					<div class="form-item">
-						<Item {item} />
-					</div>
+					<Item {item} />
 				{/if}
 			{/each}
 		</div>
+	</div>
+	<div class="pages">
+		{#each pages as page (page.id)}
+			<div class="page form">
+				{#each page?.items ?? [] as item}
+					{#if item}
+						<Item {item} />
+					{/if}
+				{/each}
+			</div>
+		{/each}
 	</div>
 </div>
 
@@ -217,7 +269,7 @@
 	}
 
 	.hide {
-		display: none;
+		display: none !important;
 	}
 	
 	.input {
@@ -284,7 +336,7 @@
 	.dropdown, .form {
 		overflow-y: auto;
 		min-width: 40vw;
-		max-width: 60vw;
+		/* max-width: 60vw; */
 		max-height: 40vh;
 		border-radius: 0 0 3px 3px;
 		background-color: var(--darker);
@@ -314,5 +366,25 @@
 	}
 	.selected > .item-name {
 		background-color: var(--light);
+	}
+
+	.form {
+		display: flex;
+		flex-direction: column;
+		padding: 0.6rem 1.2rem;
+		max-height: 70vh;
+		border-radius: 3px;
+		background-color: var(--darker);
+	}
+
+	.page {
+		margin: 0.2rem 0;
+		border: 2px solid var(--medium);
+	}
+
+	.pages {
+		display: flex;
+		flex-direction: column;
+		margin-top: 2rem;
 	}
 </style>

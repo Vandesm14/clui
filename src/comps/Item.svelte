@@ -54,9 +54,15 @@
 {/if}
 
 <style>
+	p, h1 {
+		margin: 0;
+		padding: 0;
+	}
+
 	div.ciui-page-item {
 		display: flex;
 		flex-direction: column;
+		padding: 0.4rem 0;
 	}
 	div > .clui-item-label {
 		color: var(--text-medium);

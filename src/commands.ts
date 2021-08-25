@@ -55,7 +55,7 @@ const system: Command = {
 								name: first.name,
 								type: 'paragraph',
 								value: `Description: ${first.description}\n`+
-								`Children: ${first.type} (${first.children?.length})\n`+
+								`Children: ${first.children?.length ?? 0} (${first.type ?? 'N/A'})\n`+
 								`Path: ${first.path.map(el => el.name).join(' > ')}`
 							},
 							{

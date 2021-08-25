@@ -36,6 +36,10 @@ export interface OutputItem {
 	name: string,
 	required?: boolean,
 	description?: string,
+
+	/** used by the runner to reference the arg */
+	arg?: Arg,
+
 	value?: any,
 	run?: () => void,
 }
@@ -62,20 +66,19 @@ export class Response {
 	}
 }
 
-export default function run(clui: CLUI, root: CLUI | Command, tokens: (Command | Arg)[] | string) {
+export default async function run(clui: CLUI, root: CLUI | Command, tokens: (Command | Arg)[] | string, response?: Response): Promise<{success: boolean, output: any}> {
 	const [canRun, command, args] = checkRun(root, tokens, true);
 
-	return new Promise<{success: boolean, output: any}>((resolve, reject) => {
-		if (!command) resolve({success: false, output: 'Error: Missing command'});
-		if (!canRun) resolve({success: false, output: 'Error: Missing required arguments'});
+	if (!command) return {success: false, output: 'Error: Missing command'};
+	if (!canRun) return {success: false, output: 'Error: Missing required arguments'};
 
-		const req = new Request(args, clui, command);
-		const res = new Response(console.log, console.log);
+	const req = new Request(args, clui, command);
+	console.log('has response', !!response);
+	const res = response ?? new Response(console.log, console.log);
 
-		if (command.run) {
-			command.run(req, res);
-			resolve({success: true, output: 'ok'});
-		}
-		else resolve({success: false, output: 'Error: Command has no run function'});
-	});
+	if (command.run) {
+		command.run(req, res);
+		return {success: true, output: 'ok'};
+	}
+	else return {success: false, output: 'Error: Command has no run function'};
 };

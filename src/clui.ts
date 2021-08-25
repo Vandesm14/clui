@@ -79,7 +79,7 @@ export default class CLUI {
 	match = match;
 	search = search;
 	checkRun = checkRun;
-	run = (root: CLUI | Command, tokens: (Command | Arg)[] | string) => run(this, root, tokens);
+	run = (root: CLUI | Command, tokens: (Command | Arg)[] | string, res?: runner.Response) => run(this, root, tokens, res);
 	parseMatch = (str: string, root?: Command | CLUI, cursor?: {start: number, end?: number}) => match(root ?? this, parse(str, cursor));
 
 	commands: Command[] = [];
@@ -139,7 +139,7 @@ export default class CLUI {
 		return {
 			parse,
 			match: (tokens: parser.Token[]) => match((root as Command), tokens),
-			run: (tokens: (Command | Arg)[] | string) => run(this, (root as Command), tokens),
+			run: (tokens: (Command | Arg)[] | string, res?: runner.Response) => run(this, (root as Command), tokens, res),
 			search: (query: string, opts?: searcher.options) => search((root as Command), query, opts)
 		};
 	}
