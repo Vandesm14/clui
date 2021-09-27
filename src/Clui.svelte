@@ -60,7 +60,7 @@
 	let cursor = [0, 0];
 
 	$: updateCorrect(current);
-	
+
 	const updateCorrect = (current: (Command | Arg)[]) => correct = current.filter(el => el.unknown !== true);
 
 	const search = () => {
@@ -71,7 +71,7 @@
 
 			if (value.endsWith(' ') && last instanceof Command && last.type === 'cmd') list = last.children as Command[];
 			else list = clui.search((last && last instanceof Command ? last : clui), current[current.length - 1]?.name || '', {withPath: true});
-			
+
 			selection = list.length ? Math.min(selection, list.length - 1) : 0;
 		} else if (clui.getLastCommand(current)?.type === 'arg') {
 			current = clui.parseMatch(value, clui, {start: cursor[0], end: cursor[1]});
@@ -86,7 +86,7 @@
 		}
 
 		if (clui.getLastCommand(current)?.name !== form?.command?.name) showForm = false;
-		
+
 		canRun = clui.checkRun(clui, current);
 	};
 
@@ -151,7 +151,7 @@
 					args[index].value = item.value;
 				}
 			}
-			
+
 			form = new Page(
 				[...args,	{
 					name: 'Run',
@@ -274,7 +274,7 @@
 	.hide {
 		display: none !important;
 	}
-	
+
 	.input {
 		position: relative;
 		display: flex;

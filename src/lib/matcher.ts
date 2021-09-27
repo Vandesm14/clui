@@ -1,9 +1,8 @@
-import { Command, Arg } from '../clui';
+import clui, { Command, Arg } from '../clui';
 import type * as parser from './parser';
-import clui from '../clui';
 
 // TODO: create an unknown command and arg type with the unknown property (true)
-export type matcher = (Command | Arg | any)[];
+export type matcher = (Command | Arg)[];
 
 interface UnknownCommand extends Command {
 	unknown: true
@@ -30,6 +29,7 @@ export default function(root: Command | clui, tokens: parser.Token[]): matcher {
 						list.push(cmd);
 					} else { // unknown token
             list.push(...tokens.slice(i).map(el => {return {name: el.val, unknown: true}}));
+						// @ts-expect-error
             return list;
           }
 				} else if (cmd.type === 'arg') { // Command has args

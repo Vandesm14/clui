@@ -1,15 +1,12 @@
 import convert from './lib/converter';
 import parse from './lib/parser';
 import match from './lib/matcher';
-import { default as run, checkRun } from './lib/runner';
+import run, { checkRun, Request as RunRequest, Response as RunResponse } from './lib/runner';
 import search from './lib/searcher';
 
 import Fuse from 'fuse.js';
 
-import type * as parser from './lib/parser';
-import type * as searcher from './lib/searcher';
-import type * as matcher from './lib/matcher';
-import type * as runner from './lib/runner';
+export type Tokens = (Command | Arg)[];
 
 export interface Command {
 	name: string,
@@ -20,11 +17,11 @@ export interface Command {
 
 	/** tells the runner if a command is interactive (ie: will use the res to output multiple times) */
 	interactive?: boolean,
-	run?: (req: runner.Request, res: runner.Response) => void,
+	run?: (req: RunRequest, res: RunResponse) => void,
 
 	/** set by the matcher to define unknown tokens */
 	unknown?: boolean,
-	
+
 	/** set by the searcher to define the path to the command */
 	path?: Command[]
 }
@@ -67,25 +64,17 @@ export class Arg {
 	}
 }
 
-export interface stateful {
-  parse: typeof parse,
-  match: (tokens: parser.Token[]) => matcher.matcher,
-  run: (tokens: (Command | Arg)[]) => any,
-  search: (query: string, opts?: searcher.options) => any
-}
-
 export default class CLUI {
 	parse = parse;
 	match = match;
 	search = search;
 	checkRun = checkRun;
-	run = (root: CLUI | Command, tokens: (Command | Arg)[] | string, res?: runner.Response) => run(this, root, tokens, res);
+	run = (root: CLUI | Command, tokens: (Command | Arg)[] | string, res?: RunResponse) => run(this, root, tokens, res);
 	parseMatch = (str: string, root?: Command | CLUI, cursor?: {start: number, end?: number}) => match(root ?? this, parse(str, cursor));
 
 	commands: Command[] = [];
 	fuse = new Fuse(this.commands);
 
-	// version = require('../package.json').version; 
 	version = '0.0.1'; // TODO: figure out a way to get the version from the package.json
 
 	load(...commands: Command[]) {
@@ -128,7 +117,7 @@ export default class CLUI {
 			}
 			return result;
 		};
-	
+
 		let list = flatten(this.commands);
 		const options = {
 			keys: [
@@ -137,15 +126,5 @@ export default class CLUI {
 			]
 		};
 		this.fuse = new Fuse(list, options);
-	}
-
-	stateful(root?: Command): stateful {
-		if (root === undefined) root = new Command({name: 'h', type: 'cmd', children: this.commands ?? []});
-		return {
-			parse,
-			match: (tokens: parser.Token[]) => match((root as Command), tokens),
-			run: (tokens: (Command | Arg)[] | string, res?: runner.Response) => run(this, (root as Command), tokens, res),
-			search: (query: string, opts?: searcher.options) => search((root as Command), query, opts)
-		};
 	}
 };

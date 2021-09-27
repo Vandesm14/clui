@@ -21,12 +21,8 @@ interface TokenBoolean extends TokenBase {
   val: boolean;
 }
 
-class Tokens extends Array {
-	
-}
-
 function parse(input: string, cursor?: {start: number, end?: number}) {
-	const tokens: Token[] = new Tokens();
+	const tokens: Token[] = [];
 	let i = 0;
 
 	const peek = () => input.charAt(i);

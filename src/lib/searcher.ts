@@ -1,4 +1,4 @@
-import { Command, Arg, default as clui } from "../clui";
+import clui, { Command } from "../clui";
 import Fuse from "fuse.js";
 
 export interface options {
@@ -33,6 +33,6 @@ export default function(root: Command | clui, query: string, opts?: options) {
 		]
 	};
 	const fuse = new Fuse(list, options);
-	
+
 	return fuse.search(query).map(el => el.item);
 }

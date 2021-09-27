@@ -1,4 +1,4 @@
-import { Command, Arg, default as CLUI } from '../clui';
+import CLUI, { Command, Arg } from '../clui';
 import parse from './parser';
 import match from './matcher';
 
