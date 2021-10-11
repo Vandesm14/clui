@@ -1,11 +1,11 @@
-import CLUI, { Command, Arg } from '../clui';
+import CLUI, { Command, Arg, Tokens } from '../clui';
 import parse from './parser';
 import match from './matcher';
 
-export function checkRun(root: CLUI | Command, tokens: (Command | Arg)[] | string, internal?: boolean): boolean;
-export function checkRun(root: CLUI | Command, tokens: (Command | Arg)[] | string, internal: true): [boolean, Command?, Arg[]?];
+export function checkRun(root: CLUI | Command, tokens: Tokens | string, internal?: boolean): boolean;
+export function checkRun(root: CLUI | Command, tokens: Tokens | string, internal: true): [boolean, Command?, Arg[]?];
 
-export function checkRun(root: CLUI | Command, tokens: (Command | Arg)[] | string, internal = false): any {
+export function checkRun(root: CLUI | Command, tokens: Tokens | string, internal = false): any {
 	if (typeof tokens === 'string') tokens = match(root, parse(tokens));
 	if (root instanceof CLUI) root = new Command({name: 'h', type: 'cmd', children: root.commands ?? []});
 
@@ -71,7 +71,7 @@ export class Response {
 	}
 }
 
-export default async function run(clui: CLUI, root: CLUI | Command, tokens: (Command | Arg)[] | string, response?: Response): Promise<{success: boolean, output: any}> {
+export default async function run(clui: CLUI, root: CLUI | Command, tokens: Tokens | string, response?: Response): Promise<{success: boolean, output: any}> {
 	const [canRun, command, args] = checkRun(root, tokens, true);
 
 	if (!command) return {success: false, output: 'Error: Missing command'};

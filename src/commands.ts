@@ -1,6 +1,5 @@
 import type { Command, Arg } from './clui';
 import type { Request, Response } from './lib/runner';
-import clui_many_commands from './tests/clui_many_commands';
 
 const system: Command = {
 	name: 'clui',

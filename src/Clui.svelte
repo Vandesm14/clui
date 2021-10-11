@@ -3,7 +3,7 @@
 <script lang="ts">
 	import commands from './commands';
 	import Item from './comps/Item.svelte';
-	import { Command, Arg } from './clui';
+	import { Command, Arg, Tokens } from './clui';
 	import type { OutputItem, Response } from './lib/runner';
 	import CLUI from './clui';
 	const clui = new CLUI();
@@ -12,19 +12,19 @@
 	window.clui = clui;
 	clui.load(...commands);
 
-	let current: (Command | Arg)[] = [];
-	let correct: (Command | Arg)[] = [];
+	let current: Tokens = [];
+	let correct: Tokens = [];
 	let list: Command[] = [];
 	let canRun = false;
 
 	class Page {
 		items: OutputItem[];
 		command: Command;
-		path: (Command | Arg)[];
+		path: Tokens;
 		title: string;
 		id: string;
 
-		constructor(items: OutputItem[], path: (Command | Arg)[], command: Command) {
+		constructor(items: OutputItem[], path: Tokens, command: Command) {
 			this.items = items ?? [];
 			this.path = path;
 			this.command = clui.getLastCommand(path);
@@ -61,7 +61,7 @@
 
 	$: updateCorrect(current);
 
-	const updateCorrect = (current: (Command | Arg)[]) => correct = current.filter(el => el.unknown !== true);
+	const updateCorrect = (current: Tokens) => correct = current.filter(el => el.unknown !== true);
 
 	const search = () => {
 		if (value && (clui.getLastCommand(current)?.type === 'cmd' || clui.getLastCommand(current) === undefined)) {
@@ -70,7 +70,7 @@
 			const last = correct[correct.length - 1];
 
 			if (value.endsWith(' ') && last instanceof Command && last.type === 'cmd') list = last.children as Command[];
-			else list = clui.search((last && last instanceof Command ? last : clui), current[current.length - 1]?.name || '', {withPath: true});
+			else list = clui.find(current[current.length - 1]?.name || '', { withPath: true, root: last && last instanceof Command ? last : undefined });
 
 			selection = list.length ? Math.min(selection, list.length - 1) : 0;
 		} else if (clui.getLastCommand(current)?.type === 'arg') {
@@ -117,20 +117,13 @@
 		cursor = [target.selectionStart, target.selectionEnd];
 	};
 
-	const resolve = (tokens: (Command | Arg)[], token: (Command | Arg) | (Command | Arg)[]) => {
+	const resolve = (tokens: Tokens, token: (Command | Arg) | Tokens) => {
 		if (!Array.isArray(token)) token = [token];
 		const index = tokens.findIndex(el => el.unknown);
 		if (index !== -1) tokens.splice(index, 1, ...token);
 		else tokens.push(...token);
-		value = toString(tokens) + ' ';
+		value = clui.join(tokens) + ' ';
 		search();
-	};
-
-	const toString = (tokens: (Command | Arg)[]) => {
-		return tokens.map(el => {
-			if (el instanceof Command) return el.name;
-			else return el.value;
-		}).join(' ');
 	};
 
 	const run = () => {
@@ -178,7 +171,7 @@
 		}
 	};
 
-	const currentWithoutUnknown = (current: (Command | Arg)[]) => {
+	const currentWithoutUnknown = (current: Tokens) => {
 		current = current.filter(el => el instanceof Command);
 		if (current[current.length - 1]?.unknown) return current.slice(0, current.length - 1);
 		else return current;

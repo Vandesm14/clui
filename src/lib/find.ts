@@ -2,15 +2,17 @@ import clui, { Command } from "../clui";
 import Fuse from "fuse.js";
 
 export interface options {
-	withPath?: boolean
+	withPath?: boolean,
+	root?: Command
 }
 
-export default function(root: Command | clui, query: string, opts?: options) {
+export default function(this: clui, query: string, opts?: options) {
 	const { withPath } = opts || {};
+	const root = opts?.root;
 	let cmd: Command[] | [];
-	if (root instanceof clui && !withPath) return root.fuse.search(query).map(el => el.item);
-	else if (root instanceof clui) cmd = root.commands ?? [];
-	else cmd = root.type === 'cmd' && root.children ? root.children as Command[] : [];
+	if (!withPath) return this.fuse.search(query).map(el => el.item);
+	else if (root) cmd = root.type === 'cmd' && root.children ? root.children as Command[] : [];
+	else cmd = this.commands ?? [];
 
 	const flatten = (commands: Command[], path: Command[] = []): Command[] => {
 		let result: Command[] = [];
