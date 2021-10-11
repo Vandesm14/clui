@@ -65,12 +65,10 @@ export class Arg {
 }
 
 export default class CLUI {
-	parse = parse;
-	match = match;
+	parse = parse.bind(this);
 	find = find.bind(this);
 	checkRun = checkRun;
-	run = (root: CLUI | Command, tokens: Tokens | string, res?: RunResponse) => run(this, root, tokens, res);
-	parseMatch = (str: string, root?: Command | CLUI, cursor?: {start: number, end?: number}) => match(root ?? this, parse(str, {cursor}));
+	run = run.bind(this);
 
 	commands: Command[] = [];
 	fuse = new Fuse(this.commands);

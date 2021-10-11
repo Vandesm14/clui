@@ -1,13 +1,13 @@
-import CLUI, { Command, Arg, Tokens } from '../clui';
+import clui, { Command, Arg, Tokens } from '../clui';
 import parse from './parser';
 import match from './matcher';
 
-export function checkRun(root: CLUI | Command, tokens: Tokens | string, internal?: boolean): boolean;
-export function checkRun(root: CLUI | Command, tokens: Tokens | string, internal: true): [boolean, Command?, Arg[]?];
+export function checkRun(this: clui, tokens: Tokens | string, internal?: boolean): boolean;
+export function checkRun(this: clui, tokens: Tokens | string, internal: true): [boolean, Command?, Arg[]?];
 
-export function checkRun(root: CLUI | Command, tokens: Tokens | string, internal = false): any {
-	if (typeof tokens === 'string') tokens = match(root, parse(tokens));
-	if (root instanceof CLUI) root = new Command({name: 'h', type: 'cmd', children: root.commands ?? []});
+export function checkRun(this: clui, tokens: Tokens | string, internal = false): any {
+	if (typeof tokens === 'string') tokens = this.parse(tokens);
+	const root = new Command({name: 'h', type: 'cmd', children: this.commands ?? []});
 
 	let allRequired = false;
 	let command = undefined;
@@ -51,10 +51,10 @@ export interface OutputItem {
 
 export class Request {
 	args: Arg[];
-	clui: CLUI;
+	clui: clui;
 	command: Command;
 
-	constructor(args: Arg[], clui: CLUI, command: Command) {
+	constructor(args: Arg[], clui: clui, command: Command) {
 		this.args = args;
 		this.clui = clui;
 		this.command = command;
@@ -71,13 +71,13 @@ export class Response {
 	}
 }
 
-export default async function run(clui: CLUI, root: CLUI | Command, tokens: Tokens | string, response?: Response): Promise<{success: boolean, output: any}> {
-	const [canRun, command, args] = checkRun(root, tokens, true);
+export default async function run(this: clui, tokens: Tokens | string, response?: Response): Promise<{success: boolean, output: any}> {
+	const [canRun, command, args] = checkRun.call(this, tokens, true);
 
 	if (!command) return {success: false, output: 'Error: Missing command'};
 	if (!canRun) return {success: false, output: 'Error: Missing required arguments'};
 
-	const req = new Request(args, clui, command);
+	const req = new Request(args, this, command);
 	const res = response ?? new Response(console.log, console.log);
 
 	if (command.run) {

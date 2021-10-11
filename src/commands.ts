@@ -51,7 +51,7 @@ const system: Command = {
 			],
 			run: (req: Request, res: Response) => {
 				const command = req.args[0];
-				const query = req.clui.search(req.clui, command.value, {withPath: true});
+				const query = req.clui.find(command.value, { withPath: true });
 				if (query.length) {
 					const first = query[0];
 					res.out([
@@ -79,7 +79,7 @@ const system: Command = {
 							type: 'button',
 							value: 'Run',
 							run: () => {
-								req.clui.run(req.clui, [first]);
+								req.clui.run([ first ]);
 							}
 						}
 					]);

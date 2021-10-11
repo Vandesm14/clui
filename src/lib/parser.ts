@@ -3,6 +3,8 @@
  * @module: parser
  */
 
+import type clui from '../clui';
+import type { Tokens } from '../clui';
 import match from "./matcher";
 export type ParserToken = TokenOther | TokenNumber | TokenBoolean;
 
@@ -28,11 +30,10 @@ interface TokenBoolean extends TokenBase {
 }
 
 interface options {
-	cursor?: {start: number, end?: number},
-	match?: boolean
+	cursor?: {start: number, end?: number}
 }
 
-function parse(input: string, opts?: options): ParserToken[] {
+function parse(this: clui, input: string, opts?: options): Tokens {
 	const tokens: ParserToken[] = [];
 	const cursor = opts?.cursor;
 	let i = 0;
@@ -107,9 +108,7 @@ function parse(input: string, opts?: options): ParserToken[] {
 		}
 	}
 
-	if(opts?.match) {
-		// const matched = match(tokens);
-	} else return tokens;
+	return match.call(this, tokens);
 }
 
 export default parse;

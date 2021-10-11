@@ -3,7 +3,8 @@
 <script lang="ts">
 	import commands from './commands';
 	import Item from './comps/Item.svelte';
-	import { Command, Arg, Tokens } from './clui';
+	import { Command, Arg } from './clui';
+	import type { Tokens } from './clui';
 	import type { OutputItem, Response } from './lib/runner';
 	import CLUI from './clui';
 	const clui = new CLUI();
@@ -65,7 +66,7 @@
 
 	const search = () => {
 		if (value && (clui.getLastCommand(current)?.type === 'cmd' || clui.getLastCommand(current) === undefined)) {
-			current = clui.parseMatch(value, clui, {start: cursor[0], end: cursor[1]});
+			current = clui.parse(value, { cursor: { start: cursor[0], end: cursor[1] } });
 			updateCorrect(current);
 			const last = correct[correct.length - 1];
 
@@ -74,7 +75,7 @@
 
 			selection = list.length ? Math.min(selection, list.length - 1) : 0;
 		} else if (clui.getLastCommand(current)?.type === 'arg') {
-			current = clui.parseMatch(value, clui, {start: cursor[0], end: cursor[1]});
+			current = clui.parse(value, { cursor: {start: cursor[0], end: cursor[1] } });
 			updateCorrect(current);
 			list = [];
 		} else if (focus) {
@@ -87,7 +88,7 @@
 
 		if (clui.getLastCommand(current)?.name !== form?.command?.name) showForm = false;
 
-		canRun = clui.checkRun(clui, current);
+		canRun = clui.checkRun(current);
 	};
 
 	const keyHandler = (e: KeyboardEvent) => {
@@ -130,7 +131,7 @@
 		if (canRun) {
 			const command = clui.getLastCommand(current);
 			const page = new Page([], current, command);
-			clui.run(clui, current, new Handler(page));
+			clui.run(current, new Handler(page));
 			pages = [page, ...pages];
 			clear();
 		}	else {
@@ -153,9 +154,9 @@
 						form.items.pop();
 						const params = [...current.filter(el => el instanceof Command), ...form.items as Arg[]];
 						const page = new Page([], params, command);
-						const res = clui.checkRun(clui, params);
+						const res = clui.checkRun(params);
 						if (res) {
-							clui.run(clui, params, new Handler(page));
+							clui.run(params, new Handler(page));
 							pages = [page, ...pages];
 							clear();
 						} else {
