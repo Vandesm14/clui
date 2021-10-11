@@ -1,8 +1,7 @@
 import convert from './lib/converter';
 import parse from './lib/parse';
-import match from './lib/match';
 import run, { checkRun, Request as RunRequest, Response as RunResponse } from './lib/run';
-import find from './lib/find';
+import find, { findOne } from './lib/find';
 
 import Fuse from 'fuse.js';
 
@@ -67,6 +66,7 @@ export class Arg {
 export default class CLUI {
 	parse = parse.bind(this);
 	find = find.bind(this);
+	findOne = findOne.bind(this);
 	checkRun = checkRun;
 	run = run.bind(this);
 

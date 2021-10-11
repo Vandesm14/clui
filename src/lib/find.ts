@@ -3,10 +3,10 @@ import Fuse from "fuse.js";
 
 export interface options {
 	withPath?: boolean,
-	root?: Command
+	root?: Command,
 }
 
-export default function(this: clui, query: string, opts?: options) {
+function find(this: clui, query: string, opts?: options): Command[] {
 	const { withPath } = opts || {};
 	const root = opts?.root;
 	let cmd: Command[] | [];
@@ -38,3 +38,9 @@ export default function(this: clui, query: string, opts?: options) {
 
 	return fuse.search(query).map(el => el.item);
 }
+
+export function findOne(this: clui, query: string, opts?: options): Command {
+	return find.call(this, query, opts)[0];
+}
+
+export default find;
