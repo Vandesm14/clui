@@ -5,7 +5,7 @@
 	import Item from './comps/Item.svelte';
 	import { Command, Arg } from './clui';
 	import type { Tokens } from './clui';
-	import type { OutputItem, Response } from './lib/runner';
+	import type { OutputItem, Response } from './lib/run';
 	import CLUI from './clui';
 	const clui = new CLUI();
 

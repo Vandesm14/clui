@@ -1,5 +1,5 @@
 import clui, { Command, Arg, Tokens } from '../clui';
-import type { ParserToken } from './parser';
+import type { ParserToken } from './parse';
 
 // TODO: create an unknown command and arg type with the unknown property (true)
 export type MatcherToken = Tokens;

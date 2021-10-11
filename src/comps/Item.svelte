@@ -1,6 +1,6 @@
 <script lang='ts'>
 	import type { Arg } from '../clui';
-	import type { OutputItem } from "../lib/runner";
+	import type { OutputItem } from "../lib/run";
 
 	export let item: OutputItem | Arg;
 

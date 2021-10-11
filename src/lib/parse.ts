@@ -5,7 +5,7 @@
 
 import type clui from '../clui';
 import type { Tokens } from '../clui';
-import match from "./matcher";
+import match from './match';
 export type ParserToken = TokenOther | TokenNumber | TokenBoolean;
 
 interface TokenBase {

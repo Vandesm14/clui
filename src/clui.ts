@@ -1,7 +1,7 @@
 import convert from './lib/converter';
-import parse from './lib/parser';
-import match from './lib/matcher';
-import run, { checkRun, Request as RunRequest, Response as RunResponse } from './lib/runner';
+import parse from './lib/parse';
+import match from './lib/match';
+import run, { checkRun, Request as RunRequest, Response as RunResponse } from './lib/run';
 import find from './lib/find';
 
 import Fuse from 'fuse.js';

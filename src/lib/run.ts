@@ -1,6 +1,6 @@
 import clui, { Command, Arg, Tokens } from '../clui';
-import parse from './parser';
-import match from './matcher';
+import parse from './parse';
+import match from './match';
 
 export function checkRun(this: clui, tokens: Tokens | string, internal?: boolean): boolean;
 export function checkRun(this: clui, tokens: Tokens | string, internal: true): [boolean, Command?, Arg[]?];
