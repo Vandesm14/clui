@@ -1,4 +1,10 @@
-export type Token = TokenOther | TokenNumber | TokenBoolean;
+/**
+ * @author: Leonski <https://github.com/leonskidev>
+ * @module: parser
+ */
+
+import match from "./matcher";
+export type ParserToken = TokenOther | TokenNumber | TokenBoolean;
 
 interface TokenBase {
 	type: any,
@@ -21,8 +27,14 @@ interface TokenBoolean extends TokenBase {
   val: boolean;
 }
 
-function parse(input: string, cursor?: {start: number, end?: number}) {
-	const tokens: Token[] = [];
+interface options {
+	cursor?: {start: number, end?: number},
+	match?: boolean
+}
+
+function parse(input: string, opts?: options): ParserToken[] {
+	const tokens: ParserToken[] = [];
+	const cursor = opts?.cursor;
 	let i = 0;
 
 	const peek = () => input.charAt(i);
@@ -37,7 +49,7 @@ function parse(input: string, cursor?: {start: number, end?: number}) {
 	const isStr = (ch: string) => `"'`.indexOf(ch) >= 0;
 	const isNum = (ch: string) => /[0-9]/.test(ch);
 
-	const add = (token: Token, i: number) => {
+	const add = (token: ParserToken, i: number) => {
 		const {type, val} = {...token};
 		if (cursor && cursor.start !== undefined) {
 			if (cursor.end === undefined) cursor.end = cursor.start;
@@ -58,22 +70,30 @@ function parse(input: string, cursor?: {start: number, end?: number}) {
 	while(!eof()) {
 		const ch = next();
 		if(ch === " ") continue;
-
-		if(isId(ch)) { // ids (git, merge)
+		// ids (git, merge)
+		if(isId(ch)) {
 			const id = ch + take(isId);
 
-			if(isBool(id)) add({ type: "boolean", val: Boolean(id) }, i); // e.g. true, false
-			else add({ type: "cmd", val: id }, i); // e.g. git, merge
-		}	else if(isFlag(ch)) { // flags (-f, --flag)
+			// e.g. true, false
+			if(isBool(id)) add({ type: "boolean", val: Boolean(id) }, i);
+			// e.g. git, merge
+			else add({ type: "cmd", val: id }, i);
+			// flags (-f, --flag)
+		}	else if(isFlag(ch)) {
 			const flag = ch + take(isFlag);
 
-			if(flag.length === 1) add({ type: "opt", val: next() }, i); // e.g. -f
-			else if(flag.length === 2) add({ type: "opt", val: take(isId) }, i); // e.g. --flag
-			else croak(Error(`too many recurring "-" in flag`)); // error
-		}	else if(isStr(ch)) { // str ("hello, world!")
+			// e.g. -f
+			if(flag.length === 1) add({ type: "opt", val: next() }, i);
+			// e.g. --flag
+			else if(flag.length === 2) add({ type: "opt", val: take(isId) }, i);
+			// error
+			else croak(Error(`too many recurring "-" in flag`));
+			// str ("hello, world!")
+		}	else if(isStr(ch)) {
 			add({ type: "string", val: take(val => val !== ch) }, i);
 			next();
-		}	else if(isNum(ch)) { // num (1234, 12.34)
+			// num (1234, 12.34)
+		}	else if(isNum(ch)) {
 			let decimal = false;
 			const num = ch + take(val => {
 				if(val === ".") {
@@ -87,7 +107,9 @@ function parse(input: string, cursor?: {start: number, end?: number}) {
 		}
 	}
 
-	return tokens;
+	if(opts?.match) {
+		// const matched = match(tokens);
+	} else return tokens;
 }
 
 export default parse;

@@ -70,7 +70,7 @@ export default class CLUI {
 	find = find.bind(this);
 	checkRun = checkRun;
 	run = (root: CLUI | Command, tokens: Tokens | string, res?: RunResponse) => run(this, root, tokens, res);
-	parseMatch = (str: string, root?: Command | CLUI, cursor?: {start: number, end?: number}) => match(root ?? this, parse(str, cursor));
+	parseMatch = (str: string, root?: Command | CLUI, cursor?: {start: number, end?: number}) => match(root ?? this, parse(str, {cursor}));
 
 	commands: Command[] = [];
 	fuse = new Fuse(this.commands);
@@ -84,7 +84,7 @@ export default class CLUI {
 		this.updateFuse();
 	}
 
-	async loadURL(url: string) {
+	async loadURL(url: string, forceHTTP = false) {
 		const result = (await import(url)).default;
 		if (Array.isArray(result)) {
 			for (let command of result) {

@@ -1,5 +1,5 @@
 import clui, { Command, Arg, Tokens } from '../clui';
-import type * as parser from './parser';
+import type { ParserToken } from './parser';
 
 // TODO: create an unknown command and arg type with the unknown property (true)
 export type MatcherToken = Tokens;
@@ -12,7 +12,7 @@ interface UnknownArg extends Arg {
 	unknown: true
 }
 
-export default function(root: Command | clui, tokens: parser.Token[]): MatcherToken {
+export default function(root: Command | clui, tokens: ParserToken[]): MatcherToken {
 	let list = [];
 	if (root instanceof clui) root = new Command({name: 'h', type: 'cmd', children: root.commands ?? []});
 	if (root instanceof Command) { // Is a command
