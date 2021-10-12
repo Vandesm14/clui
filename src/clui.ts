@@ -1,4 +1,4 @@
-import convert from './lib/converter';
+import convert from './lib/convert';
 import parse from './lib/parse';
 import run, { checkRun, Request as RunRequest, Response as RunResponse } from './lib/run';
 import find, { findOne } from './lib/find';
