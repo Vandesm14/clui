@@ -1,41 +1,12 @@
 import clui, { Command, Arg, Tokens } from '../clui';
 
-export function checkRun(this: clui, tokens: Tokens | string, internal?: boolean): boolean;
-export function checkRun(this: clui, tokens: Tokens | string, internal: true): [boolean, Command?, Arg[]?];
-
-export function checkRun(this: clui, tokens: Tokens | string, internal = false): any {
-	if (typeof tokens === 'string') tokens = this.parse(tokens);
-	const root = new Command({name: 'h', type: 'cmd', children: this.commands ?? []});
-
-	let allRequired = false;
-	let command = undefined;
-	let args = undefined;
-
-	if (tokens[0] instanceof Command || root instanceof Command) { // if token is a command
-		let commands = tokens.filter(el => el instanceof Command);
-		command = commands.length > 0  ? commands[commands.length - 1] as Command : root;
-		args = tokens.filter(el => el instanceof Arg) as Arg[];
-
-		if (command) {
-			allRequired = 'run' in command;
-			if (command.type === 'arg' && command.children !== undefined) {
-				let required = (command.children as Arg[]).filter((el: Arg) => el.required).length;
-				allRequired = required === args.filter((el: Arg) => el.required).length;
-			}
-		}
-	}
-
-	if (!internal) return allRequired;
-	else return [allRequired, command, args];
-};
-
 export interface OutputItem {
 	type: 'string' | 'string_long' | 'number' | 'boolean' | 'enum' | 'button' | 'paragraph' | 'table',
 	name: string,
 	required?: boolean,
 	description?: string,
 
-	/** used by the runner to reference the arg */
+	/** used by the `clui.run` to reference the arg */
 	arg?: Arg,
 
 	/** defines the keys to use for the table */
@@ -68,6 +39,35 @@ export class Response {
 		this.status = status;
 	}
 }
+
+export function checkRun(this: clui, tokens: Tokens | string, internal?: boolean): boolean;
+export function checkRun(this: clui, tokens: Tokens | string, internal: true): [boolean, Command?, Arg[]?];
+
+export function checkRun(this: clui, tokens: Tokens | string, internal = false): any {
+	if (typeof tokens === 'string') tokens = this.parse(tokens);
+	const root = new Command({name: 'h', type: 'cmd', children: this.commands ?? []});
+
+	let allRequired = false;
+	let command = undefined;
+	let args = undefined;
+
+	if (tokens[0] instanceof Command || root instanceof Command) { // if token is a command
+		let commands = tokens.filter(el => el instanceof Command);
+		command = commands.length > 0  ? commands[commands.length - 1] as Command : root;
+		args = tokens.filter(el => el instanceof Arg) as Arg[];
+
+		if (command) {
+			allRequired = 'run' in command;
+			if (command.type === 'arg' && command.children !== undefined) {
+				let required = (command.children as Arg[]).filter((el: Arg) => el.required).length;
+				allRequired = required === args.filter((el: Arg) => el.required).length;
+			}
+		}
+	}
+
+	if (!internal) return allRequired;
+	else return [allRequired, command, args];
+};
 
 export default async function run(this: clui, tokens: Tokens | string, response?: Response): Promise<{success: boolean, output: any}> {
 	const [canRun, command, args] = checkRun.call(this, tokens, true);
