@@ -15,18 +15,18 @@ interface TokenBase {
 }
 
 interface TokenOther extends TokenBase {
-  type: "cmd" | "opt" | "string";
-  val: string;
+	type: "cmd" | "opt" | "string";
+	val: string;
 }
 
 interface TokenNumber extends TokenBase {
-  type: "number";
-  val: number;
+	type: "number";
+	val: number;
 }
 
 interface TokenBoolean extends TokenBase {
-  type: "boolean";
-  val: boolean;
+	type: "boolean";
+	val: boolean;
 }
 
 interface options {
