@@ -1,7 +1,7 @@
 # The CLUI
 <!-- ## Build: [Pre-Alpha](CHANGELOG.md) -->
 
-![](clui-cover.png)
+<!-- ![](clui-cover.png) -->
 
 <!-- ### [Demo](https://vandesm14.github.io/clui/) -->
 
@@ -29,4 +29,4 @@ The Intelligent CLI is the best option when it comes to input. Forget steep lear
 
 ### Seamless Integration
 
-No GUI? No problem! Enjoy the functionality of the CLUI using the barebones API! It's now possible integrate the CLUI essentially *anywhere* without relying on HTML DOM.
+No GUI? No problem! Enjoy the functionality of the CLUI using the barebones API! It's now possible integrate the CLUI essentially *anywhere* without relying on a web-based script or interface!.
